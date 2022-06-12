@@ -42,16 +42,7 @@ class Solution {
         
         
         Arrays.sort(nums,p+1,n);
-        
-//         int start = q;
-//         int end = n-1;
-        
-//             while(start<end)
-//             {
-//                 int temp3 = nums[start];
-//                 nums[start] = nums[end];
-//                 nums[end] = temp3;
-//             }
+       
         
     }
 }
