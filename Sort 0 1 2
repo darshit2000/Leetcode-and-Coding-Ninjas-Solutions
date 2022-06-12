@@ -1,0 +1,51 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution 
+{
+    public static void sort012(int[] arr)
+    {
+        //Write your code here
+        int no0 = 0;
+        int no1 = 0;
+        int no2 = 0;
+        for(int i = 0 ; i < arr.length ; i++)
+        {
+            if(arr[i] == 0)
+            {
+                no0++;
+            }
+            else if(arr[i] == 1)
+            {
+                no1++;
+            }
+            else
+            {
+                no2++;
+            }
+        }
+        if(no0 > 0)
+        {
+            for(int i = 0 ; i < no0 ; i++)
+            {
+                arr[i] = 0;
+            }
+        }
+        
+        if(no1 > 0)
+        {
+            for(int i = no0 ; i < (no0+no1) ; i++)
+            {
+                arr[i] = 1;
+            }
+        }
+        
+        if(no2 > 0)
+        {
+            for(int i = (no0+no1) ; i < arr.length ; i++)
+            {
+                arr[i] = 2;
+            }
+        }
+       
+    }
+}
