@@ -1,0 +1,57 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        int p = 0;
+        int q = 0;
+        int temp = 0;
+        for(int i = 0 ; i < (n-1) ; i++)
+        {
+            if(nums[i] >= nums[i+1])
+            {
+                temp++;
+            }
+        }
+        if(temp == n-1)
+        {
+            Arrays.sort(nums);
+            return;
+        }
+        
+        for(int i = n-2 ; i >= 0 ; i--)
+        {
+            if(nums[i] < nums[i+1])
+            {
+                p = i;
+                q = i+1;
+                break;
+            }
+        }
+        
+        int j = n-1;
+        while( j>=0 && (nums[j] <= nums[p]) )
+        {
+            j--;
+        }
+        
+        if(j>=0)
+        {
+            int temp2 = nums[p];
+            nums[p] = nums[j];
+            nums[j] = temp2;
+        }
+        
+        
+        Arrays.sort(nums,p+1,n);
+        
+//         int start = q;
+//         int end = n-1;
+        
+//             while(start<end)
+//             {
+//                 int temp3 = nums[start];
+//                 nums[start] = nums[end];
+//                 nums[end] = temp3;
+//             }
+        
+    }
+}
