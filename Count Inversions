@@ -1,0 +1,57 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    
+    public static long mergeCount(long arr[], int l, int m, int r)
+    {
+        long []temp1 = Arrays.copyOfRange(arr, l, m + 1);
+        long []temp2 = Arrays.copyOfRange(arr, m + 1, r + 1);
+        
+        long swaps = 0;
+        int x = 0;
+        int y = 0;
+        int k = l;
+        
+        while((x < temp1.length) && (y < temp2.length))
+        {
+            if(temp1[x] <= temp2[y])
+            {
+                arr[k++] = temp1[x++];
+            }
+            else if(temp1[x] > temp2[y])
+            {
+                arr[k++] = temp2[y++];
+                swaps += m-l-x+1;
+            }
+        }
+        while(x < temp1.length)
+        {
+            arr[k++] = temp1[x++];
+        }
+        while(y < temp2.length)
+        {
+            arr[k++] = temp2[y++];
+        }
+        
+        return swaps;
+    }
+    
+    public static long mergeSort(long arr[], int l, int r)
+    {
+        long inversions = 0;
+        if (l < r) 
+        {    
+            int m = (l+r)/2;
+            inversions = mergeSort(arr,l,m);
+            inversions += mergeSort(arr,m+1,r);
+            inversions += mergeCount(arr,l,m,r);
+        }
+        return inversions;
+    }
+    
+    public static long getInversions(long arr[], int n) {
+        // Write your code here.
+        long ans = mergeSort(arr, 0 , n-1);
+        return ans;
+    }
+}
