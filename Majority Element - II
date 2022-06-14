@@ -1,0 +1,33 @@
+import java.util.* ;
+import java.io.*; 
+import java.util.ArrayList;
+
+public class Solution 
+{
+    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) 
+    {
+        // Write your code here.
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        int n = arr.size();
+            for(int i = 0 ; i < n ; i++)
+            {
+                if(!map.containsKey(arr.get(i)))
+                {
+                    map.put(arr.get(i), 1);
+                }
+                else
+                {
+                    map.put(arr.get(i), map.get(arr.get(i))+1);
+                }
+            }
+            for (Map.Entry<Integer, Integer> e : map.entrySet())
+            {
+                if(e.getValue() > (n/3))
+                {
+                    list.add(e.getKey());
+                }
+            }
+            return list;
+    }
+}
