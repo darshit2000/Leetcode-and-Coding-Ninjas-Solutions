@@ -1,0 +1,11 @@
+bool checkArmstrong(int n){
+	//Write your code here
+	int length = to_string(n).length();
+	int res = 0;
+	int temp = n;
+	while(temp > 0) {
+		res += pow((temp % 10), length);
+		temp /= 10;
+	}
+	return (res == n);
+}
