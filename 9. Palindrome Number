@@ -1,0 +1,8 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        string str = to_string(x);
+        string rev = string(str.rbegin(), str.rend());
+        return (str == rev);
+    }
+};
