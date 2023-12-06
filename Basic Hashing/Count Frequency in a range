@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+
+vector<int> countFrequency(int n, int x, vector<int> &nums){
+    // Write your code here.
+    vector<int> ans(n);
+
+    // map<int,int> m;
+    // for(int i = 0 ; i < n ; i++) {
+    //     m[nums[i]] += 1;
+    // }
+
+    // for(int i = 1 ; i <= n ; i++) {
+    //     if(m.count(i) != 0) {
+    //         ans.push_back(m[i]);
+    //     } else {
+    //         ans.push_back(0);
+    //     }
+        
+    // }
+
+    // OR
+
+    for(int i = 0 ; i < n ; i++) {
+        if(nums[i] <= n){
+            ans[nums[i]-1]++;
+        }
+    }
+    
+    return ans;
+}
