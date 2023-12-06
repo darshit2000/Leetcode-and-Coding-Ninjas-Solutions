@@ -24,23 +24,24 @@ vector<int> generateFibonacciNumbers(int n) {
 OR
 
 
-
-void fact(long long i, long long n, long long &fact_val, vector<long long> &ans)
-{
-    
-    if((fact_val*i) > n) return;
- 
-    fact_val *= i;
-    ans.push_back(fact_val);
-    fact(i+1, n, fact_val, ans);
+void fib2(int i, int n, vector<int> &ans) {
+    if(i > n) return;
+    ans.push_back(ans[i-2]+ans[i-1]);
+    fib2(i+1, n, ans);
 }
 
-vector<long long> factorialNumbers(long long n) {
-    // Write Your Code Here
-    vector<long long> ans;
-    long long fact_val = 1;
+vector<int> generateFibonacciNumbers(int n) {
+    // Write your code here.
+    if (n == 1) return {0};
+    if (n == 2) return {0,1};
 
-    fact(1, n, fact_val, ans);
+    vector<int> ans = {0,1};
+
+    fib2(2, n-1, ans);
 
     return ans;
 }
+
+
+
+
