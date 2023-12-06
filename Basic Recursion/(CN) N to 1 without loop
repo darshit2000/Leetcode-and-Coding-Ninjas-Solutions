@@ -1,0 +1,13 @@
+void sol(vector<int> &ans, int n)
+{
+    if(n == 0) return;
+    ans.push_back(n);
+    sol(ans, n-1);
+}
+
+vector<int> printNos(int x) {
+    // Write Your Code Here
+    vector<int> ans;
+    sol(ans,x);
+    return ans;
+}
