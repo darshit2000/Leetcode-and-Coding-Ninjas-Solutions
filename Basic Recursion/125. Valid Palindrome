@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        if(s.length() == 0) return true;
+        string temp = "";
+        for(int i = 0 ; i <= s.length()-1 ; i++) {
+            if((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9')) {
+                temp += tolower(s[i]);
+            }
+        }
+        // cout << temp;
+        string rev = string(temp.rbegin(), temp.rend());
+        return (temp == rev);
+    }
+};
