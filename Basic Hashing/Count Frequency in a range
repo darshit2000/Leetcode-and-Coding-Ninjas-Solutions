@@ -2,24 +2,21 @@
 
 vector<int> countFrequency(int n, int x, vector<int> &nums){
     // Write your code here.
-    vector<int> ans(n);
-
+    // vector<int> ans;
     // map<int,int> m;
     // for(int i = 0 ; i < n ; i++) {
     //     m[nums[i]] += 1;
     // }
 
     // for(int i = 1 ; i <= n ; i++) {
-    //     if(m.count(i) != 0) {
-    //         ans.push_back(m[i]);
-    //     } else {
-    //         ans.push_back(0);
-    //     }
-        
+    //     ans.push_back(m[i]);
     // }
+
 
     // OR
 
+
+    vector<int> ans(n);
     for(int i = 0 ; i < n ; i++) {
         if(nums[i] <= n){
             ans[nums[i]-1]++;
