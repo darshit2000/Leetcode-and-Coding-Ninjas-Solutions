@@ -1,0 +1,53 @@
+void fact(int n, long long &fact_val)
+{
+    if(n == 1) return;
+    fact_val *= n;
+    fact(n-1, fact_val);
+}
+
+vector<long long> factorialNumbers(long long n) {
+    // Write Your Code Here
+    vector<long long> ans;
+    long long fact_val = 1;
+    for(int i = 1 ; i <= n ; i++) {
+        fact_val = 1;
+        fact(i, fact_val);
+        if(fact_val <= n) {
+            ans.push_back(fact_val);
+        }
+        else {
+            break;
+        }
+    }
+    return ans;
+}
+
+
+
+OR
+
+
+
+long long fact(int n, long long fact_val)
+{
+    if(n == 1) return fact_val*1;
+    if(n == 2) return fact_val*2;
+    fact_val *= n;
+    fact(n-1, fact_val);
+}
+
+vector<long long> factorialNumbers(long long n) {
+    // Write Your Code Here
+    vector<long long> ans;
+    long long fact_val = 1;
+    for(int i = 1 ; i <= n ; i++) {
+        long long res = fact(i, fact_val);
+        if(res <= n) {
+            ans.push_back(res);
+        }
+        else {
+            break;
+        }
+    }
+    return ans;
+}
