@@ -51,3 +51,34 @@ vector<long long> factorialNumbers(long long n) {
     }
     return ans;
 }
+
+
+
+
+
+
+OR
+
+
+
+
+
+void fact(long long i, long long n, long long &fact_val, vector<long long> &ans)
+{
+    
+    if((fact_val*i) > n) return;
+ 
+    fact_val *= i;
+    ans.push_back(fact_val);
+    fact(i+1, n, fact_val, ans);
+}
+
+vector<long long> factorialNumbers(long long n) {
+    // Write Your Code Here
+    vector<long long> ans;
+    long long fact_val = 1;
+
+    fact(1, n, fact_val, ans);
+
+    return ans;
+}
