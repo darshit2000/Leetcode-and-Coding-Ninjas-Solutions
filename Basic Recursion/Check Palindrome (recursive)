@@ -1,0 +1,29 @@
+// bool isPalindrome(string& str) {
+//     // Write your code here.
+//     string rev = string(str.rbegin(), str.rend());
+//     return (str == rev);
+// }
+
+// bool isPalindrome(string& str) {
+//     // Write your code here.
+//     int n = str.length();
+//     for(int i = 0 ; i < n ; i++) {
+//         if(str[i] != str[n-i-1]) return false;
+//     }
+//     return true;
+// }
+
+
+bool isPal(string &str, int start, int end, int n) 
+{
+    if(start >= n/2) return true;
+    if(str[start] != str[end]) return false;
+    isPal(str, start+1, end-1, n);
+}
+
+bool isPalindrome(string& str) {
+    // Write your code here.
+    int n = str.length();
+    return isPal(str, 0, n-1, n);
+}
+
