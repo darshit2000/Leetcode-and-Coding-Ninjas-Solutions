@@ -1,0 +1,13 @@
+void bubbleSort(int arr[], int n) 
+{
+    //write your code here
+    int i,j;
+    for(int k = 1; k <= n ; k++) {
+        for(i=1, j=i-1 ; i < n ; ++i, ++j) {
+            if(arr[j] > arr[i]) {
+                swap(arr[i], arr[j]);
+            }
+        }
+    }
+    
+}
