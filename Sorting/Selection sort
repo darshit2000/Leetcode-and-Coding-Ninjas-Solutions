@@ -1,0 +1,9 @@
+void selectionSort(vector<int>&arr) {
+    // Write your code here.
+    int n = arr.size();
+    for(int i = 0 ; i < n ; i++) {
+        int min = *min_element(arr.begin()+i,arr.end());
+        auto it = find(arr.begin()+i, arr.end(), min);
+        int pos = distance(arr.begin(), it);
+        swap(arr[i], arr[pos]);
+}
