@@ -1,0 +1,11 @@
+vector<int> getSecondOrderElements(int n, vector<int> a) {
+    // Write your code here.
+    vector<int> ans;
+    a.erase(std::remove(a.begin(), a.end(), *max_element(a.begin(),a.end())));
+    
+    a.erase(std::remove(a.begin(), a.end(), *min_element(a.begin(),a.end())));
+
+    ans.push_back(*max_element(a.begin(), a.end()));
+    ans.push_back(*min_element(a.begin(), a.end()));
+    return ans;
+}
