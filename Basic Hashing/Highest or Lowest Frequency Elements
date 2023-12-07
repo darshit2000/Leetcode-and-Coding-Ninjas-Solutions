@@ -1,0 +1,80 @@
+vector<int> getFrequencies(vector<int>& v) {
+    // Write Your Code Here
+    map<int,int> m;
+    int min = INT_MAX;
+    int min_val = 0;
+    int max = INT_MIN;
+    int max_val = 0;
+    int n = v.size();
+    vector<int> ans;
+
+    for (int i = 0; i < n; i++) {
+      m[v[i]]++;
+    }
+
+    for(auto i: m) {
+        if(i.second < min) {
+            min = i.second;
+            min_val = i.first;
+        }
+        if(i.second > max) {
+            max = i.second;
+            max_val = i.first;
+        }
+    }
+
+    ans.push_back(max_val);
+    ans.push_back(min_val);
+    return ans;
+}
+
+
+
+
+
+
+// OR
+
+
+
+
+vector<int> getFrequencies(vector<int>& v) {
+    // Write Your Code Here
+    map<int,int> m;
+    int min = INT_MAX;
+    int min_val = 0;
+    int max = INT_MIN;
+    int max_val = 0;
+    int n = v.size();
+    vector<int> ans;
+
+    for (int i = 0; i < n; i++) {
+      m[v[i]]++;
+    }
+
+    for(int i = 0; i < n; i++) {
+        
+        if(m[v[i]] < min) {
+            min = m[v[i]];
+            min_val = v[i];
+        } 
+        else if(m[v[i]] == min) {
+            if(v[i] < min_val) {
+                min_val = v[i];
+            }
+        }
+        if(m[v[i]] > max) {
+            max = m[v[i]];
+            max_val = v[i];
+        }
+        else if(m[v[i]] == max) {
+            if (v[i] < max_val) {
+                max_val = v[i];
+            }
+        }
+    }
+
+    ans.push_back(max_val);
+    ans.push_back(min_val);
+    return ans;
+}
