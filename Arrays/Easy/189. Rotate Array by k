@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        if(nums.size() == 1) return;
+        k = k % nums.size();
+        reverse(nums.begin(), nums.end());
+        reverse(nums.begin(), nums.begin()+k);
+        reverse(nums.begin()+k, nums.end());
+    }
+};
+
+// OR
+
+vector<int> rotateArray(vector<int>arr, int k) {
+    // Write your code here.
+    int n = arr.size();
+    vector<int> ans(n);
+    
+    for(int i = 0 ; i < n ; i++) {
+        int index = (((i-k) % n) + n) % n;
+        ans[index] = arr[i];
+    }
+    // cout << ((-2 % 8) + 8)%8;
+    return ans;
+}
