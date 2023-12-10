@@ -27,7 +27,7 @@ public:
 
 
 
-        // Approach 4 - use xor operation       3 0 1
+        // Approach 4 - use xor operation       
         int n = nums.size();
         int xor1 = 0;
         int xor2 = 0;
