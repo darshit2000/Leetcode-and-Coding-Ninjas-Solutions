@@ -2,8 +2,10 @@ class Solution {
 public:
     int missingNumber(vector<int>& nums) {
 
-        int n = nums.size();
-        return ((n*(n+1))/2 - accumulate(nums.begin(), nums.end(), 0));
+        // Approach 1 - brute force
+
+
+        // Approach 2 - use extra array or hashmap
 
         // int n = nums.size();
         // vector<int> count(n+1);
@@ -11,10 +13,28 @@ public:
         // for(int i=0; i<n; i++) {
         //     count[nums[i]]++;
         // }
-
         // for(int j=0; j<=n; j++) {
         //     if(count[j] == 0) return j;
         // }
         // return -1;
+
+
+
+        // Approach 3 - sun of first n numbers
+
+        // int n = nums.size();
+        // return ((n*(n+1))/2 - accumulate(nums.begin(), nums.end(), 0));
+
+
+
+        // Approach 4 - use xor operation       3 0 1
+        int n = nums.size();
+        int xor1 = 0;
+        int xor2 = 0;
+        for(int i = 0 ; i <= n-1 ; i++) {
+            xor2 = xor2 ^ nums[i];
+            xor1 = xor1 ^ (i+1);
+        }
+        return (xor1 ^ xor2);
     }
 };
