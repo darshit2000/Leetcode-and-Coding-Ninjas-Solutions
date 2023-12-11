@@ -1,0 +1,36 @@
+// If array is not sorted
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+
+        // Approach 1 - TC: O(n) , SC: O(1)
+        int ans = 0;
+        int n = nums.size();
+        if(n == 1) return nums[0];
+        for(int i = 0 ; i < n ; i++) {
+            ans ^= nums[i];
+        }
+        return ans;
+    }
+};
+
+
+// If array is sorted
+
+#include<vector>
+
+int getSingleElement(vector<int> &arr){
+	// Write your code here.	
+	int n = arr.size();
+	for(int i = 0 ; i < n-1 ; i++) {
+		if(arr[i] == arr[i+1]) {
+			i++;
+		} else {
+			return arr[i];
+		}
+	}
+	if(arr[n-2] != arr[n-1]) return arr[n-1];
+	return -1;
+
+}
