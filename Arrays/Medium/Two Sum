@@ -1,3 +1,5 @@
+// Approach 1
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -16,3 +18,26 @@ string read(int n, vector<int> book, int target)
     }
     return s;
 }
+
+
+
+// Approach 2
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        map<int,int> mpp;
+        int n = nums.size();
+        vector<int> ans;
+
+        for(int i = 0 ; i < n ; i++) {
+            if(mpp.find(target-nums[i]) != mpp.end()) {
+                ans.push_back(mpp[target-nums[i]]);
+                ans.push_back(i);
+                break;
+            }
+            mpp[nums[i]] = i;
+        }
+        return ans;
+    }
+};
