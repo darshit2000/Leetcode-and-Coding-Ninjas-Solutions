@@ -1,0 +1,70 @@
+#include <bits/stdc++.h> 
+void sortArray(vector<int>& arr, int n)
+{
+    // Write your code here
+    // Dutch National flag algo:
+
+    // 0 to low-1     :   0
+    // low to mid-1   :   1
+    // mid to high    :   Unsorted
+    // high+1 to n-1  :   2
+
+    // TC: O(n)   SC: O(1)
+
+    int low = 0;
+    int mid = 0;
+    int high = n-1;
+
+    while(mid <= high) {
+      if (arr[mid] == 0) {
+        swap(arr[mid], arr[low]);
+        mid++;
+        low++;
+      } 
+      else if (arr[mid] == 2) {
+        swap(arr[mid], arr[high]);
+        high--;
+      } 
+      else {
+        mid++;
+      }
+    }
+}
+
+
+OR
+
+
+// TC: O(2N)   (2 iteration)
+
+#include <bits/stdc++.h> 
+void sortArray(vector<int>& arr, int n)
+{
+    // Write your code here
+    int noOf0;
+    int noOf1;
+    int noOf2;
+    for(int i = 0 ; i < n ; i++) {
+        if(arr[i] == 0) noOf0++;
+        if(arr[i] == 1) noOf1++;
+        if(arr[i] == 2) noOf2++;
+    }
+    int index = 0;
+    while(index < n) {
+        while(noOf0 > 0) {
+            arr[index] = 0;
+            index++;
+            noOf0--;
+        }
+        while(noOf1 > 0) {
+            arr[index] = 1;
+            index++;
+            noOf1--;
+        }
+        while(noOf2 > 0) {
+            arr[index] = 2;
+            index++;
+            noOf2--;
+        }
+    }
+}
