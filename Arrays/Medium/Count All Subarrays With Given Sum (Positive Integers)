@@ -1,0 +1,22 @@
+int findAllSubarraysWithGivenSum(vector < int > & arr, int k) {
+    // Write Your Code Here
+    int i = 0;
+    int j = 0;
+    int sum = arr[0];
+    int count = 0;
+
+    while(j < arr.size()) {
+        if(sum == k) {
+            count++;
+            j++;
+            sum += arr[j];
+        } else if(sum > k) {
+            sum -= arr[i];
+            i++;
+        } else if(sum < k) {
+            j++;
+            sum += arr[j];
+        }
+    }
+     return count;
+}
