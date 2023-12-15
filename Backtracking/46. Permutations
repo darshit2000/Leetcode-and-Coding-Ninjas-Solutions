@@ -1,0 +1,55 @@
+class Solution {
+
+private:
+
+    void solve(vector<int> nums, int index, vector<vector<int>> & ans) {
+        if(index >= nums.size()) {
+            ans.push_back(nums);
+            return;
+        }
+        for(int i = index ; i < nums.size() ; i++) {
+            // Permute
+            swap(nums[index], nums[i]);
+            // Recursion
+            solve(nums, index+1, ans);
+            // Backtracking
+            swap(nums[index], nums[i]);
+        }
+    }
+
+    void solve2(vector<int> nums, vector<int> ds, vector<int> freq, vector<vector<int>>& ans) {
+        if(ds.size() == nums.size()) {
+            ans.push_back(ds);
+            return;
+        }
+        for(int i = 0 ; i < nums.size() ; i++) {
+            if(freq[i] == 0) {
+                ds.push_back(nums[i]);
+                freq[i] = 1;
+                solve2(nums, ds, freq, ans);
+                freq[i] = 0;
+                ds.pop_back();
+            }
+        }
+    }
+
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+
+        // Approach 1   (Constant Space Complexity)
+
+        vector<vector<int>> ans;
+        int index = 0;
+        solve(nums, index, ans);
+        return ans;
+
+
+        // Approach 2   (Extra Space Complexity)
+        
+        // vector<vector<int>> ans;
+        // vector<int> ds;
+        // vector<int> freq(nums.size());
+        // solve2(nums, ds, freq, ans);
+        // return ans;
+    }
+};
