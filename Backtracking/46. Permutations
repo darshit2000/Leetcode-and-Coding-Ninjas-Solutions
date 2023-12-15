@@ -3,7 +3,7 @@ class Solution {
 private:
 
     void solve(vector<int> nums, int index, vector<vector<int>> & ans) {
-        if(index >= nums.size()) {
+        if(index >= nums.size()-1) {
             ans.push_back(nums);
             return;
         }
@@ -16,7 +16,7 @@ private:
             swap(nums[index], nums[i]);
         }
     }
-
+ 
     void solve2(vector<int> nums, vector<int> ds, vector<int> freq, vector<vector<int>>& ans) {
         if(ds.size() == nums.size()) {
             ans.push_back(ds);
@@ -24,9 +24,12 @@ private:
         }
         for(int i = 0 ; i < nums.size() ; i++) {
             if(freq[i] == 0) {
+                // Permute
                 ds.push_back(nums[i]);
                 freq[i] = 1;
+                // Recursion
                 solve2(nums, ds, freq, ans);
+                // Backtracking
                 freq[i] = 0;
                 ds.pop_back();
             }
@@ -45,7 +48,7 @@ public:
 
 
         // Approach 2   (Extra Space Complexity)
-        
+
         // vector<vector<int>> ans;
         // vector<int> ds;
         // vector<int> freq(nums.size());
