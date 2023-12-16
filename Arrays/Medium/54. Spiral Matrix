@@ -1,0 +1,126 @@
+vector<int> spiralMatrix(vector<vector<int>>&MATRIX) {
+    // Write your code here.
+    int top = 0;
+    int bottom = MATRIX.size()-1;
+    int left = 0;
+    int right = MATRIX[0].size()-1;
+    vector<int> ans;
+
+    while((top <= bottom)  && (left <= right)) {
+        for(int i = left; i <= right ; i++) {
+            ans.push_back(MATRIX[top][i]);
+        }
+        top++;
+
+        for(int i = top; i <= bottom ; i++) {
+            ans.push_back(MATRIX[i][right]);
+        }
+        right--;
+
+        if(top <= bottom) {
+            for (int i = right; i >= left; i--) {
+              ans.push_back(MATRIX[bottom][i]);
+            }
+            bottom--;
+        }
+
+        if(left <= right) {
+            for (int i = bottom; i >= top; i--) {
+              ans.push_back(MATRIX[i][left]);
+            }
+            left++;
+        }
+    }
+    return ans;
+}
+
+
+
+
+
+OR
+
+
+
+
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int row = 0;
+        int col = 0;
+        int maxRow = matrix.size();
+        int maxCol = matrix[0].size();
+        int minOfBoth = min(maxRow, maxCol);
+        int minCol = 0;
+        int minRow = 0;
+        vector<int> ans;
+        int count = 0;
+        int flag1 = 0;
+        int flag2 = 0;
+        int flag3 = 0;
+        int flag4 = 0;
+
+        if(maxCol == 1 && maxRow == 1) {
+            ans.push_back(matrix[0][0]);
+            return ans;
+        }
+
+        if(maxCol == 1) {
+            for(int i = 0 ; i < maxRow ; i++) {
+                ans.push_back(matrix[i][0]);
+            }
+            return ans;
+        } else if(maxRow ==1) {
+            for(int i = 0 ; i < maxCol ; i++) {
+                ans.push_back(matrix[0][i]);
+            }
+            return ans;
+        }
+
+        while(count <= minOfBoth-2) {
+            flag1 = 0;
+            while(col <= (maxCol-count-1)) {
+                ans.push_back(matrix[row][col]);
+                col++;
+                flag1 = 1;
+            }
+            if(flag1 == 0) break;
+            col--;
+            row++;
+
+            flag2 = 0;
+            while(row <= (maxRow-count-1)) {
+                ans.push_back(matrix[row][col]);
+                row++;
+                flag2 = 1;
+            }
+            if(flag2 == 0) break;
+            row--;
+            col--;
+
+            flag3 = 0;
+            while(col >= (minCol+count)) {
+                ans.push_back(matrix[row][col]);
+                col--;
+                flag3 = 1;
+            }
+            if(flag3 == 0) break;
+            col++;
+            row--;
+            count++;
+
+            flag4 = 0;
+            while(row >= (minRow+count)){
+                ans.push_back(matrix[row][col]);
+                row--;
+                flag4 = 1;
+            }
+            if(flag4 == 0) break;
+            row++;
+            col++;
+        }
+
+        return ans;
+    }
+};
