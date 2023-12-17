@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+
+
+int getLongestZeroSumSubarrayLength(vector<int> &arr){
+	// Write your code here.
+	unordered_map<int, int> mpp;
+	int mx = 0;
+	int n = arr.size();
+
+	int sum = 0;
+
+	for(int i = 0 ; i < n ; i++) {
+		sum += arr[i];
+		if(sum == 0) {
+			mx = i+1;
+		} 
+		if(mpp.find(sum) == mpp.end()) {
+			mpp.insert(make_pair(sum,i));
+		}
+		if(mpp.find(sum) != mpp.end()) {
+			mx = max(mx, i - mpp[sum]);
+		}
+	}
+
+	return mx;
+}
