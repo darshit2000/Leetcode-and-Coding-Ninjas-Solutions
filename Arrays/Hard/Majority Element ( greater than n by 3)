@@ -1,0 +1,74 @@
+vector<int> majorityElement(vector<int> v) {
+	// Write your code here
+	int n = v.size();
+	int lim = floor(n/3);
+
+	int count1 = 0;
+	int count2 = 0;
+	int element1 = -1e9;
+	int element2 = -1e9;
+	int tempCount1 = 0;
+	int tempCount2 = 0;
+
+	vector<int> ans;
+
+	for(int i = 0 ; i < n ; i++)  {
+		if((count1 == 0) && (v[i] != element2)) {
+			count1 = 1;
+			element1 = v[i];
+		} else if((count2 == 0) && (v[i] != element1)) {
+			count2 = 1;
+			element2 = v[i];
+		} else if(v[i] == element1) {
+			count1++;
+		} else if(v[i] == element2) {
+			count2++;
+		} else {
+			count1--;
+			count2--;
+		}
+	}
+
+	for(int i = 0 ; i < n ; i++)  {
+		if(v[i] == element1) tempCount1++;
+		else if (v[i] == element2) tempCount2++;
+	}
+
+	if((tempCount1 > lim) && (tempCount2 > lim)) {
+		if(element1 < element2) {
+			ans.push_back(element1);
+			ans.push_back(element2);
+		} else {
+			ans.push_back(element2);
+			ans.push_back(element1);
+		}
+	} else if(tempCount1 > lim) {
+		ans.push_back(element1);
+	} else if(tempCount2 > lim) {
+		ans.push_back(element2);
+	}
+
+	return ans;
+}
+
+
+// OR
+
+
+// vector<int> majorityElement(vector<int> v) {
+// 	// Write your code here
+// 	map<int, int> mpp;
+// 	int n = v.size();
+// 	vector<int> ans;
+
+// 	for(int i = 0 ; i < n ; i++) {
+// 		mpp[v[i]]++;
+// 	}
+
+// 	for(auto item : mpp) {
+// 		if(item.second > floor(n/3)) {
+// 			ans.push_back(item.first);
+// 		}
+// 	}
+// 	return ans;
+// }
