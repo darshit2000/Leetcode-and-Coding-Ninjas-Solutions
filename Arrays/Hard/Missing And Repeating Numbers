@@ -1,0 +1,141 @@
+// Approach 1       Using maths   TC: O(n)   SC: O(1)
+
+#include <bits/stdc++.h>
+
+vector<int> findMissingRepeatingNumbers(vector < int > a) {
+    // Write your code here      
+    long long n = a.size(); 
+    long long x = 0;
+    long long y = 0;
+
+    long long sum = (n*(n+1))/2;
+    long long sumOfSquares = (n*(n+1)*(2*n+1))/6;
+    long long sumOfArray = 0;
+    long long sumOfSquaresOfArray = 0;
+
+    for(long long i = 0 ; i < n ; i++) {
+        sumOfArray += (long long)a[i];
+        sumOfSquaresOfArray += (long long)a[i] * (long long)a[i];
+    }
+
+    long long val1 = sum - sumOfArray;
+    long long val2 = sumOfSquares - sumOfSquaresOfArray;
+    val2 = val2/val1;
+
+    x = (val1 + val2)/2;
+    y = x - val1;
+    
+    return {(int)y,(int)x};
+}
+
+
+
+// Approach 2       Using XOR   TC: O(n)   SC: O(1)
+
+// #include <bits/stdc++.h>
+
+// vector<int> findMissingRepeatingNumbers(vector < int > a) {
+//     // Write your code here      
+//     int n = a.size(); 
+
+//     int xr = 0;
+//     for(int i = 0 ; i < n ; i++) {
+//         xr = xr ^ a[i];
+//         xr = xr ^ (i+1);
+//     }
+
+//     int bitNo = 0;
+//     while(1) {
+//         if((xr & (1<<bitNo)) != 0) {
+//             break;
+//         } 
+//         bitNo++;
+//     }
+
+//     int one = 0;
+//     int zero = 0;
+//     for(int i = 0 ; i < n ; i++) {
+//         // Xor with elements of a
+//         if((a[i] & (1<<bitNo)) == 0) {
+//             zero ^= a[i];
+//         } else {
+//             one ^= a[i];
+//         }
+
+//         // Again Xor with 1 to n
+//         if(((i+1) & (1<<bitNo)) == 0) {
+//             zero ^= (i+1);
+//         } else {
+//             one ^= (i+1);
+//         }
+//     }
+
+//     int cnt = 0;
+//     for(int i = 0 ; i < n ; i++) {
+//         if(a[i] == zero) cnt++;
+//     }
+    
+//     if(cnt == 2) return {zero,one};
+//     else return {one,zero};
+// }
+
+
+
+// Approach 3      Using XOR    TC: O(n)   SC: O(n)
+
+// #include <bits/stdc++.h>
+
+// vector<int> findMissingRepeatingNumbers(vector < int > a) {
+//     // Write your code here      
+//     int n = a.size(); 
+//     vector<int> ans;
+//     vector<int> s;
+//     int xor1 = 0;
+//     int xor2 = 0;
+//     int rep = 0;
+//     int miss = 0;
+
+//     for(int i = 0 ; i < n ; i++) {
+//         xor1 ^= (i+1);
+        
+//         if(find(s.begin(), s.end(), a[i]) != s.end()) {
+//             rep = a[i];
+//         } else {
+//             s.push_back(a[i]);
+//             xor2 ^= a[i];
+//         }
+//     }
+//     miss = xor1 ^ xor2;
+    
+//     return {rep, miss};
+// }
+
+
+
+// Approach 4   (use of aux space)  TC: O(2n)  SC: O(n)
+
+// #include <bits/stdc++.h>
+
+// vector<int> findMissingRepeatingNumbers(vector < int > a) {
+//     // Write your code here      
+//     int n = a.size(); 
+//     vector<int> tmp(n+1);
+//     int rep = 0;
+//     int mis = 0; 
+
+//     for(int i = 0 ; i < n ; i++) {
+//         if(tmp[a[i]] != 0) {
+//             rep = a[i];
+//         } else {
+//             tmp[a[i]] = 1;
+//         }
+//     }             
+//     for(int i = 1 ; i <= n ; i++) {
+//         if(tmp[i] == 0) {
+//             mis = i;
+//             break;
+//         }
+//     }  
+
+//     return {rep, mis};
+// }
