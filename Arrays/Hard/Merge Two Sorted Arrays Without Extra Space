@@ -1,0 +1,103 @@
+// Approach 1  	: 	TC: O((n+m) + nlogn + mlogm)		SC: O(1)
+
+#include<vector>
+
+void mergeTwoSortedArraysWithoutExtraSpace(vector<long long> &a, vector<long long> &b){
+	// Write your code here.
+	int n = a.size();
+	int m = b.size();
+	int i = n-1;
+	int j = 0;
+	while(i >= 0 && j < m) {
+		if(a[i] > b[j]) {
+			swap(a[i], b[j]);
+		}
+		i--;
+		j++;
+	}
+	sort(a.begin(), a.end());
+	sort(b.begin(), b.end());
+}
+
+
+
+// Approach 2  	:	Shell Sort	 	TC: O(log(n+m) * (n+m))		SC: O(1)
+
+// #include<vector>
+
+// void swapIfGreater(vector<long long> &a, vector<long long> &b, int i, int j) {
+// 	if(a[i] > b[j]) {
+// 		swap(a[i], b[j]);
+// 	}
+// }
+
+// void mergeTwoSortedArraysWithoutExtraSpace(vector<long long> &a, vector<long long> &b){
+// 	// Write your code here.
+// 	int n = a.size();
+// 	int m = b.size();
+// 	int len = (n+m);
+// 	int gap = len/2 + len%2;
+
+// 	while(gap > 0) {
+// 		int left = 0;
+// 		int right = left + gap;
+
+// 		while(right < len) {
+// 			if(left < n && right >= n) {
+// 				swapIfGreater(a, b, left, right-n);
+// 			} else if(left >= n) {
+// 				swapIfGreater(a, b, left-n, right-n);
+// 			} else {
+// 				swapIfGreater(a, b, left, right);
+// 			}
+// 			left++;
+// 			right++;
+// 		}
+// 		if(gap == 1) break;
+// 		gap = gap/2 + gap%2;
+// 	}
+// }
+
+
+
+// Approach 3  	:	Merge Procedure	 	TC: O(n+m)		SC: O(n+m)
+
+// #include<vector>
+
+// void mergeTwoSortedArraysWithoutExtraSpace(vector<long long> &a, vector<long long> &b){
+// 	// Write your code here.
+// 	vector<int> ans;
+// 	int i = 0;
+// 	int j = 0;
+// 	int n = a.size();
+// 	int m = b.size();
+
+// 	while(i < n && j < m) {
+// 		if(a[i] < b[j]) {
+// 			ans.push_back(a[i]);
+// 			i++;
+// 		} else {
+// 			ans.push_back(b[j]);
+// 			j++;
+// 		}
+// 	}
+
+// 	if(i >= n) {
+// 		while(j < m) {
+// 			ans.push_back(b[j]);
+// 			j++;
+// 		}
+// 	} else if(j >= m) {
+// 		while(i < n) {
+// 			ans.push_back(a[i]);
+// 			i++;
+// 		}
+// 	}
+	
+// 	for(int k = 0 ; k < n ; k++) {
+// 		a[k] = ans[k];
+// 	}
+// 	for(int k = 0 ; k < m ; k++) {
+// 		b[k] = ans[k+n];
+// 	}
+// }
