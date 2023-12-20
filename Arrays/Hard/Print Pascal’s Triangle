@@ -1,0 +1,19 @@
+vector<vector<int>> pascalTriangle(int N) {
+    // Write your code here.
+    vector<vector<int>> ans;
+    ans.push_back({1});
+    if(N == 1) return ans;
+
+    for(int i = 1 ; i < N ; i++) {
+        vector<int> temp(i+1);
+        temp[0] = 1;
+        temp[i] = 1;
+        int index = 1;
+        while(index <= i-1) {
+            temp[index] = ans[i-1][index-1] + ans[i-1][index];
+            index++;
+        }
+        ans.push_back(temp);
+    }
+    return ans;
+}
