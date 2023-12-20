@@ -1,0 +1,64 @@
+// Approach 1   Use two pointer     TC: O(n^2)      SC: O(1)
+
+
+#include <bits/stdc++.h>
+
+vector<vector<int>> triplet(int n, vector<int> &arr)
+{
+    vector<vector<int>> ans;
+    sort(arr.begin(), arr.end());
+
+    for(int i = 0 ; i < n ; i++) {
+        if(i != 0 && arr[i-1] == arr[i]) continue;
+        int j = i+1;
+        int k = n-1;
+
+        while(j < k){
+            int sum = arr[i] + arr[j] + arr[k];
+            if(sum == 0) {
+                vector<int> temp = {arr[i], arr[j], arr[k]};
+                ans.push_back(temp);
+                j++;
+                k--;
+                while(j < k && arr[j-1] == arr[j]) j++;     
+                while(j < k && arr[k] == arr[k+1]) k--;
+
+            } else if(sum < 0) {
+                j++;
+                while(j < k && arr[j-1] == arr[j]) j++;
+            } else if(sum > 0) {
+                k--;
+                while(j < k && arr[k] == arr[k+1]) k--;
+            }
+        }
+    }
+    return ans;
+}
+
+
+
+
+// Approach2    Use Hashing     TC: O(n^2 * logn)     SC: O(n+n)
+
+// #include <bits/stdc++.h>
+
+// vector<vector<int>> triplet(int n, vector<int> &arr)
+// {
+//     set<vector<int>> set1;
+//     // Write your code here.
+//     for(int i = 0 ; i < n ; i++) {
+//         set<int> set2;
+//         for(int j = i+1 ; j < n ; j++) {
+//             int third = -(arr[i]+ + arr[j]);
+//             if(set2.find(third) != set2.end()) {
+//                 vector<int> temp = {arr[i], arr[j], third};
+//                 sort(temp.begin(), temp.end());
+//                 set1.insert(temp);
+//             }
+//             set2.insert(arr[j]);
+//         }
+//     }
+
+//     vector<vector<int>> ans(set1.begin(), set1.end());
+//     return ans;
+// }
