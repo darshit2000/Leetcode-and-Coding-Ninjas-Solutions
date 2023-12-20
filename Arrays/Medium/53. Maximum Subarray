@@ -1,25 +1,5 @@
 // Approach 1   Kadane Algo 1
 
-// class Solution {
-// public:
-//     int maxSubArray(vector<int>& nums) {
-//         int sum = 0;
-//         int mx = nums[0];
-//         int n = nums.size();
-
-//         for(int i = 0 ; i < n ; i++) {
-//             sum += nums[i];
-//             mx = max(mx, sum);
-//             if(sum < 0) sum = 0;
-//         }
-//         return mx;
-//     }
-// };
-
-
-
-// Approach 2   Kadane Algo 2 
-
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
@@ -28,9 +8,62 @@ public:
         int n = nums.size();
 
         for(int i = 0 ; i < n ; i++) {
-            sum = max(sum + nums[i] , nums[i]);
-            mx = max(sum , mx);
+            sum += nums[i];
+            mx = max(mx, sum);
+            if(sum < 0) sum = 0;
         }
         return mx;
     }
 };
+
+
+
+// Approach 2   Kadane Algo 2 
+
+// class Solution {
+// public:
+//     int maxSubArray(vector<int>& nums) {
+//         int sum = 0;
+//         int mx = nums[0];
+//         int n = nums.size();
+
+//         for(int i = 0 ; i < n ; i++) {
+//             sum = max(sum + nums[i] , nums[i]);
+//             mx = max(sum , mx);
+//         }
+//         return mx;
+//     }
+// };
+
+
+
+
+// Approach 3     Divide and Conquer    (O(nlogn))
+// class Solution {
+// public:
+//     int maxSumSubArray(vector<int>& nums , int left, int right) {
+//         if(left > right) return INT_MIN;
+//         int mid = (left  + right)/2;
+//         int curLeftSum = 0;
+//         int maxLeftSum = 0;
+//         int curRightSum = 0;
+//         int maxRightSum = 0;
+
+//         for(int i = mid-1 ; i >= left ; i--) {
+//             curLeftSum += nums[i];
+//             maxLeftSum = max(maxLeftSum, curLeftSum);
+//         }
+//         for(int j = mid+1 ; j <= right ; j++) {
+//             curRightSum += nums[j];
+//             maxRightSum = max(maxRightSum, curRightSum);
+//         }
+
+//         return max({maxLeftSum + nums[mid] + maxRightSum, maxSumSubArray(nums, left, mid-1), maxSumSubArray(nums, mid+1, right)});
+
+//     }
+
+//     int maxSubArray(vector<int>& nums) {
+//         int n = nums.size();
+//         return maxSumSubArray(nums, 0, n-1);
+//     }
+// };
