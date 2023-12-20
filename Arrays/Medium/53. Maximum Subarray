@@ -1,3 +1,25 @@
+// Approach 1   Kadane Algo 1
+
+// class Solution {
+// public:
+//     int maxSubArray(vector<int>& nums) {
+//         int sum = 0;
+//         int mx = nums[0];
+//         int n = nums.size();
+
+//         for(int i = 0 ; i < n ; i++) {
+//             sum += nums[i];
+//             mx = max(mx, sum);
+//             if(sum < 0) sum = 0;
+//         }
+//         return mx;
+//     }
+// };
+
+
+
+// Approach 2   Kadane Algo 2 
+
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
@@ -6,9 +28,8 @@ public:
         int n = nums.size();
 
         for(int i = 0 ; i < n ; i++) {
-            sum += nums[i];
-            mx = max(mx, sum);
-            if(sum < 0) sum = 0;
+            sum = max(sum + nums[i] , nums[i]);
+            mx = max(sum , mx);
         }
         return mx;
     }
