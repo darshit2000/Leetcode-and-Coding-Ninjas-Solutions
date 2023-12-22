@@ -1,0 +1,25 @@
+pair<int, int> getFloorAndCeil(vector<int> &a, int n, int x) {
+	// Write your code here.
+	int low = 0;
+	int high = n-1;
+	pair<int, int> ans;
+	ans.first = -1;
+	ans.second = -1;
+
+	while(low <= high) {
+		int mid = (low + high)/2;
+		if(a[mid] == x) {
+			ans.first = a[mid];
+			ans.second = a[mid];
+			return ans;
+		} else if(a[mid] < x) {
+			ans.first = a[mid];
+			low = mid + 1;
+		} else if(a[mid] > x) {
+			ans.second = a[mid];
+			high = mid - 1;
+		}
+	}
+
+	return ans;
+}
