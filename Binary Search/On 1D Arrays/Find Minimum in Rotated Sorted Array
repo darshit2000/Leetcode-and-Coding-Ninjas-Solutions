@@ -1,0 +1,25 @@
+int findMin(vector<int>& arr)
+{
+	// Write your code here.
+	int n = arr.size();
+	int low = 0;
+	int high = n-1;
+	int mn = INT_MAX;
+
+	while(low <= high) {
+		int mid = (low + high)/2;
+
+		// Left half is sorted, Right half not sorted
+		if(arr[low] <= arr[mid]) {
+			mn = min(mn, arr[low]);
+			low = mid + 1;
+		}
+
+		// Right half is sorted, Left half not sorted
+		else if(arr[mid] <= arr[high]) {
+			mn = min(mn, arr[mid]);
+			high = mid - 1;
+		}
+	}
+	return mn;
+}
