@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+
+int findKRotation(vector<int> &arr){
+    // Write your code here.    
+    int n = arr.size();
+    int low = 0;
+    int high = n-1;
+    int mn = INT_MAX;
+
+    while(low <= high) {
+        int mid = (low + high)/2;
+
+        // Left side sorted, right side not sorted
+        if(arr[low] <= arr[mid]) {
+            mn = min(mn, arr[low]);
+            low = mid + 1;
+        } 
+        // Right side sorted, left side not sorted
+        else if(arr[mid] <= arr[high]) {
+            mn = min(mn, arr[mid]);
+            high = mid - 1;
+        }
+    }
+
+    low = 0;
+    high = n-1;
+    int pos = -1;
+    while(low <= high) {
+        int mid = (low + high)/2;
+        if(arr[mid] == mn) {
+            pos = mid;
+            break;
+        } 
+
+        // Left side sorted, right side not sorted
+        if(arr[low] <= arr[mid]) {
+            if(arr[low] <= mn && mn <= arr[mid]) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        // Right side sorted, left side not sorted
+        else if(arr[mid] <= arr[high]) {
+            if(arr[mid] <= mn && mn <= arr[high]) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+    }
+
+    return pos;
+}
