@@ -1,0 +1,86 @@
+class Solution {
+public:
+    string removeOuterParentheses(string s) {
+        int n = s.length();
+        stack<char> stk;
+        int open = 0;
+        string ans = "";
+
+        for(int i = 0 ; i < n ; i++) {
+            if(s[i] == '(' && open++ > 0) {
+                ans += s[i];
+            } else if(s[i] == ')' && open-- > 1 ) {
+                ans += s[i];
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+
+
+// class Solution {
+// public:
+//     string removeOuterParentheses(string s) {
+//         int n = s.length();
+//         stack<char> stk;
+//         int start = 0;
+//         string ans = "";
+
+//         for(int i = 0 ; i < n ; i++) {
+//             if(s[i] == '(') {
+//                 if(stk.size() == 0) {
+//                     stk.push(s[i]);
+//                     start++;
+//                 } else {
+//                     stk.push(s[i]);
+//                 }
+//             } else {
+//                 stk.pop();
+//                 if(stk.size() == 1) {
+//                     for(int j = start; j <= i; j++) {
+//                         ans += s[j];
+//                     }
+//                     start = i + 1; 
+//                 } else if(stk.size() == 0) {
+//                     start++;
+//                 }
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+
+
+
+// class Solution {
+// public:
+//     string removeOuterParentheses(string s) {
+//         int n = s.length();
+//         string ans = "";
+//         stack<char> stk;
+//         char ch;
+
+//         int i = 0;
+//         while(i < n) {
+//             if(s[i] == ')') {
+//                 stk.pop();
+//                 if(stk.size() >= 1) {
+//                     ans += s[i];
+//                 }
+//             } else if(s[i] == '(') {
+//                 if(stk.size() >= 1) {
+//                     ans += s[i];
+//                     stk.push(s[i]);
+//                 } else {
+//                     stk.push(s[i]);
+//                 }     
+//             }
+//             i++;
+//         }
+//         return ans;
+//     }
+// };
