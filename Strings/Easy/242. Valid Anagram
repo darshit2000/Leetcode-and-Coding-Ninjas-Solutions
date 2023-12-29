@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.length() != t.length()) return false;
+        vector<int> charCount(256);
+        for(int i = 0 ; i < s.length() ; i++) {
+            charCount[(int)s[i]]++;
+            charCount[(int)t[i]]--;
+        }
+        for(int i = 0 ; i < charCount.size() ; i++) {
+            if(charCount[i] != 0) return false;
+        }
+        return true;
+    }
+};
+
+
+
+// class Solution {
+// public:
+//     bool isAnagram(string s, string t) {
+//         if(s.length() != t.length()) return false;
+//         map<char, int> mpp1;
+//         map<char, int> mpp2;
+//         for(int i = 0 ; i < s.length() ; i++) {
+//             mpp1[s[i]]++;
+//             mpp2[t[i]]++;
+//         }
+//         return (mpp1 == mpp2);
+//     }
+// };
