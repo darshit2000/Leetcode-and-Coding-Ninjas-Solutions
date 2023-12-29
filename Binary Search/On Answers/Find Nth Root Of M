@@ -1,0 +1,20 @@
+
+#include <math.h>
+
+int NthRoot(int n, int m) {
+//   // Write your code here.
+  auto low = 1;
+  auto high = m;
+  while(low <= high) {
+    auto mid = (low + high)/2;
+    auto product = pow(mid, n);
+    if(product == m) {
+      return mid;
+    } else if(product < m) {
+      low = mid + 1;
+    } else if(product > m) {
+      high = mid - 1;
+    }
+  }
+  return -1;
+}
