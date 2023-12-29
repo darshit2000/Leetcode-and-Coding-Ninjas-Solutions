@@ -4,12 +4,20 @@ using namespace std;
 class Solution {
 public:
     string largestOddNumber(string num) {
-        int n = num.length();
-        int i = n-1;
-        while(i >= 0) {
-            if((int)num[i] % 2 == 1) return num.substr(0, i+1);
-            i--;
-        }
-        return "";
+        return num.substr(0, num.find_last_of("13579")+1);
     }
 }; 
+
+
+// class Solution {
+// public:
+//     string largestOddNumber(string num) {
+//         int n = num.length();
+//         int i = n-1;
+//         while(i >= 0) {
+//             if((int)num[i] % 2 == 1) return num.substr(0, i+1);
+//             i--;
+//         }
+//         return "";
+//     }
+// };
