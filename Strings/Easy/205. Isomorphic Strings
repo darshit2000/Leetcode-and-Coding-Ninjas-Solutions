@@ -1,0 +1,64 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int first = 0;
+        int second = 0;
+        int flag = 0;
+        unordered_map<char,char> mpp;
+        vector<bool> isMapped(256);
+
+        while(first < s.length()) {
+            if(mpp.find(s[first]) == mpp.end() && isMapped[(int)t[second]] == false) {
+                mpp[s[first]] = t[second];
+                isMapped[(int)t[second]] = true;
+            } else if(mpp.find(s[first]) != mpp.end()){
+                if(mpp[s[first]] != t[second]) {
+                    flag = 1;
+                    break;
+                }
+            } else if(mpp.find(s[first]) == mpp.end() && isMapped[(int)t[second]] == true) {
+                flag = 1;
+                break;
+            }
+            first++;
+            second++;
+        }
+        if(flag == 1) return false;
+        return true;
+    }
+};
+
+
+
+
+// class Solution {
+// public:
+//     bool isIsomorphic(string s, string t) {
+//         int first = 0;
+//         int second = 0;
+//         int flag = 0;
+//         vector<pair<char,char>> v;
+//         vector<bool> isMappedFromFirst(256);
+//         vector<bool> isMappedFromSecond(256);
+
+//         while(first < s.length()) {
+//             if(find(v.begin(), v.end(), make_pair(s[first], t[second])) != v.end()) {
+//                 first++;
+//                 second++;
+//                 continue;
+//             }
+//             else if(find(v.begin(), v.end(), make_pair(s[first], t[second])) == v.end() && !isMappedFromSecond[(int)t[second]] && !isMappedFromFirst[(int)s[first]]) {
+//                 v.push_back(make_pair(s[first], t[second]));
+//                 isMappedFromFirst[(int)s[first]] = true;
+//                 isMappedFromSecond[(int)t[second]] = true;
+//             } else {
+//                 flag = 1;
+//                 break;
+//             }
+//             first++;
+//             second++;
+//         }
+//         if(flag == 1) return false;
+//         return true;
+//     }
+// };
