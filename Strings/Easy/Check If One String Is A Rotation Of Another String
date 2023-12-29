@@ -1,27 +1,30 @@
 int isCyclicRotation(string &p, string &q) 
 {
     // Write your code here
-    p=p+p;
-    int i=0, j=0;
-    int n= p.size();
+    p = p + p;
+    int i = 0;
+    int j = 0;
+    int n = p.size();
 
-    while(i<n){
-        if(p[i]==q[j]){
+    while(i < n){
+        if(p[i] == q[j]) {
             i++;
             j++;
-            if(j==q.size()) return 1;
+            if(j == q.size()) return 1;
             continue;
         }
-        else if (q[j]!=p[i] && j!=0){
-            j=0;
+        // Seen some pattern before, but now it broke, so go to start
+        else if (q[j] != p[i] && j != 0){
+            j = 0;
             continue;
+        } 
+        // No pattern seen in the past, so just increment i and find the starting point of the pattern
+        else if(q[j] != p[i] && j == 0) {
+            i++;
         }
-        i++;
     }
     return 0;
 }
-
-
 
 
 
@@ -30,8 +33,6 @@ int isCyclicRotation(string &p, string &q)
 //     // Write your code here
 //     return ((p+p).find(q) != string::npos);
 // }
-
-
 
 
 // int isCyclicRotation(string &p, string &q) 
