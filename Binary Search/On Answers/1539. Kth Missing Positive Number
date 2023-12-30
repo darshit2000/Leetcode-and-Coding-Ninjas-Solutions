@@ -21,7 +21,8 @@ public:
         int ans = arr[high] + totalMissingRemaining;
 
         if(high == n-1) return ans;
-        else if(low < n && arr[low] != ans) return ans;
-        else return (ans+1);
+        else if(arr[high+1] == ans) return (ans+1);
+        else if(arr[high+1] != ans) return ans;
+        return -1;
     }
 };
