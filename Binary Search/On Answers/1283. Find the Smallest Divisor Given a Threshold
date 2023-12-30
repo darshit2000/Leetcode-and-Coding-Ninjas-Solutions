@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+#include <cmath>
+
+class Solution {
+public:
+    int solve(vector<int>& nums, int divisor) {
+        int sum = 0;
+        for(int item : nums) {
+            sum += ceil((double)item/(double)divisor);
+        }
+        return sum;
+    }
+
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int ans = 1;
+        int low = 1;
+        int high = *max_element(nums.begin(), nums.end());
+        while(low <= high) {
+            int mid = (low + high)/2;
+            int sum = solve(nums, mid);
+            if(sum <= threshold) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
