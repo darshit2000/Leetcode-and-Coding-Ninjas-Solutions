@@ -1,0 +1,40 @@
+class Solution {
+public:
+
+    bool solve(vector<int>& bloomDay, int totalBouquet, int k, int minDays) {
+        int currBouquet = 0;
+        int maxconsecutive = 0;
+        for(int i = 0 ; i < bloomDay.size() ; i++) {
+            if(bloomDay[i] - minDays <= 0) {
+                maxconsecutive++;
+                if(maxconsecutive == k) {
+                    currBouquet++;
+                    maxconsecutive = 0;
+                    if(currBouquet == totalBouquet) {
+                        return true;
+                    }
+                }
+            } else {
+                maxconsecutive = 0;
+            }
+        }
+        return false;
+    }
+
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int ans = -1;
+        if((long)m*k > bloomDay.size()) return -1;
+        int low = *min_element(bloomDay.begin(), bloomDay.end());;
+        int high = *max_element(bloomDay.begin(), bloomDay.end());
+        while(low <= high) {
+            int mid = (low + high)/2;
+            bool canMakeBouquet = solve(bloomDay, m, k, mid);
+            if(canMakeBouquet) {
+                ans = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1;
+        }
+        return ans;
+    }
+};
