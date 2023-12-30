@@ -1,0 +1,35 @@
+bool canWePlace(vector<int> &stalls, int cows, int minDist) {
+    cows--;
+    int lastSmallestNumber = stalls[0];
+
+    for(int i = 1 ; i < stalls.size() ; i++) {
+        if(stalls[i]-lastSmallestNumber >= minDist) {
+            cows--;
+            lastSmallestNumber = stalls[i];
+        }
+        if(cows == 0) return true;
+    }
+    return false;
+}
+
+int aggressiveCows(vector<int> &stalls, int k)
+{
+    //    Write your code here.
+    sort(stalls.begin(), stalls.end());
+    int n = stalls.size();
+    int ans = 1;
+    int low = 1;
+    int high = stalls[n-1] - stalls[0];
+
+    while(low <= high) {
+        int mid = (low + high)/2;
+        bool result = canWePlace(stalls, k, mid);
+        if(result) {
+            ans = mid;
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return ans;
+}
