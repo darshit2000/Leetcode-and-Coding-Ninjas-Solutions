@@ -1,0 +1,27 @@
+class Solution {
+public:
+    uint32_t solve(vector<int>& piles, int k) {
+        uint32_t hours = 0;
+        for(int item : piles) {
+            hours += ceil((double)item/(double)k);
+        }
+        return hours;
+    }
+
+    int minEatingSpeed(vector<int>& piles, int h) {
+        uint32_t ans = 1;
+        uint32_t low = 1;
+        uint32_t high = *max_element(piles.begin(), piles.end());
+        while(low <= high) {
+            uint32_t mid = (low + high)/2;
+            uint32_t hours = solve(piles, mid);
+            if(hours <= h) {
+                ans = mid;
+                high = mid - 1;
+            } else if(hours > h) {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
