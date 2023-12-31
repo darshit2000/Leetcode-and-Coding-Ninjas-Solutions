@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+
+int solve(vector<int>& arr, int n, int maxNumberOfPages) {
+    int totalStudents = 1;
+    int totalPages = arr[0];
+    for(int i = 1 ; i < n ; i++) {
+        totalPages += arr[i];
+        if(totalPages <= maxNumberOfPages) {
+            continue;
+        } else if(totalPages > maxNumberOfPages) {
+            totalStudents++;
+            totalPages = arr[i];
+        }
+    }
+    return totalStudents;
+}
+
+int findPages(vector<int>& arr, int n, int m) {
+    // Write your code here.
+    if(m > n) return -1;
+    
+    int low = *max_element(arr.begin(), arr.end());
+    int high = accumulate(arr.begin(), arr.end(), 0);
+    int ans = low;
+
+    while(low <= high) {
+        int mid = (low + high)/2;
+        int totalStudents = solve(arr, n, mid);
+
+        if(totalStudents == m) {
+            ans = mid;
+            high = mid - 1;
+        } else if(totalStudents > m) {
+            low = mid + 1;
+        } else if(totalStudents < m) {
+            high = mid - 1;
+        }
+    }
+
+    return ans;
+}
