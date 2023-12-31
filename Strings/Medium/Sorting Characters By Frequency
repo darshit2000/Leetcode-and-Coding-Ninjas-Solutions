@@ -1,0 +1,21 @@
+string sortByFrequency(int n, string& s)
+{
+	// Write Your Code here
+	string ans = "";
+	map<char,int> mpp;
+	multimap<int, char> MM;
+	for(int i = 0 ; i < n ; i++) {
+		mpp[s[i]]++;
+	}
+	for (auto& it : mpp) {
+        MM.insert({ it.second, it.first });
+    }
+	for(auto& item : MM) {
+		int count = item.first;
+		for(int j = 0 ; j < count ; j++) {
+			ans = item.second + ans;
+		}
+	}
+	// cout << ans;
+	return ans;
+}
