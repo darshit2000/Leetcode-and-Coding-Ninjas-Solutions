@@ -1,0 +1,71 @@
+// Priority queue
+
+#include <bits/stdc++.h>
+
+double minimiseMaxDistance(vector<int> &arr, int k){
+	// Write your code here.	
+	int n = arr.size();
+	vector<int> howManyInserted(n-1);
+	priority_queue<pair<long double,int>> pq;
+	for(int i = 0 ; i < n-1 ; i++) {
+		pq.push(make_pair(arr[i+1]-arr[i],i));
+	}
+	for(int gasStationNumber = 0 ; gasStationNumber < k ; gasStationNumber++) {
+		auto maxDifference = pq.top();
+		pq.pop();
+		int index = maxDifference.second;
+		howManyInserted[index]++;
+		long double oldSectionSize = arr[index+1]-arr[index];
+		long double newSectionSize = oldSectionSize/(long double)(howManyInserted[index] + 1); 
+		pq.push(make_pair(newSectionSize,index));
+	}
+	return pq.top().first;
+}
+
+
+
+
+
+// Binary Search
+
+
+// int solve(vector<int> &diff, long double maxDist, int k) {
+// 	int count = 0;
+// 	for(int i = 0 ; i < diff.size() ; i++) {
+// 		int numberinbetween = (diff[i]/maxDist);
+// 		if(numberinbetween*maxDist == diff[i]) {
+// 			numberinbetween--;
+// 		}
+// 		count += numberinbetween;
+// 		if(count > k) return count;
+// 	}
+// 	return count;
+// }
+
+// double minimiseMaxDistance(vector<int> &arr, int k){
+// 	// Write your code here.	
+// 	long double ans;
+// 	int n = arr.size();
+
+// 	vector<int> diff(n-1);
+// 	for(int i = 1 ; i < n ; i++) {
+// 		diff[i-1] = arr[i] - arr[i-1];
+// 	}
+
+// 	long double low = 0;
+// 	long double high = *max_element(diff.begin(), diff.end());
+
+// 	ans = low;
+// 	long double difference = 1e-6;
+// 	while((high-low) > difference) {
+// 		long double mid = (low + high)/(2.0);
+// 		int totalGasStations = solve(diff, mid, k);
+// 		if(totalGasStations <= k) {
+// 			ans = mid;
+// 			high = mid;
+// 		} else if(totalGasStations > k) {
+// 			low = mid;
+// 		}
+// 	}
+// 	return (double)high;
+// }
