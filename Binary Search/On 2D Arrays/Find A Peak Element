@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+
+vector<int> findPeakGrid(vector<vector<int>> &g){
+    // Write your code here.    
+    int n = g.size();
+    int m = g[0].size();
+
+    int low = 0;
+    int high = m-1;
+    int j = -1;
+    while(low <= high) {
+        int mid = (low+high) >> 1;
+        int mx = INT_MIN;
+        int rowNo = -1;
+        for(j = 0 ; j < n ; j++) {
+            if(g[j][mid] > mx) {
+                mx = g[j][mid];
+                rowNo = j;
+            }
+        }
+        int left = (mid-1 >= 0) ? g[rowNo][mid-1] : -1;
+        int right = (mid+1 < m) ? g[rowNo][mid+1] : -1;
+        if(mx > left && mx > right) return {rowNo,mid};
+        else if(mx < right) low = mid + 1;
+        else if(mx < left) high = mid - 1;
+        else low = mid + 1;
+    }
+    return {-1,-1};
+}
