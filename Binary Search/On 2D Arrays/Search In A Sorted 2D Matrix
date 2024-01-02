@@ -7,7 +7,7 @@ bool searchElement(vector<vector<int>> &MATRIX, int target) {
 
     int row = 0;
     int col = m-1;
-    while(row < n && col < m) {
+    while(row < n && col >= m) {
         if(MATRIX[row][col] == target) return true;
         if(MATRIX[row][col] < target) {
             row++;
