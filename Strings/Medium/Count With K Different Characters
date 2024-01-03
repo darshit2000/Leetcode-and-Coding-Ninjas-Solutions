@@ -5,11 +5,11 @@ int countSubStrings(string str, int k)
     int count = 0;
 
     for(int i = 0 ; i < n; i++) {
-        bool isMapped[256] = {false};
+        bool isMapped[26] = {false};
         int distChar = 0;
         for(int j = i ; j < n ; j++) {
-            if(isMapped[(int)str[j]] == false) {
-                isMapped[(int)str[j]] = true;
+            if(isMapped[(int)str[j]-97] == false) {
+                isMapped[(int)str[j]-97] = true;
                 distChar++;
             }
 
