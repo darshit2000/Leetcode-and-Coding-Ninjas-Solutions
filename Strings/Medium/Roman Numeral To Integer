@@ -15,3 +15,38 @@ int romanToInt(string s) {
     }
     return number;
 }
+
+
+
+
+// Space efficient
+
+class Solution {
+public:
+
+    int getValue(char ch) {
+        switch(ch) {
+            case 'I' : return 1;
+            case 'V' : return 5; 
+            case 'X' : return 10; 
+            case 'L' : return 50; 
+            case 'C' : return 100; 
+            case 'D' : return 500; 
+            case 'M' : return 1000; 
+        }
+        return -1;
+    }
+
+    int romanToInt(string s) {
+        int n = s.length();
+        if(n == 0) return 0;
+        int number = getValue(s[n-1]);
+        
+        for(int i = n-2 ; i >= 0 ; i--) {
+            
+            if(getValue(s[i]) >= getValue(s[i+1])) number += getValue(s[i]);
+            else number -= getValue(s[i]);
+        }
+        return number;
+    }
+};
