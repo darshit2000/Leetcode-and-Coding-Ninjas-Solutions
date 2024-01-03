@@ -1,0 +1,61 @@
+class Solution {
+public:
+    void expand(string s, string &ans, int left, int right, int n) {
+        while(left >= 0 && right < n) {
+            if(s[left] == s[right]) {
+                left--;
+                right++;
+            } else break;
+        }
+        if(ans.length() <= (right-left-1)) ans = s.substr(left+1, right-left-1);
+    }
+
+    string longestPalindrome(string s) {
+        string ans = "";
+        int n = s.length();
+        for(int i = 0 ; i < s.length() ; i++) {
+            expand(s, ans, i, i, n);
+            expand(s, ans, i, i+1, n);
+        }
+        return ans;
+    }
+};
+
+
+// Recursion
+
+// class Solution {
+// public:
+//     string longPal(string str, int i, int j) {
+
+//         if(i > j) return "";
+
+//         int start = i;
+//         int end = j;
+//         string temp = "";
+//         for(int k = i ; k <= j ; k++) {
+//             temp += str[k];
+//         }
+//         string rev = string(temp.rbegin(), temp.rend());
+//         if(temp == rev) return temp;
+
+//         // while(start <= end)
+//         // {
+//         //     if(str[start] == str[end]) {
+//         //         start++;
+//         //         end--;
+//         //     } else break;
+//         // }
+//         // if(end < start) return str.substr(i,j+1);
+
+//         string s1 = longPal(str, i, j-1);
+//         string s2 = longPal(str, i+1, j);
+//         if(s1.length() >= s2.length()) return s1;
+//         return s2;
+//     }
+
+//     string longestPalindrome(string s) {
+//         string ans = longPal(s,0,s.length()-1);
+//         return ans;
+//     }
+// };
