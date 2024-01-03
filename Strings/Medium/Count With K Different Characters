@@ -1,0 +1,23 @@
+int countSubStrings(string str, int k) 
+{
+    // Write your code here.
+    int n = str.size();
+    int count = 0;
+
+    for(int i = 0 ; i < n; i++) {
+        bool isMapped[256] = {false};
+        int distChar = 0;
+        for(int j = i ; j < n ; j++) {
+            if(isMapped[(int)str[j]] == false) {
+                isMapped[(int)str[j]] = true;
+                distChar++;
+            }
+
+            if(distChar == k) {
+                count++;
+            } else if(distChar > k) break;
+        }
+    }
+    return count;
+}
+
