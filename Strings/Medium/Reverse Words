@@ -1,0 +1,25 @@
+string revWords(string str) {
+    // Write your code here.
+    string ans = "";
+    int n = str.length();
+    string temp = "";
+
+    int i = n-1;
+    while(i >= 0) {
+        if(str[i] != ' ') {
+            temp = str[i] + temp;
+            i--;
+        } else if(str[i] == ' ') {
+            if(temp.length() > 0) {
+                ans += temp;
+                ans += ' ';
+                temp = "";
+                i--;
+            } else {
+                i--;
+            }
+        }
+    }
+    if(temp.length() > 0) ans += temp;
+    return ans;
+}
