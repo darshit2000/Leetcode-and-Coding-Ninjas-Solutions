@@ -1,0 +1,22 @@
+int sumOfBeauty(string s) {
+	// Write your code here.
+	int n = s.size();
+	int count = 0;
+	for(int i = 0 ; i < n ; i++) {
+		int isMapped[26] = {0}; 
+		
+		for(int j = i ; j < n ; j++) {
+			isMapped[(int)s[j] - 97]++;
+			
+			int mn = INT_MAX;
+			int mx = INT_MIN;
+			for(int item : isMapped) {
+				if(item == 0) continue;
+				mx = max(mx, item);
+				mn = min(mn, item);
+			}
+			count += (mx-mn);
+		}
+	}
+	return count;
+}
