@@ -1,0 +1,50 @@
+#include <stdint.h>
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        int n = s.length();
+        bool signChecked = false;
+        bool isPositive = true;
+        string str = "";
+        stringstream ss;
+        long number = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            if(s[i] == ' ') {
+                if(str.length() > 0 || signChecked) break;
+                continue;
+            }
+            else if(!signChecked && s[i] == '-') {
+                if(str.length() > 0) break;
+                isPositive = false;
+                signChecked = true;
+                continue;
+            } else if(!signChecked && s[i] == '+') {
+                if(str.length() > 0) break;
+                isPositive = true;
+                signChecked = true;
+                continue;
+            }
+            else if((int)s[i] >= 48 && (int)s[i] <= 57) {
+                str += s[i];
+            } else {
+                break;
+            }
+        }
+        ss << str;
+        ss >> number;
+
+        // cout << "string:" << str;
+        // cout << "INTMIN:" << INT_MIN;
+        
+        if(isPositive) {
+            if(number - 2147483648 >= 0) return INT_MAX;
+            else return (int)number;
+        }
+        else {
+            if(number - 2147483647 > 0) return INT_MIN;
+            else return (int)number * -1;
+        }
+    }
+};
