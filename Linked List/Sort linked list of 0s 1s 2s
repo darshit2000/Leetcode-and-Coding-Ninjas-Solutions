@@ -59,12 +59,13 @@ Node* sortList(Node *head){
 
     if(newHeadZero != NULL) {
         currZero->next = ((newHeadOne != NULL) ? newHeadOne : newHeadTwo);
-        currOne->next = newHeadTwo;
-        currTwo->next = NULL;
+        if(newHeadOne != NULL) currOne->next = newHeadTwo;
+        if(newHeadTwo != NULL) currTwo->next = NULL;
         return newHeadZero;
     } else {
         if(newHeadOne != NULL) {
             currOne->next = ((newHeadTwo != NULL) ? newHeadTwo : NULL);
+            if(newHeadTwo != NULL) currTwo->next = NULL;
             return newHeadOne;
         } else return newHeadTwo;
     }
