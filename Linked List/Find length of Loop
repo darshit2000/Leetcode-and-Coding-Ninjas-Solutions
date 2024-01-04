@@ -1,0 +1,45 @@
+/**
+ * Definition of linked list:
+ *
+ * class Node {
+ * public:
+ *      int data;
+ *      Node *next;
+ *
+ *      Node(int data) {
+ *          this->data = data;
+ *          this->next = NULL;
+ *      }
+ * };
+ *
+ *************************************************************************/
+
+int lengthOfLoop(Node *head) {
+    // Write your code here
+    
+    bool cycle = false;
+    Node* slow = head;
+    Node* fast = head;
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast) {
+            cycle = true;
+            slow = head;
+            while(slow != fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+            break;
+        }
+    }
+    if(!cycle) return 0;
+    
+    int count = 1;
+    fast = slow->next;
+    while(slow != fast) {
+        count++;
+        fast = fast->next;
+    }
+    return count;
+}
