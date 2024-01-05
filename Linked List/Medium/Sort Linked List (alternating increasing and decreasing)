@@ -1,0 +1,73 @@
+/*
+Following is the class structure of the Node class:
+
+class Node
+{
+public:
+    int data;
+    Node *next;
+    Node()
+    {
+        this->data = 0;
+        next = NULL;
+    }
+    Node(int data)
+    {
+        this->data = data; 
+        this->next = NULL;
+    }
+    Node(int data, Node* next)
+    {
+        this->data = data;
+        this->next = next;
+    }
+};
+*/
+
+Node* sortList(Node* head){
+    // Write your code here.
+    if(head == NULL || head->next == NULL) return head;
+    Node* first = head;
+    Node* second = head->next;
+    Node* i = first;
+    Node* j = second;
+    while(i != NULL && j != NULL && i->next != NULL && j->next != NULL) {
+        i->next = i->next->next;
+        i = i->next;
+        j->next = j->next->next;
+        j = j->next;
+    }
+    if(i != NULL) i->next = NULL;
+    if(j != NULL) j->next = NULL;
+
+    Node* left = NULL;
+    Node* curr = second;
+    Node* right = curr->next;
+    while(curr->next != NULL) {
+        curr->next = left;
+        left = curr;
+        curr = right;
+        right = curr->next;
+    }
+    curr->next = left;
+    second = curr;
+
+    Node* newHead = new Node(-1);
+    curr = newHead;
+    Node* l = first;
+    Node* r = second;
+    while(l != NULL && r != NULL) {
+        if(l->data <= r->data) {
+            curr->next = l;
+            l = l->next;
+        } else {
+            curr->next = r;
+            r = r->next;
+        }
+        curr = curr->next;
+    }
+    if(l != NULL) curr->next = l;
+    else curr->next = r;
+
+    return newHead->next;
+}
