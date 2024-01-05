@@ -1,0 +1,128 @@
+/**
+ * Definition of linked list:
+ *
+ * class Node {
+ * public:
+ *      int data;
+ *      Node *next;
+ *      Node() {
+ *          this->data = 0;
+ *          this->next = NULL;
+ *      }
+ *      Node(int data) {
+ *          this->data = data;
+ *          this->next = NULL;
+ *      }
+ *      Node (int data, Node *next) {
+ *          this->data = data;
+ *          this->next = next;
+ *      }
+ * };
+ *
+ *************************************************************************/
+
+Node *addTwoNumbers(Node *num1, Node *num2)
+{
+    // Write your code here.
+    Node* newHead = new Node(-1);
+    Node* currNew = newHead;
+
+    Node* curr1 = num1;
+    Node* curr2 = num2;
+    int carry = 0;
+    while(curr1 || curr2) {
+        int sum = carry;
+        if(curr1) sum += curr1->data;
+        if(curr2) sum += curr2->data;
+
+        if(sum >= 10) {
+            Node* newNode = new Node(sum - 10);
+            currNew->next = newNode;
+            currNew = newNode;
+            carry = 1;
+        } else {
+            Node* newNode = new Node(sum);
+            currNew->next = newNode;
+            currNew = newNode;
+            carry = 0;
+        }
+        if(curr1) curr1 = curr1->next;
+        if(curr2) curr2 = curr2->next;
+    }
+    
+    if(carry == 1) {
+        Node* newNode = new Node(1);
+        currNew->next = newNode;
+    }
+    return newHead->next;
+}
+
+
+
+
+
+// Node *addTwoNumbers(Node *num1, Node *num2)
+// {
+//     // Write your code here.
+//     Node* newHead = new Node(-1);
+//     Node* currNew = newHead;
+
+//     Node* curr1 = num1;
+//     Node* curr2 = num2;
+//     int carry = 0;
+//     while(curr1 && curr2) {
+//         int sum = curr1->data + curr2->data + carry;
+//         if(sum >= 10) {
+//             Node* newNode = new Node(sum - 10);
+//             currNew->next = newNode;
+//             currNew = newNode;
+//             carry = 1;
+//         } else {
+//             Node* newNode = new Node(sum);
+//             currNew->next = newNode;
+//             currNew = newNode;
+//             carry = 0;
+//         }
+//         curr1 = curr1->next;
+//         curr2 = curr2->next;
+//     }
+//     if(curr2 == NULL) {
+//         while(curr1 != NULL) {
+//             int sum = curr1->data + carry;
+//             if(sum >= 10) {
+//                 Node* newNode = new Node(sum - 10);
+//                 currNew->next = newNode;
+//                 currNew = newNode;
+//                 carry = 1;
+//             } else {
+//                 Node* newNode = new Node(sum);
+//                 currNew->next = newNode;
+//                 currNew = newNode;
+//                 carry = 0;
+//             }
+//             curr1 = curr1->next;
+//         }
+//     }
+//     else if(curr1 == NULL) {
+//         while(curr2 != NULL) {
+//             int sum = curr2->data + carry;
+//             if(sum >= 10) {
+//                 Node* newNode = new Node(sum - 10);
+//                 currNew->next = newNode;
+//                 currNew = newNode;
+//                 carry = 1;
+//             } else {
+//                 Node* newNode = new Node(sum);
+//                 currNew->next = newNode;
+//                 currNew = newNode;
+//                 carry = 0;
+//             }
+//             curr2 = curr2->next;
+//         }
+//     }
+//     if(carry == 1) {
+//         Node* newNode = new Node(1);
+//         currNew->next = newNode;
+//     }
+//     return newHead->next;
+// }
