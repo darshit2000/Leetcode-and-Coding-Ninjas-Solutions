@@ -1,0 +1,72 @@
+/**
+ * Definition of linked list:
+ *
+ * class Node {
+ * public:
+ *      int data;
+ *      Node *next;
+ *      Node() {
+ *          this->data = 0;
+ *          this->next = NULL;
+ *      }
+ *      Node(int data) {
+ *          this->data = data;
+ *          this->next = NULL;
+ *      }
+ *      Node (int data, Node *next) {
+ *          this->data = data;
+ *          this->next = next;
+ *      }
+ * };
+ *
+ *************************************************************************/
+
+
+// Iterative
+
+Node* reverse(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    Node* prevNode = NULL;
+    Node* currNode = head;
+    Node* nextNode = currNode->next;
+    while(currNode->next != NULL) {
+        currNode->next = prevNode;
+        prevNode = currNode;
+        currNode = nextNode;
+        nextNode = currNode->next;
+    }
+    currNode->next = prevNode;
+    Node* newHead = currNode;
+    return newHead;
+}
+
+Node *addOne(Node *head)
+{
+    // Write Your Code Here.
+    Node* headAfterReversing = reverse(head);
+
+    Node* curr = headAfterReversing;
+    int carry = 1;
+    while(curr != NULL) {
+        if(curr->data + carry >= 10) {
+            carry = 1;
+            curr->data = 0;
+        } else {
+            curr->data++;
+            carry = 0;
+            break;
+        }
+        curr = curr->next;
+    }
+    // return headAfterReversing;
+    if(carry == 1) {
+        Node* finalHead = reverse(headAfterReversing);
+        Node* newNode = new Node(1);
+        newNode->next = finalHead;
+        finalHead = newNode;
+        return finalHead;
+    } else {
+        Node* finalHead = reverse(headAfterReversing);
+        return finalHead;
+    }
+}
