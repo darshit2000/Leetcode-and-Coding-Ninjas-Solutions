@@ -1,0 +1,67 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+
+    pair<ListNode*,ListNode*> reverse(ListNode* head) {
+        // if(head == NULL || head->next == NULL) return head;
+        // ListNode* newHead = reverse(head->next);
+        // head->next->next = head->next;
+        // head->next = NULL;
+        // return make_pair(newHead,head);
+        if(head == NULL || head->next == NULL) return make_pair(head,head);
+        ListNode* prevNode = NULL;
+        ListNode* currNode = head;
+        ListNode* nextNode = currNode->next;
+        while(currNode->next) {
+            currNode->next = prevNode;
+            prevNode = currNode;
+            currNode = nextNode;
+            nextNode = currNode->next;
+        }
+        currNode->next = prevNode;
+        return make_pair(currNode,head);
+        // return currNode;
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode* t1 = head;
+        ListNode* t2 = head;
+        ListNode* newHead = NULL;
+        ListNode* last = NULL;
+        pair<ListNode*,ListNode*> p;
+
+        while(t2 != NULL) {
+            for(int i = 0 ; i < k-1 ; i++) {
+                t2 = t2->next;
+                if(t2 == NULL) {
+                    last->next = t1;
+                    return newHead;
+                }
+            }
+            ListNode* temp = t2;
+            t2 = t2->next;
+            temp->next = NULL;
+
+            // ListNode* newTempHead = reverse(t1);
+            // if(newHead == NULL) newHead = newTempHead;
+            // if(last != NULL) last->next = newTempHead;
+            // last = t1;
+
+            p = reverse(t1);
+            if(newHead == NULL) newHead = p.first;
+            if(last != NULL) last->next = p.first;
+            last = p.second;
+            t1 = t2;
+        }
+        return newHead;
+    }
+};
