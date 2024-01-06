@@ -1,0 +1,75 @@
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+        class Node
+        {
+        public:
+            int data;
+            Node *next;
+            Node()
+            {
+                this->data = 0;
+                next = NULL;
+            }
+            Node(int data)
+            {
+                this->data = data;
+                this->next = NULL;
+            }
+            Node(int data, Node* next)
+            {
+                this->data = data;
+                this->next = next;
+            }
+        };
+
+*****************************************************************/
+
+// TC: O(n+m)  SC: O(1)
+
+// Node* findIntersection(Node *firstHead, Node *secondHead)
+// {
+//     //Write your code here
+    
+// }
+
+
+
+// TC: O(n+m+(m-n)+n) = O(n+2m)  SC: O(1)
+
+Node* getIntersection(Node* firstHead, Node* secondHead, int diff) {
+    Node* temp1 = firstHead;
+    Node* temp2 = secondHead;
+    for(int i = 0 ; i < diff ; i++) {
+        temp2 = temp2->next;
+    }
+    while(temp1 && temp2) {
+        if(temp1 == temp2) return temp1;
+        temp1 = temp1->next;
+        temp2 = temp2->next;
+    }
+    return NULL;
+}
+
+Node* findIntersection(Node *firstHead, Node *secondHead)
+{
+    //Write your code here
+    int n = 0;
+    int m = 0;
+    Node* temp1 = firstHead;
+    Node* temp2 = secondHead;
+    while(temp1) {
+        n++;
+        temp1 = temp1->next;
+    }
+    while(temp2) {
+        m++;
+        temp2 = temp2->next;
+    }
+    if(n > m) {
+        return getIntersection(secondHead, firstHead, n-m);
+    } else {
+        return getIntersection(firstHead, secondHead, m-n);
+    }
+}
