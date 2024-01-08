@@ -2,7 +2,6 @@ class Solution {
 public:
     long long int myPow(long long int x, long long int n) {
         if(n == 0) return 1;
-        if(n==1)return x;
         long long int val = myPow(x,n/2);
         if(n%2==0)return (val*val)%1000000007;
         else return (val*val*x)%1000000007;
