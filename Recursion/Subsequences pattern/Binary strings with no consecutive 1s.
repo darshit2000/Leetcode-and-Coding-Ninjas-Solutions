@@ -1,0 +1,39 @@
+void gen(string str, int index, int N, vector<string> &ans) {
+    if(index == N) {
+        ans.push_back(str);
+        return;
+    }
+    gen(str+'0', index+1, N, ans);
+    if(index == 0) gen(str+'1', index+1, N, ans);
+    
+    if(str.back() == '0') gen(str+'1', index+1, N, ans);
+    
+}
+
+vector<string> generateString(int N) {
+    // Write your code here.
+    vector<string> ans;
+    gen("", 0, N, ans);
+    return ans;
+}
+
+
+
+
+
+// vector<string> generateString(int N) {
+//     // Write your code here.
+//     if(N == 1) return {"0","1"};
+
+//     vector<string> res = generateString(N-1);
+//     vector<string> temp;
+//     for(string item : res) {
+//         if(item.back() == '0') {
+//             temp.push_back(item + '0');
+//             temp.push_back(item + '1');
+//         } else {
+//             temp.push_back(item + '0');
+//         }
+//     }
+//     return temp;
+// }
