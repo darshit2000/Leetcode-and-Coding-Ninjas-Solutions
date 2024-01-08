@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#include <cmath>
+
+bool isGood(int number, int length, int digit, int sum) {
+	if(length == 1 && number == digit) return false;
+	else if(length == 1 && number > sum) return true;
+	else if(length == 1 && number <= sum) return false;
+
+	int lastDigit = number % 10;
+	if((lastDigit > sum) && (lastDigit != digit)) return isGood(number/10, length-1, digit, sum + lastDigit);
+	else return false;
+}
+
+vector<int> goodNumbers(int a, int b, int digit) {
+	// Write your code here.
+	vector<int> ans;
+	for(int i = a ; i <= b ; i++) {
+		int n = floor(log10(i) + 1);
+		int newNumber = i/10;
+		int lastDigit = i % 10;
+		if(lastDigit == digit) continue;
+		if(newNumber == 0) {
+			ans.push_back(i);
+			continue;
+		}
+		if(isGood(newNumber,n-1,digit,lastDigit)) ans.push_back(i);
+	}
+	return ans;
+}
