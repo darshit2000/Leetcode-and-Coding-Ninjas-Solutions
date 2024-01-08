@@ -1,0 +1,20 @@
+void gen(string s, string temp, vector<string> &ans, int index) {
+    if(index == s.length()) {
+        ans.push_back(temp);
+        return;
+    }
+    // Not picked (index)th element and moved to index+1
+    gen(s, temp, ans, index+1);
+    // picked (index)th element and moved to index+1
+    temp += s[index];
+    gen(s, temp, ans, index+1);
+}
+
+vector<string> generateSubsequences(string s)
+{
+    // Write your code here.
+    vector<string> ans;
+    int n = s.length();
+    gen(s, "", ans, 0);
+    return ans;
+}
