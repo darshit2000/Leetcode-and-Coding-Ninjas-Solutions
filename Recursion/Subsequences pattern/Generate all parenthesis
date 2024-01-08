@@ -1,0 +1,17 @@
+void gen(string str, vector<string> &ans, int open, int close, int n) {
+    if(open + close >= 2 * n) {
+        ans.push_back(str);
+        return;
+    }
+    if(open < n) gen(str+"(", ans, open+1, close, n);
+    if(close < open) gen(str+")", ans, open, close+1, n);
+}
+
+vector<string> validParenthesis(int n){
+    // Write your code here.
+    vector<string> ans;
+    int open = 0;
+    int close = 0;
+    gen("", ans, open, close, n);
+    return ans;
+}
