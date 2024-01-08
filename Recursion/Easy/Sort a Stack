@@ -1,0 +1,63 @@
+#include <bits/stdc++.h> 
+#include <stack>
+
+void insertElement(stack<int> &stack, int element) {
+	if(stack.size() == 0) {
+		stack.push(element);
+		return;
+	}
+	int topOfStack = stack.top();
+	if(element >= topOfStack) {
+		stack.push(element);
+		return;
+	} else {
+		stack.pop();
+		insertElement(stack, element);
+		stack.push(topOfStack);
+	}
+}
+
+void sortStack(stack<int> &stack)
+{
+	// Write your code here
+	if(stack.size() == 1) return;
+
+	int topOfStack = stack.top();
+	stack.pop();
+	sortStack(stack);
+	insertElement(stack, topOfStack);
+	return;
+}
+
+
+
+// Taking extra stack
+
+
+// void sortStack(stack<int> &stack)
+// {
+// 	// Write your code here
+// 	if(stack.size() == 1) return;
+
+// 	int curr = stack.top();
+// 	stack.pop();
+// 	sortStack(stack);
+
+// 	int topOfStack = stack.top();
+// 	if(curr < topOfStack) {
+// 		std::stack<int> aux;
+// 		while(stack.size() > 0 && curr < topOfStack) {	
+// 			aux.push(topOfStack);
+// 			stack.pop();	
+// 			if(stack.size() > 0) topOfStack = stack.top();
+// 		}
+// 		stack.push(curr);
+// 		while(aux.size() > 0) {
+// 			stack.push(aux.top());
+// 			aux.pop();
+// 		}
+// 	} else {
+// 		stack.push(curr);
+// 	}
+// 	return;
+// }
