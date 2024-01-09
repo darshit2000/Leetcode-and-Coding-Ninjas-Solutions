@@ -3,10 +3,11 @@ void gen(string s, string temp, vector<string> &ans, int index) {
         ans.push_back(temp);
         return;
     }
-    // Not picked (index)th element and moved to index+1
-    gen(s, temp, ans, index+1);
     // picked (index)th element and moved to index+1
     temp += s[index];
+    gen(s, temp, ans, index+1);
+    // Not picked (index)th element and moved to index+1
+    temp.pop_back();
     gen(s, temp, ans, index+1);
 }
 
