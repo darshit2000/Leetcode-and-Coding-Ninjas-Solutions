@@ -1,0 +1,23 @@
+
+// Answer lies only in the suffix or only in the prefix
+#include <bits/stdc++.h>
+#include<vector>
+
+int subarrayWithMaxProduct(vector<int> &arr){
+	// Write your code here.
+	int n = arr.size();
+	int product = 1;
+	int mx = INT_MIN;
+	for(int i = 0 ; i < n ; i++) {
+		if(arr[i] != 0) product *= arr[i];
+		else product = 1;
+		mx = max(mx, product);
+	}
+	product = 1;
+	for(int i = n-1 ; i >= 0 ; i--) {
+		if(arr[i] != 0) product *= arr[i];
+		else product = 1;
+		mx = max(mx, product);
+	}
+	return mx;
+}
