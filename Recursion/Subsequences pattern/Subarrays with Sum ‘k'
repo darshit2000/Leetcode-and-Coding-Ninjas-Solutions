@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// check Subsequences not subarray 
+
+// void solve(vector<int> a, int i, long long k, vector<vector<int>> &ans, int sum, vector<int> temp) {
+//     if(i >= a.size()) {
+//         if(sum == k) ans.push_back(temp);
+//         return; 
+//     }
+//     temp.push_back(a[i]);
+//     solve(a, i+1, k, ans, sum+a[i], temp);
+//     temp.pop_back();
+//     solve(a, i+1, k, ans, sum, temp);
+// }
+
+
+
+// checks subarrays 
+
+void solve(vector<int> a, int i, int j, long long k, vector<vector<int>> &ans, long long sum, vector<int> temp) {
+    if(j >= a.size())  return;
+
+    if(sum == k) {
+        ans.push_back(temp);
+        temp.push_back(a[j+1]);
+        solve(a, i, j+1, k, ans, sum + a[j+1], temp);
+    }
+    else if(sum > k) {
+        temp.erase(temp.begin());
+        solve(a, i+1, j, k, ans, sum - a[i], temp);
+    } 
+    else if(sum < k) {
+        temp.push_back(a[j+1]);
+        solve(a, i, j+1, k, ans, sum + a[j+1], temp);
+    }
+    return;
+}
+
+vector<vector<int>> subarraysWithSumK(vector<int> a, long long k) {
+    // Write your code here
+    int n = a.size();
+    int i = 0;
+    int j = 0;
+    long long sum = a[0];
+    // int sum = accumulate(a.begin(), a.end(), 0);
+    vector<vector<int>> ans;
+    solve(a, i, j, k, ans, sum, {a[0]});
+    // solve(a, i, j, k, ans, sum, a);
+    // solve(a, i, k, ans, 0, {});
+    return ans;
+}
+
+
+
+// Non Recursive
+
+// vector<vector<int>> subarraysWithSumK(vector<int> a, long long k) {
+//     // Write your code here
+//     int n = a.size();
+//     int i = 0;
+//     int j = 0;
+//     vector<vector<int>> ans;
+//     vector<int> temp;
+//     temp.push_back(a[0]);
+//     long long sum = a[0];
+
+//     while(j < n) {
+//         if(sum == k) {
+//             ans.push_back(temp);
+//             j++;
+//             sum += a[j];
+//             temp.push_back(a[j]);
+//         } else if(sum > k) {
+//             sum -= a[i];
+//             temp.erase(temp.begin());
+//             i++;
+//         } else if(sum < k) {
+//             j++;
+//             sum += a[j];
+//             temp.push_back(a[j]);
+//         }
+//     }
+//     return ans;
+// }
