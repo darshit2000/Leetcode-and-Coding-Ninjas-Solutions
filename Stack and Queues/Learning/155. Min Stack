@@ -1,0 +1,84 @@
+class MinStack {
+public:
+    stack<pair<int,int>> stk;
+    MinStack() {
+    }
+    
+    void push(int val) {
+        if(stk.empty()) stk.push(make_pair(val,INT_MAX));
+        else {
+            stk.push(make_pair(val, min(stk.top().first, stk.top().second)));
+        }
+    }
+    
+    void pop() {
+        if(stk.empty()) return;
+        stk.pop();
+    }
+    
+    int top() {
+        if(stk.empty()) return -1;
+        return stk.top().first;
+    }
+    
+    int getMin() {
+        if(stk.empty()) return INT_MIN;
+        return min(stk.top().first, stk.top().second);
+    }
+};
+
+
+
+
+// class MinStack {
+// public:
+//     stack<int> stk;
+//     stack<int> s1;
+//     stack<int> s2;
+//     MinStack() {
+//     }
+    
+//     void push(int val) {
+//         stk.push(val);
+//         while(!s1.empty() && val > s1.top()) {
+//             s2.push(s1.top());
+//             s1.pop();
+//         }
+//         s1.push(val);
+//         while(!s2.empty()) {
+//             s1.push(s2.top());
+//             s2.pop();
+//         }
+//     }
+    
+//     void pop() {
+//         int val = stk.top();
+//         while(!s1.empty() && val != s1.top()) {
+//             s2.push(s1.top());
+//             s1.pop();
+//         }
+//         s1.pop();
+//         while(!s2.empty()) {
+//             s1.push(s2.top());
+//             s2.pop();
+//         }
+//         stk.pop();
+//     }
+    
+//     int top() {
+//         return stk.top();
+//     }
+    
+//     int getMin() {
+//         return s1.top();
+//     }
+// };
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
