@@ -1,0 +1,109 @@
+// Using 1 queue
+
+class Stack {
+	// Define the data members.
+    queue<int> q;
+
+   public:
+    Stack() {
+        // Implement the Constructor.
+    }
+
+    /*----------------- Public Functions of Stack -----------------*/
+
+    int getSize() {
+        // Implement the getSize() function.
+        return q.size();
+    }
+
+    bool isEmpty() {
+        // Implement the isEmpty() function.
+        if(q.size() == 0) return true;
+        return false;
+    }
+
+    void push(int element) {
+        // Implement the push() function.
+        q.push(element);
+        int s = q.size();
+        for(int i = 0 ; i < s-1 ; i++) {
+            q.push(q.front());
+            q.pop();
+        }
+    }
+
+    int pop() {
+        // Implement the pop() function.
+        if(q.empty()) return -1;
+        int val = q.front();
+        q.pop();
+        return val;
+    }
+
+    int top() {
+        // Implement the top() function.
+        if(!q.empty()) return q.front();
+        return -1;
+    }
+};
+
+
+
+
+// using 2 queues
+
+// class Stack {
+// 	// Define the data members.
+//     queue<int> q1;
+//     queue<int> q2;
+
+//    public:
+//     Stack() {
+//         // Implement the Constructor.
+//     }
+
+//     /*----------------- Public Functions of Stack -----------------*/
+
+//     int getSize() {
+//         // Implement the getSize() function.
+//         return q1.size();
+//     }
+
+//     bool isEmpty() {
+//         // Implement the isEmpty() function.
+//         if(q1.size() == 0) return true;
+//         return false;
+//     }
+
+//     void push(int element) {
+//         // Implement the push() function.
+//         if(q1.size() < 1000) q1.push(element);
+//     }
+
+//     int pop() {
+//         // Implement the pop() function.
+//         if(q1.empty()) return -1;
+//         int val = -1;
+//         if(q1.front() == q1.back()) {
+//             val = q1.front();
+//             q1.pop();
+//             return val;
+//         } else {    
+//             int s = q1.size();
+//             for(int j = 0 ; j < s-1 ; j++) {
+//                 q2.push(q1.front());
+//                 q1.pop();
+//             }
+//             val = q1.front();
+//             q1.pop();
+//             q1.swap(q2);
+//             return val;
+//         }
+//     }
+
+//     int top() {
+//         // Implement the top() function.
+//         if(!q1.empty()) return q1.back();
+//         return -1;
+//     }
+// };
