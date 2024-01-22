@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+string moreSubsequence(int n, int m, string a, string b)
+{
+    // Write your code here
+    unordered_set<char> s1,s2;
+    for(int i=0;i<n;i++) s1.insert(a[i]);
+
+    for(int i=0;i<m;i++) s2.insert(b[i]);
+
+    if(s1.size() == s2.size()) {
+        if(n >= m) return a;
+        else return b;
+    } else if(s1.size() > s2.size()) return a;
+    else return b;
+}
+
+
+
+
+
+
+// void gen(string s, string temp, set<string> &st, int index, int size) {
+//     if(index == size) {
+//         st.insert(temp);
+//         return;
+//     }
+    
+//     temp += s[index];
+//     gen(s, temp, st, index+1, size);
+//     temp.pop_back();
+//     gen(s, temp, st, index+1, size);
+//     return;
+// }
+
+// string moreSubsequence(int n, int m, string a, string b)
+// {
+//     // Write your code here
+//     int x = 0;
+//     int y = 0;
+//     set<string> s;
+//     gen(a, "", s, 0, n);
+//     x = s.size();
+//     s.clear();
+//     gen(b, "", s, 0, m);
+//     y = s.size();
+    
+
+//     if(x == y) {
+//         if(n == m) return a;
+//         else if(n > m) return a;
+//         else return b; 
+//     }
+//     else if(x > y) return a;
+//     else return b;
+// }
