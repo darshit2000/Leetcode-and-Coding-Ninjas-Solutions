@@ -1,0 +1,21 @@
+void solve(int row, int col, vector<string> &ans, string str, vector<vector<int>> &mat, int n) {
+    if(row < 0 || col < 0 || row >= n || col >= n || mat[row][col] == 0) return;
+    if(row == n-1 && col == n-1 && mat[n-1][n-1] != 0) {
+        ans.push_back(str);
+        return;
+    }
+    mat[row][col] = 0;
+    solve(row, col+1, ans, str+'R', mat, n);
+    solve(row+1, col, ans, str+'D', mat, n);
+    solve(row-1, col, ans, str+'U', mat, n);
+    solve(row, col-1, ans, str+'L', mat, n);
+    mat[row][col] = 1;
+}
+
+vector<string> ratMaze(vector<vector<int>> &mat) {
+    // Write your code here.
+    vector<string> ans;
+    string str = "";
+    solve(0, 0, ans, str, mat, mat.size());
+    return ans;
+} 
