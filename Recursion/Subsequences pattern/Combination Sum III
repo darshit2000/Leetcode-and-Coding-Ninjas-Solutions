@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve(vector<int> arr, vector<int> &ds, vector<vector<int>> &ans, int index, int sum, int target, int reqSize) {
+    if(ds.size() == reqSize && sum == target) {
+        ans.push_back(ds);
+        return;
+    }
+    if(index >= 9 || sum > target) return;
+
+    ds.push_back(arr[index]);
+    solve(arr, ds, ans, index+1, sum+arr[index], target, reqSize);
+    ds.pop_back();
+    solve(arr, ds, ans, index+1, sum, target, reqSize);
+}
+
+vector<vector<int>> combinationSum(int k, int n) {
+    // Write Your Code Here
+    vector<int> ds = {};
+    vector<vector<int>> ans;
+    int index = 0;
+    int sum = 0;
+    solve({1,2,3,4,5,6,7,8,9}, ds, ans, index, sum, n, k); 
+    return ans;
+}
