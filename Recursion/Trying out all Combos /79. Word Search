@@ -1,0 +1,38 @@
+class Solution {
+public:
+    void solve(int index, int row, int col, vector<vector<char>>& board, string &word, bool &ans) {
+        if(index >= word.length()) {
+            ans = true;
+            return;
+        }
+        if(row < 0 || row >= board.size() || col < 0 || col >= board[0].size()) return;
+        if(board[row][col] != word[index]) return;
+
+        board[row][col] = '.';
+        solve(index+1, row, col+1, board, word, ans);
+        if(ans) return;
+        solve(index+1, row+1, col, board, word, ans);
+        if(ans) return;
+        solve(index+1, row, col-1, board, word, ans);
+        if(ans) return;
+        solve(index+1, row-1, col, board, word, ans);
+        if(ans) return;
+        board[row][col] = word[index];
+    }
+
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();
+        int n = board[0].size();
+        bool ans = false;
+        for(int i = 0 ; i < m ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(board[i][j] == word[0]) {
+                    int index = 0;
+                    solve(index, i, j, board, word, ans);
+                    if(ans) return true;
+                }
+            }
+        }
+        return ans;
+    }
+};
