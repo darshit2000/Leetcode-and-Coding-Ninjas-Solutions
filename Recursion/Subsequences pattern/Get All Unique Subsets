@@ -1,0 +1,20 @@
+vector<vector<int>> ans;
+vector<int> ds;
+
+void solve(vector<int> arr, int index, int n) {
+    ans.push_back(ds);
+
+    for(int i = index; i < n ; i++) {
+        if(i != index && arr[i-1] == arr[i]) continue;
+        ds.push_back(arr[i]);
+        solve(arr, i+1, n);
+        ds.pop_back();
+    }        
+}
+
+vector<vector<int>> getUniqueSubsets(vector<int>& arr) {
+    // Write Your Code Here   
+    int index = 0;
+    solve(arr, index, arr.size());
+    return ans; 
+}
