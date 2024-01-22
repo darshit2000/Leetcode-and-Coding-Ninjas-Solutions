@@ -1,0 +1,50 @@
+// Method 1
+
+void solve(int index, string s, vector<string> &dict, string temp, vector<string> &ans, string currString) {
+    if(index >= s.length()-1) {
+        if(find(dict.begin(), dict.end(), temp) != dict.end()) {
+            currString += temp;
+            ans.push_back(currString);
+        } 
+        return;
+    } 
+    
+    if(find(dict.begin(), dict.end(), temp) != dict.end()) {
+        solve(index+1, s, dict, string(1, s[index+1]), ans, currString + temp + " ");
+    } 
+    solve(index+1, s, dict, temp+s[index+1], ans, currString);
+}
+
+vector<string> getAllValidSentences(string &s, vector<string> &dict)
+{
+    //  write your code here.
+    vector<string> ans;
+    solve(0, s, dict, string(1, s[0]), ans, "");
+    return ans;
+}
+
+
+
+
+// Method 2
+
+// void solve(string s, vector<string> &ans, string temp, vector<string> &dict) {
+//     if(s.length() == 0) {
+//         ans.push_back(temp);
+//         return;
+//     }
+//     for(int i = 0 ; i < s.length() ; i++) {
+//         string left = s.substr(0, i+1);
+//         if(find(dict.begin(), dict.end(), left) != dict.end()) {
+//             solve(s.substr(i+1), ans, temp + left + " ", dict);
+//         }
+//     }
+// }
+
+// vector<string> getAllValidSentences(string &s, vector<string> &dict)
+// {
+//     //  write your code here.
+//     vector<string> ans;
+//     solve(s, ans, "", dict);
+//     return ans;
+// }
