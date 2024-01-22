@@ -1,0 +1,19 @@
+bool solve(vector<int> a, int index, int sum, int k, int n) {
+    if(sum > k) return false;
+    if(index == n) {
+        if(sum == k) return true;
+        return false;
+    }
+    if(solve(a, index+1, sum+a[index], k, n) == true) return true;
+    if(solve(a, index+1, sum, k, n) == true) return true;
+    return false;
+}
+
+bool isSubsetPresent(int n, int k, vector<int> &a)
+{
+    // Write your code here
+    int index = 0;
+    int sum = 0;
+    return solve(a, index, sum, k, n);
+}
+
