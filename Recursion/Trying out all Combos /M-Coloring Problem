@@ -1,0 +1,28 @@
+bool isSafe(vector<vector<int>> &mat, int row, int color, vector<int> &assigned) {
+    for(int j = 0 ; j < mat[0].size() ; j++) {
+        if(mat[row][j] == 1) {
+            if(assigned[j] == color) return false;
+        }
+    }
+    return true;
+}
+
+bool solve(int row, vector<vector<int>> &mat, vector<int> &assigned, int m) {
+    if(row >= mat.size()) return true;
+
+    for(int color = 0 ; color < m ; color++) {
+        if(isSafe(mat, row, color, assigned) == true) {
+            assigned[row] = color;
+            if(solve(row+1, mat, assigned, m) == true) return true;
+            assigned[row] = -1;
+        }
+    }
+    return false;
+}
+
+string graphColoring(vector<vector<int>> &mat, int m) {
+    // Write your code here
+    vector<int> assigned(mat.size(), -1);
+    if(solve(0, mat, assigned, m) == true) return "YES";
+    return "NO";
+}
