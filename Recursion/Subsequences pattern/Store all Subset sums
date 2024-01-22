@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> ans;
+
+void solve(vector<int> num, int index, int sum) {
+	if(index >= num.size()) {
+		ans.push_back(sum);
+		return;
+	}
+	solve(num, index+1, sum+num[index]);
+	solve(num, index+1, sum);
+}
+
+vector<int> subsetSum(vector<int> &num){
+	// Write your code here.	
+	int index = 0;
+	int sum = 0;
+	solve(num, index, sum);
+	sort(ans.begin(), ans.end());
+	return ans;
+}
