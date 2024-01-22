@@ -1,0 +1,132 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Recursive with vector 2
+
+void solve(vector<int> arr, int n, int index, int sum, int target, vector<int> temp, vector<vector<int>> &ans) {
+	if(sum == target) {
+		ans.push_back(temp);
+		return;
+	}
+	for(int i = index ; i < n ; i++) {
+		if(i != index && arr[i] == arr[i-1]) continue;
+		if(sum > target) break;
+		temp.push_back(arr[i]);
+		solve(arr, n, i+1, sum+arr[i], target, temp, ans);
+		temp.pop_back();
+	}
+	return;
+}
+
+vector<vector<int>> combinationSum2(vector<int> &arr, int n, int target){
+	// Write your code here.
+	sort(arr.begin(), arr.end());
+	vector<vector<int>> ans;
+	vector<int> temp;
+	int index = 0;
+	int sum = 0;
+	solve(arr, n, index, sum, target, temp, ans);
+	return ans;
+}
+
+
+
+// Recursive with vector 2
+
+// vector<vector<int>> ans;
+// vector<int> temp;
+
+// void solve(vector<int> arr, int n, int index, int sum, int target) {
+// 	if(index >= n) {
+// 		if(sum == target) ans.push_back(temp);
+// 		return;
+// 	}
+// 	if(sum == target) {
+// 		ans.push_back(temp);
+// 		return;
+// 	}
+// 	if(sum < target) {
+// 		temp.push_back(arr[index]);
+// 		solve(arr, n, index+1, sum+arr[index], target);
+// 		temp.pop_back();
+// 		while(index+1 < n && arr[index+1] == arr[index]) index++;
+// 		solve(arr, n, index+1, sum, target);
+// 	}
+// 	return;
+// }
+
+// vector<vector<int>> combinationSum2(vector<int> &arr, int n, int target){
+// 	// Write your code here.
+// 	sort(arr.begin(), arr.end());
+// 	int index = 0;
+// 	int sum = 0;
+// 	solve(arr, n, index, sum, target);
+// 	return ans;
+// }
+
+
+
+// Recursive with set
+
+// set<vector<int>> ans;
+// vector<int> temp;
+
+// void solve(vector<int> arr, int n, int index, int sum, int target) {
+// 	if(index >= n) {
+// 		if(sum == target) ans.insert(temp);
+// 		return;
+// 	}
+// 	if(sum == target) {
+// 		ans.insert(temp);
+// 		return;
+// 	}
+// 	else if(sum < target) {
+// 		temp.push_back(arr[index]);
+// 		solve(arr, n, index+1, sum+arr[index], target);
+// 		temp.pop_back();
+// 		solve(arr, n, index+1, sum, target);
+// 	}
+// 	return;
+// }
+
+// vector<vector<int>> combinationSum2(vector<int> &arr, int n, int target){
+// 	// Write your code here.
+// 	sort(arr.begin(), arr.end());
+// 	int index = 0;
+// 	int sum = 0;
+// 	solve(arr, n, index, sum, target);
+// 	vector<vector<int>> res(ans.begin(), ans.end());
+// 	return res;
+// }
+
+
+
+// Non Recursive (finds subarray not subsequences)
+
+// vector<vector<int>> combinationSum2(vector<int> &arr, int n, int target){
+// 	// Write your code here.
+// 	sort(arr.begin(), arr.end());
+// 	vector<vector<int>> ans;
+// 	int i = 0;
+// 	int j = 0;
+// 	int sum = arr[0];
+// 	vector<int> ds;
+// 	ds.push_back(arr[0]);
+// 	while(j < n) {
+// 		if(sum == target) {
+// 			ans.push_back(ds);
+// 			j++;
+// 			ds.push_back(arr[j]);
+// 			sum += arr[j];
+// 		} else if(sum > target) {
+// 			sum -= arr[i];
+// 			ds.erase(ds.begin());
+// 			i++;
+// 		} else if(sum < target) {
+// 			j++;
+// 			ds.push_back(arr[j]);
+// 			sum += arr[j];
+// 		}
+// 	}
+// 	return ans;
+// }
