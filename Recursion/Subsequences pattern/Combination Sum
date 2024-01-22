@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+set<vector<int>> ans;
+vector<int> ds;
+
+void solve(vector<int> &ARR, int index, int sum, int B) {
+    // need to add this condition because this time we are infinitely adding one element, 
+    // so we need to add a stopping condition. This is not required when we can add one 
+    // element only once because at that time it is guranteed that we can reach the end of the array.
+    if(sum > B) return;
+    else if(index >= ARR.size()) return; 
+    else if(sum == B) {
+        ans.insert(ds);
+        return;
+    }
+    else if(sum < B) {
+        ds.push_back(ARR[index]);   
+        solve(ARR, index, sum+ARR[index], B);
+        // solve(ARR, index+1, sum+ARR[index], B);
+        ds.pop_back();
+        solve(ARR, index+1, sum, B);
+        return;
+    }
+}
+
+
+vector<vector<int>> combSum(vector<int> &ARR, int B)
+{
+    // Write your code here.
+    sort(ARR.begin(), ARR.end());
+    int index = 0; 
+    int sum = 0;  
+    solve(ARR, index, sum, B);
+    vector<vector<int>> res(ans.begin(), ans.end());
+    return res;
+}
