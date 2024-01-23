@@ -1,0 +1,18 @@
+#include<bits/stdc++.h>
+
+string postfixToPrefix(string &s){
+    // Write your code here.
+    stack<string> stk;
+    for(int i = 0 ; i < s.length() ; i++) {
+        char ch = s[i];
+        if(ch >= 'a' && ch <= 'z') stk.push(string(1,ch));
+        else {
+            string inp2 = stk.top();
+            stk.pop();
+            string inp1 = stk.top();
+            stk.pop();
+            stk.push(ch+inp1+inp2);
+        }
+    }
+    return stk.top();
+}
