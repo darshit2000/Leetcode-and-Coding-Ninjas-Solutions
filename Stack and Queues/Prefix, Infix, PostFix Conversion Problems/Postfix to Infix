@@ -1,0 +1,15 @@
+string postToInfix(string postfix) {
+    // Write your code here.
+    stack<string> stk;
+	for(int i = 0 ; i < postfix.length()  ; i++) {
+		char ch = postfix[i];
+		if(ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+			string inp2 = stk.top();
+			stk.pop();
+			string inp1 = stk.top();
+			stk.pop();
+			stk.push("("+inp1+ch+inp2+")");
+		} else stk.push(string(1,ch));
+	}
+	return stk.top();
+}
