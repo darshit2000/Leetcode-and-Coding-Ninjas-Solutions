@@ -5,21 +5,25 @@ vector<int> collidingAsteroids(vector<int> &asteroids)
     vector<int> ans;
     int n = asteroids.size();
     for(int i = 0 ; i < n ; i++) {
-        if(stk.empty() || asteroids[i] > 0) stk.push(asteroids[i]);
-        else if(asteroids[i] < 0 && stk.top() < 0) stk.push(asteroids[i]);
-        else {
-            while(!stk.empty() && abs(asteroids[i]) > abs(stk.top()) && stk.top() > 0) stk.pop();
-            if(stk.empty()) {
+            if(stk.empty() || asteroids[i] > 0) {
                 stk.push(asteroids[i]);
-            } else if(!stk.empty() && stk.top() < 0) {
+            }
+            else if(asteroids[i] < 0 && stk.top() < 0) {
                 stk.push(asteroids[i]);
-            } else if(!stk.empty() && abs(asteroids[i]) > stk.top()) {
-                stk.push(asteroids[i]);
-            } else if(!stk.empty() && abs(asteroids[i]) == stk.top()) {
-                stk.pop();
+            }
+            else if(asteroids[i] < 0 && stk.top() >= 0) {
+                while(!stk.empty() && stk.top() > 0 && abs(asteroids[i]) > stk.top()) stk.pop();
+                if(stk.empty()) {
+                    stk.push(asteroids[i]);
+                } else if(!stk.empty() && stk.top() < 0) {
+                    stk.push(asteroids[i]);
+                } else if(!stk.empty() && abs(asteroids[i]) > stk.top()) {
+                    stk.push(asteroids[i]);
+                } else if(!stk.empty() && abs(asteroids[i]) == stk.top()) {
+                    stk.pop();
+                }
             }
         }
-    }
     while(!stk.empty()) {
         ans.push_back(stk.top());
         stk.pop();
