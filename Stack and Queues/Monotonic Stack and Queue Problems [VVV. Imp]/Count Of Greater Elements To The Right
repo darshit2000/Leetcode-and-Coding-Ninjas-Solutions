@@ -1,0 +1,99 @@
+void merge(vector<pair<int,int>> &arr, int low, int mid, int high, vector<int> &ans) {
+    int left = low;
+    int right = mid+1;
+    vector<pair<int,int>> temp;
+    while(left <= mid && right <= high) {
+        if(arr[left].first < arr[right].first) {
+            ans[arr[left].second] += (high-right+1);
+            temp.push_back(arr[left]);
+            left++;
+        } else if(arr[left].first >= arr[right].first) {
+            temp.push_back(arr[right]);
+            right++;
+        }
+    }
+    while(left <= mid) {
+        temp.push_back(arr[left]);
+        left++;
+    }
+    while(right <= high) {
+        temp.push_back(arr[right]);
+        right++;
+    }
+    for(int i = low ; i <= high ; i++) {
+        arr[i] = temp[i-low];
+    }
+}
+
+void mergesort(vector<pair<int,int>> &arr, int low, int high, vector<int> &ans) {
+    if(low >= high) return;
+    int mid = (low+high)/2;
+    mergesort(arr, low, mid, ans);
+    mergesort(arr, mid+1, high, ans);
+    merge(arr, low, mid, high, ans);
+}
+
+vector<int> countGreater(vector<int>&arr, vector<int>&query) {
+    // Write your code here.
+    int n = arr.size();
+    vector<int> ans(n,0);
+    vector<pair<int,int>> v(n);
+    for(int i = 0 ; i < n ; i++) {
+        v[i].first = arr[i];
+        v[i].second = i;
+    }
+    mergesort(v,0,n-1,ans);
+
+    int m = query.size();
+    vector<int> tse(m);
+    for(int i = 0 ; i < m ; i++) {
+        tse[i] = ans[query[i]];
+    }
+    return tse;
+}
+
+
+
+
+// vector<int> countGreater(vector<int>&arr, vector<int>&query) {
+//     // Write your code here.
+//     int n = arr.size();
+//     stack<int> s1;
+//     stack<int> s2;
+//     vector<int> tge(n,0);
+//     for(int i = n-1 ; i >= 0 ; i--) {
+//         if(s1.empty()) {
+//             s1.push(arr[i]);
+//         } else {
+//             if(arr[i] < s1.top()) {
+//                 tge[i] = s1.size();
+//                 s1.push(arr[i]);
+//             } else {
+//                 int count = 0;
+//                 if(s1.top() == arr[i]) {
+//                     while(s1.top() != arr[i]) {
+//                         s2.push(s1.top());
+//                         s1.pop();
+//                     }
+//                 } 
+//                 while(!s1.empty() && s1.top() <= arr[i]) {
+//                     count++;
+//                     s2.push(s1.top());
+//                     s1.pop();
+//                 }
+//                 tge[i] = s1.size();
+//                 s1.push(arr[i]);
+//                 while(!s2.empty()) {
+//                     s1.push(s2.top());
+//                     s2.pop();
+//                 }
+//             }
+//         }
+//     }
+//     int m = query.size();
+//     vector<int> ans(m);
+//     for(int i = 0 ; i < m ; i++) {
+//         ans[i] = tge[query[i]];
+//     }
+//     return ans;
+// }
