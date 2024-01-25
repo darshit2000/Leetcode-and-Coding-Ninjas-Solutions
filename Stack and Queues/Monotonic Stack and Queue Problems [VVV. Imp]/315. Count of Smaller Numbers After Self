@@ -1,0 +1,48 @@
+class Solution {
+public:
+    void merge(vector<pair<int,int>> &nums, int low, int mid, int high, vector<int> &ans) {
+        int left = low;
+        int right = mid+1;
+        vector<pair<int,int>> temp;
+        while(left <= mid && right <= high) {
+            if(nums[left].first > nums[right].first) {
+                ans[nums[left].second] += (high-right+1);
+                temp.push_back(nums[left]);
+                left++;
+            } else {
+                temp.push_back(nums[right]);
+                right++;
+            }
+        }
+        while(left <= mid) {
+            temp.push_back(nums[left]);
+            left++;
+        }
+        while(right <= high) {
+            temp.push_back(nums[right]);
+            right++;
+        }
+        for(int i = low ; i <= high ; i++) {
+            nums[i] = temp[i-low];
+        }
+    }
+
+    void mergeSort(vector<pair<int,int>> &nums, int low, int high, vector<int> &ans) {
+        if(low >= high) return;
+        int mid = (low+high)>>1;
+        mergeSort(nums, low, mid, ans);
+        mergeSort(nums, mid+1, high, ans);
+        merge(nums, low, mid, high, ans);
+    }
+
+    vector<int> countSmaller(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n);
+        vector<pair<int,int>> newNums;
+        for(int i = 0 ; i < n ; i++) {
+            newNums.push_back(make_pair(nums[i],i));
+        }
+        mergeSort(newNums, 0, n-1, ans);
+        return ans;
+    }
+};
