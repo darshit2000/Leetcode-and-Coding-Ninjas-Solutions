@@ -1,0 +1,80 @@
+// Optimal
+
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        long long int m = 1000000007;
+        long long int sum = 0;
+        int n = arr.size();
+        vector<int> nsl(n,-1);
+        vector<int> nsr(n,n);
+        stack<pair<int,int>> stk;
+        for(int i = n-1 ; i >= 0 ; i--) {
+            // Next Smaller Element to the Right
+            while(!stk.empty() && stk.top().first > arr[i]) stk.pop();
+            if(!stk.empty()) nsr[i] = stk.top().second;
+            stk.push(make_pair(arr[i],i));
+        }
+        while(!stk.empty()) stk.pop();
+        for(int i = 0 ; i < n ; i++) {
+            // Next Smaller or Equal Element to the Left
+            while(!stk.empty() && stk.top().first >= arr[i]) stk.pop();
+            if(!stk.empty()) nsl[i] = stk.top().second;
+            stk.push(make_pair(arr[i],i));
+        }
+        for(int i = 0 ; i < n ; i++) {
+            int left = i - nsl[i];
+            int right = nsr[i] - i;
+            int total = left * right;
+            sum = (sum + ((total % m)*arr[i]) % m) % m;
+        }
+        return sum%m;
+    }
+};
+
+
+
+// Naive solution (iterative)
+
+// class Solution {
+// public:
+//     int sumSubarrayMins(vector<int>& arr) {
+//         long long int m = 1000000007;
+//         long long int sum = 0;
+//         int n = arr.size();
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             int mn = INT_MAX;
+//             for(int j = i ; j < n ; j++) {
+//                 mn = min(mn, arr[j]);
+//                 sum += mn;
+//             }
+//         }
+//         return sum%m;
+//     }
+// };
+
+
+
+// Naive solution (using recursion)
+
+// class Solution {
+// public:
+//     void solve(int index, vector<int>& arr, long long int &sum, vector<int> ds) {
+//         if(index >= arr.size()) return;
+//         for(int i = index; i < arr.size() ; i++) {
+//             ds.push_back(arr[i]);
+//             // cout << "\nds : ";
+//             // for(int i : ds) cout << i << ",";
+//             sum += (long long int)(*min_element(ds.begin(), ds.end()));
+//         }
+//         ds.clear();
+//         solve(index+1, arr, sum, ds);
+//     }
+//     int sumSubarrayMins(vector<int>& arr) {
+//         long long int m = 1000000007;
+//         long long int sum = 0;
+//         solve(0, arr, sum, {});
+//         return sum%m;
+//     }
+// };
