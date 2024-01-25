@@ -1,0 +1,91 @@
+// Optimal      TC: O(2n)   SC: O(n)
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+        int maxArea = INT_MIN;
+        stack<pair<int,int>> stk;
+
+        for(int i = 0 ; i <= n ; i++) {
+            while(!stk.empty() && (i == n || heights[i] <= stk.top().first)) {
+                int h = stk.top().first;
+                stk.pop();
+                int nextSmallerIndex = i;
+                int prevSmallerIndex = -1;
+                if(!stk.empty()) prevSmallerIndex = stk.top().second;
+                int totalArea = (nextSmallerIndex - prevSmallerIndex - 1) * h;
+                maxArea = max(maxArea , totalArea);
+            }
+            if(i != n) stk.push(make_pair(heights[i],i));
+        }
+        return maxArea;
+    }
+};
+
+
+
+// Optimal      TC: O(5n)   SC: O(3n)
+
+// class Solution {
+// public:
+//     int largestRectangleArea(vector<int>& heights) {
+//         int n = heights.size();
+//         int maxArea = INT_MIN;
+//         vector<int> nsr(n,n);
+//         vector<int> nsl(n,-1);
+//         stack<pair<int,int>> stk;
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             // Next Smaller Element to the Right
+//             while(!stk.empty() && stk.top().first > heights[i]) stk.pop();
+//             if(!stk.empty()) nsr[i] = stk.top().second;
+//             stk.push(make_pair(heights[i],i));
+//         }
+
+//         while(!stk.empty()) stk.pop();
+
+//         for(int i = 0 ; i < n ; i++) {
+//             // Next Smaller or Equal Element to the Left
+//             while(!stk.empty() && stk.top().first >= heights[i]) stk.pop();
+//             if(!stk.empty()) nsl[i] = stk.top().second;
+//             stk.push(make_pair(heights[i],i));
+//         }
+
+//         for(int i = 0 ; i < n ; i++) {
+//             // int left = i - nsl[i];
+//             // int right = nsr[i] - i - 1;
+//             // int totalArea = (left + right) * heights[i];
+//             int totalArea = (nsr[i] - nsl[i] - 1) * heights[i];
+//             maxArea = max(maxArea , totalArea);
+//         }
+//         return maxArea;
+//     }
+// };
+
+
+
+// Naive (O(n^2))
+
+// class Solution {
+// public:
+//     int largestRectangleArea(vector<int>& heights) {
+//         int mx = *max_element(heights.begin(), heights.end());
+//         int maxArea = INT_MIN;
+//         int n = heights.size();
+//         for(int i = mx ; i >= 0 ; i--) {
+//             int tempMax = INT_MIN;
+//             int currArea = 0;
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(heights[j] >= i) {
+//                     currArea += i;
+//                     tempMax = max(tempMax, currArea);
+//                 } else {
+//                     currArea = 0;
+//                 }
+//             }
+//             maxArea = max(maxArea,tempMax);
+//         }
+//         return maxArea;
+//     }
+// };
