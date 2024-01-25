@@ -1,0 +1,86 @@
+// Optimal 
+
+class Solution {
+public:
+    long long subArrayRanges(vector<int>& nums) {
+        long long sum = 0;
+        int n = nums.size();
+        vector<int> ngl(n,-1);
+        vector<int> ngr(n,n);
+        vector<int> nsl(n,-1);
+        vector<int> nsr(n,n);
+
+        stack<pair<int,int>> stk1;
+        stack<pair<int,int>> stk2;
+
+        for(int i = n-1 ; i >= 0 ; i--) {
+            // Next Greater Element to the Right
+            while(!stk1.empty() && stk1.top().first < nums[i]) stk1.pop();
+            if(!stk1.empty()) ngr[i] = stk1.top().second;
+            stk1.push(make_pair(nums[i],i));
+
+            // Next Smaller Element to the Right
+            while(!stk2.empty() && stk2.top().first > nums[i]) stk2.pop();
+            if(!stk2.empty()) nsr[i] = stk2.top().second;
+            stk2.push(make_pair(nums[i],i));
+        }
+
+        while(!stk1.empty()) stk1.pop();
+        while(!stk2.empty()) stk2.pop();
+
+        for(int i = 0 ; i < n ; i++) {
+            // Next Greater or Equal Element to the Left
+            while(!stk1.empty() && stk1.top().first <= nums[i]) stk1.pop();
+            if(!stk1.empty()) ngl[i] = stk1.top().second;
+            stk1.push(make_pair(nums[i],i));
+
+            // Next Smaller or Equal Element to the Left
+            while(!stk2.empty() && stk2.top().first >= nums[i]) stk2.pop();
+            if(!stk2.empty()) nsl[i] = stk2.top().second;
+            stk2.push(make_pair(nums[i],i));
+        }
+
+        // cout << "\nNGR: ";
+        // for(int i : ngr) cout << i << ",";
+        // cout << "\nNSR: ";
+        // for(int i : nsr) cout << i << ",";
+        // cout << "\nNGL: ";
+        // for(int i : ngl) cout << i << ",";
+        // cout << "\nNSL: ";
+        // for(int i : nsl) cout << i << ",";
+
+        for(int i = 0 ; i < n ; i++) {
+            long long left = i - ngl[i];
+            long long right = ngr[i] - i;
+            long long totalMax = left * right;
+            left = i - nsl[i];
+            right = nsr[i] - i;
+            long long totalMin = left * right;
+            long long netSum = (totalMax-totalMin)*nums[i];
+            sum += netSum;
+        }
+        return sum;
+    }
+};
+
+
+
+// Naive (Iterative)
+
+// class Solution {
+// public:
+//     long long subArrayRanges(vector<int>& nums) {
+//         long long sum = 0;
+//         int n = nums.size();
+//         for(int i = 0 ; i < n ; i++) {
+//             int mn = INT_MAX;
+//             int mx = INT_MIN;
+//             for(int j = i ; j < n ; j++) {
+//                 mn = min(mn, nums[j]);
+//                 mx = max(mx, nums[j]);
+//                 sum += (mx-mn);
+//             }
+//         }
+//         return sum;
+//     }
+// };
