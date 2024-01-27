@@ -1,3 +1,102 @@
+// Leetcode
+
+struct Node {
+    public:
+        int key,value;
+        Node* prev, *next;
+        Node() {}
+        Node(int k, int v) {
+            key = k;
+            value = v;
+            next = NULL;
+            prev = NULL;
+        }
+};
+
+class LRUCache {
+public:
+    unordered_map<int,Node*> mpp;
+    int c = 0;
+    Node *head, *tail;
+
+    LRUCache(int capacity) {
+        c = capacity;
+        head = new Node(-1,-1);
+        tail = new Node(-1,-1);
+        head->next = tail;
+        tail->prev = head;
+    }
+
+    void insertNode(Node* node) {
+        node->next = head->next;
+        node->prev = head;
+        head->next = node;
+        node->next->prev = node;
+    }
+
+    void deleteNode(Node* node) {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+    
+    int get(int key) {
+        if(mpp.count(key) >= 1) {
+            int val = mpp[key]->value;
+
+            Node* nodeToBeReplaced = mpp[key];
+            deleteNode(nodeToBeReplaced);
+            delete nodeToBeReplaced;
+
+            Node* newNode = new Node(key, val);
+            insertNode(newNode);
+            mpp[key] = newNode;
+
+            return val;
+        } else return -1;
+    }
+    
+    void put(int key, int value) {
+        Node* newNode = new Node(key,value);
+        if(mpp.count(key) >= 1) {
+            Node* existing = mpp[key];
+            deleteNode(existing);
+            delete existing;
+
+            insertNode(newNode);
+            mpp[key] = newNode;
+        } else {
+            if(c > 0) {
+                c--;
+                insertNode(newNode);
+                mpp[key] = newNode;
+            } else {
+                mpp.erase(tail->prev->key);
+                deleteNode(tail->prev);
+                insertNode(newNode);
+                mpp[key] = newNode;
+            }
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+
+
+
+
+
+
+
+
+
+// CN
+
 #include<bits/stdc++.h>
 
 using namespace std;
@@ -54,12 +153,6 @@ public:
             Node* nodeToBeDeleted = mpp[key];
             deleteNode(nodeToBeDeleted);
             insertNode(nodeToBeDeleted);
-
-            // OR 
-            // Node* newNode = new Node(key, nodeToBeDeleted->value);
-            // insertNode(newNode);
-            // mpp[key] = newNode;
-
             return val;
         } else return -1;
     }
@@ -149,3 +242,4 @@ public:
           
 //     }
 // };
+
