@@ -1,0 +1,95 @@
+#include <bits/stdc++.h> 
+/*
+	This is signature of helper function 'knows'.
+	You should not implement it, or speculate about its implementation.
+
+	bool knows(int A, int B); 
+	Function 'knows(A, B)' will returns "true" if the person having
+	id 'A' know the person having id 'B' in the party, "false" otherwise.
+*/
+
+
+int findCelebrity(int n) {
+ 	// Write your code here.
+	stack<int> stk1, stk2;
+	for(int i = 0 ; i < n ; i++) stk1.push(i);
+
+	while(stk1.size() >= 2) {
+		int cand1 = stk1.top();
+		stk1.pop();
+	
+		int cand2 = stk1.top();
+		stk1.pop();
+
+		if(!knows(cand1,cand2) && knows(cand2,cand1)) {
+			stk1.push(cand1);
+			stk2.push(cand2);
+		} else if(knows(cand1,cand2) && !knows(cand2,cand1)) {
+			stk1.push(cand2);
+			stk2.push(cand1);
+		} else if((knows(cand1,cand2) && knows(cand2,cand1)) || (!knows(cand1,cand2) && !knows(cand2,cand1))) {
+			stk2.push(cand1);
+			stk2.push(cand2);
+		}
+	}
+	if(!stk1.empty()){
+		int cand3 = stk1.top();
+		while(!stk2.empty()) {
+			if(!knows(cand3,stk2.top()) && knows(stk2.top(),cand3)) stk2.pop();
+			else return -1;
+		}
+		if(stk2.empty()) return cand3;
+	}
+	return -1;
+}
+
+
+
+
+// O(n^2) using recursion
+
+// bool isCel(int i, int j, int n) {
+// 	if(j >= n) return true;
+// 	if(i == j) return isCel(i, j+1, n);
+// 	if(!knows(i,j) && knows(j,i)) return isCel(i, j+1, n);
+// 	else return false;
+// }
+
+// int findCelebrity(int n) {
+//  	// Write your code here.
+// 	for(int i = 0 ; i < n ; i++) {
+// 		if(isCel(i, 0, n)) return i; 
+// 	}
+// 	return -1;
+// }
+
+
+
+
+
+// O(n^2) using iterative
+
+// int findCelebrity(int n) {
+//  	// Write your code here.
+// 	// bool ans = false;
+// 	vector<int> sumOfCol(n,0);
+// 	vector<int> sumOfRow(n,0);
+// 	for(int i = 0 ; i < n ; i++) {
+// 		for(int j = 0 ; j < n ; j++) {
+// 			if(i != j) {
+// 				if(knows(i,j)) {
+// 					sumOfRow[i]++;
+// 					sumOfCol[j]++;
+// 				}
+// 			}
+// 		}
+// 	}
+// 	for(int i = 0 ; i < n ; i++) {
+// 		if(sumOfRow[i] == 0) {
+// 			for(int j = 0 ; j < n ; j++) {
+// 				if(sumOfCol[j] == n-1) return i;
+// 			}
+// 		}
+// 	}
+// 	return -1;
+// }
