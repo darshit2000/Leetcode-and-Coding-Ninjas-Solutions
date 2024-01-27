@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+vector<int> findStockSpans(vector<int>& prices) {
+    // Write your code here.
+    int n = prices.size();
+    vector<int> ngl(n,-1);
+    vector<int> ans(n);
+    stack<pair<int,int>> stk;
+
+    for(int i = 0 ; i < n ; i++) {
+        while(!stk.empty() && stk.top().first < prices[i]) stk.pop();
+        if(!stk.empty()) ngl[i] = stk.top().second;
+        stk.push(make_pair(prices[i],i));
+        ans[i] = (i-ngl[i]);
+    }
+    
+    return ans;
+}
+
+
+
+
+// Leetcode
+
+class StockSpanner {
+public:
+    stack<pair<int,int>> stk;
+    int index = 0;
+
+    StockSpanner() {
+        
+    }
+    
+    int next(int price) {
+        int ans = 0;
+        while(!stk.empty() && stk.top().first <= price) stk.pop();
+        if(!stk.empty()) ans = (index - stk.top().second);
+        else ans = index + 1;
+        stk.push(make_pair(price,index));
+        index++;
+        return ans;
+    }
+};
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner* obj = new StockSpanner();
+ * int param_1 = obj->next(price);
+ */
