@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int maxArea(vector<int> heights, int m) {
+        vector<int> nsr(m,m);
+        vector<int> nsl(m,-1);
+        stack<pair<int,int>> stk1, stk2;
+        int mx = INT_MIN;
+
+        for(int i = m-1 ; i >= 0 ; i--) {
+            while(!stk1.empty() && stk1.top().first > heights[i]) stk1.pop();
+            if(!stk1.empty()) nsr[i] = stk1.top().second;
+            stk1.push(make_pair(heights[i],i));
+        }
+
+        for(int i = 0 ; i < m ; i++) {
+            while(!stk2.empty() && stk2.top().first >= heights[i]) stk2.pop();
+            if(!stk2.empty()) nsl[i] = stk2.top().second;
+            stk2.push(make_pair(heights[i],i));
+        }
+        
+        for(int i = 0 ; i < m ; i++) {
+            int area = (nsr[i] - nsl[i] - 1) * heights[i];
+            mx = max(mx,area);
+        }
+        return mx;
+    }
+
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        vector<int> hist(m,0);
+        int area = 0;
+        int mx = INT_MIN;
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < m ; j++) {
+                if(matrix[i][j] == '0') hist[j] = 0;
+                else hist[j]++;
+            }
+            area = maxArea(hist, m);
+            mx = max(mx, area);
+        }
+        return mx;
+    }
+};
