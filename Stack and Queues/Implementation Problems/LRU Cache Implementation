@@ -1,0 +1,151 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct Node {
+    public:
+        int key,value;
+        Node* prev; 
+        Node* next;
+        Node() {}
+        Node(int k, int v) {
+            key = k;
+            value = v;
+            next = NULL;
+            prev = NULL;
+        }
+};
+
+class LRUCache
+{
+public:
+    unordered_map<int,Node*> mpp;
+    int c = 0;
+    Node* head;
+    Node* tail;
+
+    LRUCache(int capacity)
+    {
+        // Write your code here
+        c = capacity;
+        head = new Node(-1,-1);
+        tail = new Node(-1,-1);
+        head->next = tail;
+        tail->prev = head;
+    }
+
+    void insertNode(Node* node) {
+        node->next = head->next;
+        node->prev = head;
+        head->next = node;
+        node->next->prev = node;
+    }
+
+    void deleteNode(Node* node) {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+
+    int get(int key)
+    {
+        // Write your code here
+        if(mpp.count(key) >= 1) {
+            int val = mpp[key]->value;
+            Node* nodeToBeDeleted = mpp[key];
+            deleteNode(nodeToBeDeleted);
+            insertNode(nodeToBeDeleted);
+
+            // OR 
+            // Node* newNode = new Node(key, nodeToBeDeleted->value);
+            // insertNode(newNode);
+            // mpp[key] = newNode;
+
+            return val;
+        } else return -1;
+    }
+
+    void put(int key, int value)
+    {
+        // Write your code here
+        Node* newNode = new Node(key,value);
+
+        if(mpp.count(key) >= 1) {
+            Node* existing = mpp[key];
+            deleteNode(existing);
+            delete existing;
+            insertNode(newNode);
+            mpp[key] = newNode;
+        }
+        else {
+            if(c > 0) {
+                insertNode(newNode);
+                mpp[key] = newNode;
+                c--;
+            } else {
+                mpp.erase(tail->prev->key);
+                deleteNode(tail->prev);
+                insertNode(newNode);
+                mpp[key] = newNode;
+            }
+        }  
+    }
+};
+
+
+
+
+
+
+
+// class LRUCache
+// {
+// public:
+//     unordered_map<int,pair<int,int>> mpp;
+//     int c = 0;
+//     uint32_t counter = 0;
+//     LRUCache(int capacity)
+//     {
+//         // Write your code here
+//         c = capacity;
+//     }
+
+//     int get(int key)
+//     {
+//         // Write your code here
+//         if(mpp.find(key) != mpp.end()) {
+//             mpp[key] = make_pair(mpp[key].first,counter);
+//             counter++;
+//             return mpp[key].first;
+//         }
+//         else return -1;
+//     }
+
+//     void put(int key, int value)
+//     {
+//         // Write your code here
+//         if(mpp.find(key) != mpp.end()) {
+//             mpp[key] = make_pair(value,counter);
+//             counter++;
+//         } 
+//         else {
+//             if(c > 0) {
+//                 mpp[key] = make_pair(value,counter);
+//                 counter++;
+//                 c--;
+//             } else {
+//                 int minCounter = INT_MAX;
+//                 int keyReq = -1;
+//                 for(auto item : mpp) {
+//                     if(item.second.second < minCounter) {
+//                         minCounter = item.second.second;
+//                         keyReq = item.first;
+//                     }
+//                 }
+//                 mpp.erase(keyReq);
+//                 mpp[key] = make_pair(value,counter);
+//                 counter++;
+//             }  
+//         }
+          
+//     }
+// };
