@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        vector<bool> charMap(256,false);
+        int n = s.length();
+        int currCounter = 0;
+        int mx = 0;
+        int left = 0;
+        int right = 0;
+        while(right < n) {
+            if(charMap[s[right]] == false) {
+                currCounter = (right - left + 1);
+                mx = max(mx,currCounter);
+                charMap[s[right]] = true;
+                right++;
+            } else {
+                charMap[s[left]] = false;
+                left++;
+            }
+        }
+        return mx;
+    }
+};
