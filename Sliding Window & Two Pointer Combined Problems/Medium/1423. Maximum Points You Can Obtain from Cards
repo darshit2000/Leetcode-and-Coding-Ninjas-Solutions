@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k) {
+        int maxSum = 0;
+        int currSum = 0;
+        int n = cardPoints.size();
+
+        for(int i = 0 ; i < k ; i++) maxSum += cardPoints[i];
+        currSum = maxSum;
+        for(int j = k-1 ; j >= 0 ; j--) {
+            currSum -= cardPoints[j];
+            currSum += cardPoints[n - k + j];
+            maxSum = max(maxSum, currSum);
+        }
+        return maxSum;
+    }
+};
+
+
+
+
+
+// Naive (Recursion)
+
+// class Solution {
+// public:
+//     void solve(vector<int> &cardPoints, int left, int right, int sum, int &maxSum, int k) {
+//         if(k < 0 || left > right) return;
+//         maxSum = max(maxSum, sum);
+//         solve(cardPoints, left+1, right, sum + cardPoints[left], maxSum, k-1);
+//         solve(cardPoints, left, right-1, sum + cardPoints[right], maxSum, k-1);
+//     }
+//     int maxScore(vector<int>& cardPoints, int k) {
+//         if(k == cardPoints.size()) return accumulate(cardPoints.begin(), cardPoints.end(), 0);
+//         int maxSum = 0;
+//         solve(cardPoints, 0, cardPoints.size()-1, 0, maxSum, k);
+//         return maxSum;
+//     }
+// };
