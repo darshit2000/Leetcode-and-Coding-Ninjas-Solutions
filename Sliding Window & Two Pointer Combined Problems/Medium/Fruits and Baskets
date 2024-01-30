@@ -1,0 +1,20 @@
+int findMaxFruits(vector<int> &arr, int n) {
+    // Write your code here.
+    int left = 0;
+    int right = 0;
+    unordered_map<int,int> mpp;
+    int mx = 1;
+    while(right < n) {
+        mpp[arr[right]]++;
+        
+        while(mpp.size() > 2) {
+            mpp[arr[left]]--;
+            if(mpp[arr[left]] == 0) mpp.erase(arr[left]);
+            left++;
+        }
+
+        mx = max(mx, right - left + 1);
+        right++;
+    }
+    return mx;
+}
