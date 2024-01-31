@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int atMost(vector<int>& nums, int k, int n) {
+        if(k < 0) return 0;
+
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+        int count = 0;
+
+        while(right < n) {
+            sum += (nums[right] % 2);
+
+            while(sum > k) {
+                sum -= (nums[left] % 2);
+                left++;
+            }
+
+            if(sum <= k) {
+                count += (right - left + 1);
+            }
+
+            right++;
+        }
+        return count;
+    }
+
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        int n = nums.size();
+        return atMost(nums, k, n) - atMost(nums, k-1, n);
+    }
+};
+
+
+
+
+
+// class Solution {
+// public:
+//     int numberOfSubarrays(vector<int>& nums, int k) {
+//         int n = nums.size();
+
+//         unordered_map<int,int> mpp;
+//         mpp[0] = 1;
+
+//         int i = 0;
+//         int sum = 0;
+//         int count = 0;
+
+//         while(i < n) {
+//             sum += (nums[i] % 2);
+
+//             if(mpp.find(sum - k) != mpp.end()) {
+//                 count += mpp[sum-k];
+//             }
+
+//             mpp[sum]++;
+//             i++;
+//         }
+//         return count;
+//     }
+// };
