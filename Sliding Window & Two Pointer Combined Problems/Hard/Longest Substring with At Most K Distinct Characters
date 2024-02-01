@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int kDistinctChars(int k, string &str)
+{
+    // Write your code here
+    int left = 0;
+    int right = 0;
+    int n = str.length();
+    unordered_map<char,int> mpp;
+    int mx = 0;
+
+    while(right < n) {
+        mpp[str[right]]++;
+
+        while(mpp.size() > k) {
+            mpp[str[left]]--;
+            if(mpp[str[left]] == 0) mpp.erase(str[left]);
+            left++;
+        }
+        mx = max(mx, right - left + 1);
+        right++;
+    }
+    return mx;
+}
+
+
