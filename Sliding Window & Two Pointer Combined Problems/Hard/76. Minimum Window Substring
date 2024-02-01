@@ -1,0 +1,98 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if(t == ""){
+            return "";
+        }
+        int n1 = s.length();
+        int n2 = t.length();
+        vector<int> tFreq(256,0);
+        int left = 0;
+        int right = 0;
+        int minLength = INT_MAX;
+        int counter = 0;
+        int head = 0;
+
+        for(int i = 0 ; i < n2 ; i++) tFreq[t[i] - 'A']++;
+
+        while(right < n1) {
+            
+            if(tFreq[s[right] - 'A'] > 0) counter++;
+
+            tFreq[s[right] - 'A']--;
+
+            while(counter == n2) {
+                if(minLength > (right - left + 1)) {
+                    minLength = (right - left + 1);
+                    head = left;
+                }
+                
+                if(tFreq[s[left] - 'A'] == 0) counter--;     
+
+                tFreq[s[left] - 'A']++;
+
+                left++;
+            }
+            right++;
+        }
+
+        if (minLength != INT_MAX) return s.substr(head, minLength);
+        else return "";
+    }
+};
+
+
+
+
+
+
+
+// Two Maps (can also use vector)
+
+// class Solution {
+// public:
+//     string minWindow(string s, string t) {
+//         if(t == ""){
+//             return "";
+//         }
+//         int n1 = s.length();
+//         int n2 = t.length();
+//         unordered_map<char,int> sMap;
+//         unordered_map<char,int> tMap;
+//         int left = 0;
+//         int right = 0;
+//         int minLength = INT_MAX;
+//         int counter = 0;
+//         int head = 0;
+
+//         for(int i = 0 ; i < n2 ; i++) {
+//             tMap[t[i]]++;
+//         }
+
+//         while(right < n1) {
+//             sMap[s[right]]++;
+
+//             if(tMap.find(s[right]) != tMap.end() && sMap[s[right]] <= tMap[s[right]]) {
+//                 counter++;
+//             }
+            
+//             while(counter == n2) {
+//                 if(minLength > (right - left + 1)) {
+//                     minLength = (right - left + 1);
+//                     head = left;
+//                 }
+
+//                 sMap[s[left]]--;
+
+//                 if(tMap.find(s[left]) != tMap.end() && sMap[s[left]] < tMap[s[left]]) {
+//                     counter--;
+//                 } 
+//                 left++;
+//             }
+//             right++;
+//         }
+
+//         if (minLength != INT_MAX) return s.substr(head, minLength);
+//         else return "";
+//     }
+// };
