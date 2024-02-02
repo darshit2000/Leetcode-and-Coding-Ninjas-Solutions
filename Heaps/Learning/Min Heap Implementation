@@ -1,0 +1,109 @@
+class minHeap {
+public:
+    int *heap;
+    int size ,capacity;
+    // Constructor for the class.
+    minHeap(int cap) {
+        // Write your code here.
+        heap = new int[cap];
+        size = 0;
+        capacity = cap;
+    }
+
+    // void minHeapify(int index) {
+    //     if(index >= size) return;
+
+    //     int smallest = index;
+
+    //     while(true) {
+    //         int currentIndex = smallest;
+    //         int leftChild = 2 * smallest + 1;
+    //         int rightChild = 2 * smallest + 2;
+    
+    //         if(leftChild < size && heap[smallest] > heap[leftChild]) {
+    //             smallest = leftChild;
+    //         } 
+    //         if(rightChild < size && heap[smallest] > heap[rightChild]) {
+    //             smallest = rightChild;
+    //         } 
+            
+    //         if(smallest == rightChild || smallest == leftChild) {
+    //             swap(heap[smallest], heap[currentIndex]);
+    //         } else break;
+    //     }
+    // }
+
+    void minHeapify(int index)
+    {
+        int smallest = index;
+        int leftChild = 2 * index + 1;
+        int rightChild = 2 * index + 2;
+        
+        if(leftChild < size && heap[smallest] > heap[leftChild]) smallest = leftChild;
+
+        if(rightChild < size && heap[smallest] > heap[rightChild]) smallest = rightChild;
+
+        if(smallest != index)
+        {
+            swap(heap[index], heap[smallest]);
+            minHeapify(smallest);
+        }
+    }
+
+    // Implement the function to remove minimum element.
+
+    int extractMinElement() {
+        // Write you code here.
+        if(size <= 0) return -1;
+        else if(size == 1) {
+            size--;
+            return heap[0];
+        }
+
+        int mn = heap[0];
+
+        swap(heap[0], heap[size-1]);
+        size--;
+
+        minHeapify(0);
+        return mn;
+    }
+
+    // Implement the function to delete an element.
+    void deleteElement(int ind) {
+        // Write you code here.
+        if(ind >= size) return;
+
+        heap[ind] = INT_MIN;
+        int parent = -1;
+
+        while(ind > 0) {
+            parent = (ind - 1)/2;
+            if(heap[ind] < heap[parent]) {
+                swap(heap[ind], heap[parent]);
+                ind = parent;
+            } else break;
+        }
+        
+        extractMinElement();
+    }
+
+    // Implement the function to insert 'val' in the heap.
+    void insert(int val) {
+        // Write you code here.
+        if(size >= capacity) return;
+
+        heap[size] = val;
+        size++;
+        int pos = size - 1;
+        while(pos > 0) {
+            int parent = (pos - 1)/2;
+            if(heap[pos] < heap[parent]) {
+                swap(heap[pos], heap[parent]);
+                pos = parent;
+            } else break;
+        }
+    }
+};
+
+
