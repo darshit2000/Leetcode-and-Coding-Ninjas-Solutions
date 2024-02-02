@@ -11,7 +11,7 @@ public:
         int right = 0;
         int minLength = INT_MAX;
         int counter = 0;
-        int head = 0;
+        int startIndex = 0;
 
         for(int i = 0 ; i < n2 ; i++) tFreq[t[i] - 'A']++;
 
@@ -24,7 +24,7 @@ public:
             while(counter == n2) {
                 if(minLength > (right - left + 1)) {
                     minLength = (right - left + 1);
-                    head = left;
+                    startIndex = left;
                 }
                 
                 if(tFreq[s[left] - 'A'] == 0) counter--;     
@@ -36,7 +36,7 @@ public:
             right++;
         }
 
-        if (minLength != INT_MAX) return s.substr(head, minLength);
+        if (minLength != INT_MAX) return s.substr(startIndex, minLength);
         else return "";
     }
 };
@@ -63,7 +63,7 @@ public:
 //         int right = 0;
 //         int minLength = INT_MAX;
 //         int counter = 0;
-//         int head = 0;
+//         int startIndex = 0;
 
 //         for(int i = 0 ; i < n2 ; i++) {
 //             tMap[t[i]]++;
@@ -79,7 +79,7 @@ public:
 //             while(counter == n2) {
 //                 if(minLength > (right - left + 1)) {
 //                     minLength = (right - left + 1);
-//                     head = left;
+//                     startIndex = left;
 //                 }
 
 //                 sMap[s[left]]--;
@@ -92,7 +92,7 @@ public:
 //             right++;
 //         }
 
-//         if (minLength != INT_MAX) return s.substr(head, minLength);
+//         if (minLength != INT_MAX) return s.substr(startIndex, minLength);
 //         else return "";
 //     }
 // };
