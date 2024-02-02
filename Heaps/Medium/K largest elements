@@ -1,0 +1,40 @@
+void maxHeapify(vector<int> &v, int n, int index) {
+    int greater = index;
+
+    int leftChild = 2 * greater + 1;
+    int rightChild = 2 * greater + 2;
+
+    if(leftChild < n && v[greater] < v[leftChild]) greater = leftChild;
+
+    if(rightChild < n && v[greater] < v[rightChild]) greater = rightChild;
+
+    if(greater != index) {
+        swap(v[index], v[greater]);
+        maxHeapify(v, n, greater);
+    }
+}
+
+void buildHeap(vector<int> &v, int n) {
+    for(int i = (n-2)/2 ; i >= 0 ; i--) {
+        maxHeapify(v, n, i); 
+    }
+    return;
+}
+
+vector<int> kLargest(int arr[], int n, int k) {
+    // Write your code here
+    vector<int> v;
+    vector<int> ans;
+    v.assign(arr, arr + n);
+
+    buildHeap(v, n);
+    
+    for(int i = 0 ; i < k ; i++) {
+        ans.push_back(v[0]);
+        swap(v[0], v[v.size()-1]);
+        v.pop_back();
+        maxHeapify(v, n, 0);
+    }
+
+    return ans;
+}
