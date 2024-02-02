@@ -1,0 +1,31 @@
+string minWindow(string S, string T)
+{
+	// Write your Code here
+    int n1 = S.length();
+    int n2 = T.length();
+    int minLength = INT_MAX;
+    int startIndex = -1;
+
+    for(int i = 0 ; i < n1 ; i++) {
+        if(S[i] == T[0]) {
+            int sIndex = i+1;
+            int tIndex = 1;
+            while(tIndex < n2 && sIndex < n1) {
+                if(S[sIndex] == T[tIndex]) {
+                    tIndex++;
+                }
+                sIndex++;
+            }
+
+            if(tIndex == n2) {
+                if(minLength > (sIndex - i)) {
+                    minLength = sIndex - i;
+                    startIndex = i;
+                }
+            }
+        }
+    }
+
+    if(minLength == INT_MAX) return "";
+    else return S.substr(startIndex, minLength);
+}
