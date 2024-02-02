@@ -1,0 +1,27 @@
+void maxHeapify(int index, int n, vector<int> &heap) {
+	int greater = index;
+
+	int leftChild = 2 * greater + 1;
+	int rightChild = 2 * greater + 2;
+
+	if(leftChild < n && heap[greater] < heap[leftChild]) greater = leftChild;
+
+	if(rightChild < n && heap[greater] < heap[rightChild]) greater = rightChild;
+
+	if(greater != index) {
+		swap(heap[index], heap[greater]);
+		maxHeapify(greater, n, heap);
+	}
+
+}
+
+vector<int>MinToMaxHeap(int n, vector<int>&arr)
+{
+	// Write your code here.
+	vector<int> maxHeap(arr.begin(), arr.end());
+
+	for(int i = (n-2)/2 ; i >= 0 ; i--) {
+		maxHeapify(i, n, maxHeap);
+	}
+	return maxHeap;
+}
