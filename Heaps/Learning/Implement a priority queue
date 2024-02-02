@@ -1,0 +1,87 @@
+// Iterative
+
+// void maxHeapify(int index, int n, vector<int> &heap) {
+//     int greater = index;
+
+//     while(true) {
+//         int currIndex = greater;
+//         int leftChild = 2 * greater + 1;
+//         int rightChild = 2 * greater + 2;
+
+//         if(leftChild < n && heap[greater] <= heap[leftChild]) {
+//             greater = leftChild;
+//         } 
+        
+//         if(rightChild < n && heap[greater] < heap[rightChild]) {
+//             greater = rightChild;
+//         } 
+
+//         if(greater == leftChild || greater == rightChild) {
+//             swap(heap[currIndex], heap[greater]);
+//         } else break;
+//     }
+// }
+
+
+
+// Recursive
+
+void maxHeapify(int index, int n, vector<int> &heap) {
+    int greater = index;
+
+    int leftChild = 2 * greater + 1;
+    int rightChild = 2 * greater + 2;
+
+    if(leftChild < n && heap[greater] <= heap[leftChild]) greater = leftChild;
+     
+    if(rightChild < n && heap[greater] < heap[rightChild]) greater = rightChild;
+   
+    if(greater != index) {
+        swap(heap[greater], heap[index]);
+        maxHeapify(greater, n, heap);
+    }
+}
+
+int pop(vector<int> &heap)
+{
+    // Write you code here.
+    int n = heap.size();
+    if(n == 0) return -1;
+
+    int mx = heap[0];
+    
+    swap(heap[0], heap[n-1]);
+
+    heap.pop_back();
+    n--;
+
+    maxHeapify(0, n, heap);
+
+    return mx;
+}
+
+// Code Snippet of the push function: 
+//
+//     void push(vector<int> &heap, int x)
+//     {
+//           heap.push_back(x);
+//
+//            // Posistion of the current inserted element.
+//            int pos=heap.size()-1;
+//
+//            // Shifting the element up until it reaches the top most node if it is larger than its parent.
+//            while(pos>0)
+//            {
+//                int parent = (pos-1)/2;
+//                if(heap[pos] > heap[parent])
+//                {
+//                    swap(heap[parent],heap[pos]);
+//                    pos=parent;
+//               }
+//              else
+//              {
+//                  // As parent is larger the element now is in its correct position. 
+//                  break;
+//              }
+//          }
+//      }
