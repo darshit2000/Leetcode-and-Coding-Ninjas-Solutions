@@ -1,0 +1,56 @@
+#include <bits/stdc++.h> 
+
+// Using sorting 
+
+// vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
+// {
+//     // Write your code here. 
+//     vector<int> ans;
+//     for(vector<int> arr : kArrays) {
+//         ans.insert(ans.end(), arr.begin(), arr.end());
+//     }
+//     sort(ans.begin(), ans.end());
+//     return ans;
+// }
+
+
+
+// Using multiset 
+
+// vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
+// {
+//     // Write your code here. 
+//     multiset<int> ms;
+//     for(vector<int> arr : kArrays) {
+//         for(int i : arr) ms.insert(i);
+//     }
+//     vector<int> ans(ms.begin(), ms.end());
+//     return ans;
+// }
+
+
+// Using Min heap
+vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
+{
+    // Write your code here. 
+    priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> minHeap;
+    vector<int> ans;
+
+    for(int i = 0 ; i < k ; i++) {
+        minHeap.push(make_pair(kArrays[i][0], make_pair(i, 0))); 
+    }
+
+    while(!minHeap.empty()) {
+        ans.push_back(minHeap.top().first);
+
+        int arrayNo = minHeap.top().second.first;
+        int index = minHeap.top().second.second;
+
+        minHeap.pop();
+
+        if(index+1 < kArrays[arrayNo].size()) {
+            minHeap.push(make_pair(kArrays[arrayNo][index+1], make_pair(arrayNo, index+1))); 
+        }
+    }
+    return ans;
+}
