@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        if(n == 0) return tasks.size();
+
+        priority_queue<int> maxHeap;
+        vector<int> freqList(26,0);
+        // { time remaining of the task , time at which this task will become active again }
+        queue<pair<int,int>> remaining;
+
+        for(int i = 0 ; i < tasks.size() ; i++)  freqList[tasks[i] - 'A']++;
+
+        for(int freq : freqList) {
+            if(freq != 0) maxHeap.push(freq);
+        }
+        
+        int time = 0;
+        while(!maxHeap.empty() || !remaining.empty()) {
+            time++;
+
+            if(!maxHeap.empty()) {
+                int timeOfPoppedTask = maxHeap.top();
+                maxHeap.pop();
+
+                int remainingTimeOfPoppedTask = timeOfPoppedTask - 1;
+
+                if(remainingTimeOfPoppedTask > 0) {
+                    remaining.push({remainingTimeOfPoppedTask, time + n});
+                }
+            }
+            
+            if(!remaining.empty() && remaining.front().second == time) {
+                maxHeap.push(remaining.front().first);
+                remaining.pop();
+            }
+        }
+        return time;
+    }   
+};
