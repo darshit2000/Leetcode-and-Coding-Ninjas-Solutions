@@ -8,6 +8,9 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+// Priority Queue with priority_queue<ListNode*>
+
 class Solution {
 public:
     struct compare {
@@ -41,7 +44,10 @@ public:
 
 
 
-// Priority Queue
+
+
+
+// Priority Queue with priority_queue<pair<int,ListNode*>>
 
 // class Solution {
 // public:
@@ -67,6 +73,8 @@ public:
 //         return head->next;
 //     }
 // };
+
+
 
 
 
