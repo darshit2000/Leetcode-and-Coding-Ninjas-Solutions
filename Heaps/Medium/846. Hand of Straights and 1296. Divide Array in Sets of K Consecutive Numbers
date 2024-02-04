@@ -1,0 +1,123 @@
+// Unordered Map and Priority Queue
+
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        int n = hand.size();
+        if(n % groupSize != 0) return false;
+        
+        unordered_map<int,int> freqList;
+        priority_queue<int, vector<int>, greater<int>> minHeap;
+
+        for(int i = 0 ; i < n ; i++) {
+            freqList[hand[i]]++;
+            minHeap.push(hand[i]);
+        }
+
+        while(!minHeap.empty()) {
+            int firstValue = minHeap.top();
+            minHeap.pop();
+
+            if(freqList[firstValue] > 0) {
+                freqList[firstValue]--;
+                int nextExpectedValue = firstValue + 1;
+
+                for(int i = 0 ; i < groupSize-1 ; i++) {
+                    if(freqList[nextExpectedValue] > 0) {
+                        freqList[nextExpectedValue]--;
+                        nextExpectedValue += 1;
+                    }
+                    else return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+
+
+
+
+
+// Ordered Map
+
+// class Solution {
+// public:
+//     bool isNStraightHand(vector<int>& hand, int groupSize) {
+//         int n = hand.size();
+//         if(n % groupSize != 0) return false;
+
+//         map<int,long long> freqMap;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             freqMap[hand[i]]++;
+//         }
+
+//         for(auto item : freqMap) {
+//             while(freqMap[item.first] > 0){
+//                 int firstValue = item.first;
+//                 if(item.second > 0) {
+//                     freqMap[firstValue]--;
+//                     int nextExpected = firstValue + 1;
+
+//                     for(int i = 0 ; i < groupSize-1 ; i++) {
+//                         if(freqMap[nextExpected] > 0) {
+//                             freqMap[nextExpected]--;
+//                             nextExpected += 1;
+//                         }
+//                         else return false;
+//                     }
+//                 }
+//             }
+//         }
+//         return true;
+//     }
+// };
+
+
+
+
+
+
+// Vector and Priority Queue
+
+// class Solution {
+// public:
+//     bool isNStraightHand(vector<int>& hand, int groupSize) {
+//         int n = hand.size();
+//         if(n % groupSize != 0) return false;
+        
+//         vector<int> temp;
+//         priority_queue<int, vector<int>, greater<int>> minHeap;
+
+//         for(int i = 0 ; i < n ; i++) minHeap.push(hand[i]);
+
+//         int size = 0;
+//         while(!minHeap.empty()) {
+//             int curr = minHeap.top();
+//             minHeap.pop();
+//             size++;
+
+//             while(!minHeap.empty() && size < groupSize) {
+//                 if(minHeap.top() == curr) {
+//                     temp.push_back(minHeap.top());
+//                     minHeap.pop();
+//                 } else if((minHeap.top() - curr) == 1) {
+//                     size++;
+//                     curr = minHeap.top();
+//                     minHeap.pop();
+//                 } else if((minHeap.top() - curr) != 1) {
+//                     return false;
+//                 }
+//             }
+
+//             if(size != groupSize) return false;
+//             else {
+//                 size = 0;
+//                 for(int i : temp) minHeap.push(i);
+//                 temp.clear();
+//             }
+//         }
+//         return true;
+//     }
+// };
