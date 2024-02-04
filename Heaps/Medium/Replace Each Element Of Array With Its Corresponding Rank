@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+
+// vector<int> replaceWithRank(vector<int> &arr, int n) {
+//     // Write your code here.
+//     unordered_map<int, int> mpp;
+//     priority_queue<int, vector<int>, greater<int>> pq;
+//     vector<int> ans;
+//     int rank = 1;
+
+//     for(int i = 0 ; i < n ; i++) {
+//         pq.push(arr[i]);
+//     }
+//     while(!pq.empty()) {
+//         if(mpp.find(pq.top()) == mpp.end()) {
+//             mpp[pq.top()] = rank;
+//             rank++;
+//         }
+//         pq.pop();
+//     }
+//     for(int i = 0 ; i < n ; i++) {
+//         ans.push_back(mpp[arr[i]]);
+//     }
+//     return ans;
+// }
+
+
+
+
+vector<int> replaceWithRank(vector<int> &arr, int n) {
+    // Write your code here.
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+    vector<int> ans(n);
+    int rank = 0;
+
+    for(int i = 0 ; i < n ; i++) {
+        pq.push({arr[i],i});
+    }
+
+    int lastElement = INT_MIN;
+    
+    while(!pq.empty()) {
+        pair<int,int> p1 = pq.top();
+        pq.pop();
+        
+        if(p1.first != lastElement) {
+            lastElement = p1.first;
+            rank++;
+        }
+        
+        ans[p1.second] = rank;
+    }
+
+    return ans;
+}
+
+
