@@ -1,3 +1,5 @@
+// Using Priority Queue, but keeping only k elements in the PQ
+
 class KthLargest {
 public:
     priority_queue<int, vector<int>, greater<int>> minHeap;
@@ -22,6 +24,7 @@ public:
 
 
 
+// Using Priority Queue, but keeping all elements in the PQ all the time
 
 // class KthLargest {
 // public:
@@ -59,9 +62,9 @@ public:
 
 
 
+// Using Multiset
 
-
- // class KthLargest {
+// class KthLargest {
 // public:
 //     multiset<int> ms;
 //     int k;
@@ -73,8 +76,12 @@ public:
     
 //     int add(int val) {
 //         ms.insert(val);
-//         vector<int> temp(ms.begin(), ms.end());
-//         if(k <= temp.size()) return temp[temp.size()-k];
-//         return -1;
+//         auto it = ms.end();
+//         int curr = 0;
+//         while(curr < k) {
+//             it--;
+//             curr++;
+//         }
+//         return *it;
 //     }
 // };
