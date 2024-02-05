@@ -1,0 +1,155 @@
+// Map and Linked List
+
+class Node {
+    public:
+        int userId, tweetId;
+        Node* next;
+        Node() {}
+        Node(int uid, int tid) {
+            userId = uid;
+            tweetId = tid;
+            next = NULL;
+        }
+};
+
+class Twitter {
+public:
+    // {userID, List of followers}
+    unordered_map<int,vector<int>> followers;
+
+    Node* head;
+    int totalTweets = 0;
+    
+    Twitter() {
+        head = NULL;
+    }
+    
+    void postTweet(int userId, int tweetId) {
+        Node* newTweet = new Node(userId, tweetId);
+        if(totalTweets == 0) {
+            head = newTweet;
+        } else {
+            newTweet->next = head;
+            head = newTweet;
+        }
+        totalTweets++;
+    } 
+    
+    vector<int> getNewsFeed(int userId) {
+        vector<int> listOfFollowers = followers[userId];
+        int count = 0;
+        vector<int> feed;
+        Node* curr = head;
+
+        while(curr != NULL) {
+            int id = curr->userId;
+            if(id == userId || (find(listOfFollowers.begin(), listOfFollowers.end(), id) != listOfFollowers.end())) {
+                count++;
+                feed.push_back(curr->tweetId);
+            }
+            if(count >= 10) break;
+            curr = curr->next;
+        }
+        return feed;
+    }
+    
+    void follow(int followerId, int followeeId) {
+        if(followers.find(followerId) != followers.end()) {
+            followers[followerId].push_back(followeeId);
+        } else {
+            followers[followerId] = {followeeId};
+        }
+    }
+    
+    void unfollow(int followerId, int followeeId) {
+        if(followers.find(followerId) != followers.end()) {
+            vector<int> listOfFollowers(followers[followerId].begin(), followers[followerId].end());
+            if(find(listOfFollowers.begin(), listOfFollowers.end(), followeeId) != listOfFollowers.end()) {
+                listOfFollowers.erase(find(listOfFollowers.begin(), listOfFollowers.end(), followeeId));
+            }
+            followers[followerId] = listOfFollowers;
+        }
+    }
+};
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter* obj = new Twitter();
+ * obj->postTweet(userId,tweetId);
+ * vector<int> param_2 = obj->getNewsFeed(userId);
+ * obj->follow(followerId,followeeId);
+ * obj->unfollow(followerId,followeeId);
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Using map and vector
+
+// class Twitter {
+// public:
+//     // {userID, List of followers}
+//     unordered_map<int,vector<int>> followers;
+//     // list of {userID, tweetID}
+//     vector<pair<int,int>> tweets;
+    
+//     Twitter() {
+        
+//     }
+    
+//     void postTweet(int userId, int tweetId) {
+//         tweets.push_back({userId, tweetId});
+//     } 
+    
+//     vector<int> getNewsFeed(int userId) {
+//         vector<int> listOfFollowers = followers[userId];
+//         int count = 0;
+//         vector<int> feed;
+
+//         for(int i = tweets.size() - 1 ; i >= 0 ; i--) {
+//             int id = tweets[i].first;
+//             if(id == userId || (find(listOfFollowers.begin(), listOfFollowers.end(), id) != listOfFollowers.end())) {
+//                 count++;
+//                 feed.push_back(tweets[i].second);
+//             }
+//             if(count == 10) break;
+//         }
+//         return feed;
+//     }
+    
+//     void follow(int followerId, int followeeId) {
+//         if(followers.find(followerId) != followers.end()) {
+//             followers[followerId].push_back(followeeId);
+//         } else {
+//             followers[followerId] = {followeeId};
+//         }
+//     }
+    
+//     void unfollow(int followerId, int followeeId) {
+//         if(followers.find(followerId) != followers.end()) {
+//             vector<int> listOfFollowers(followers[followerId].begin(), followers[followerId].end());
+//             if(find(listOfFollowers.begin(), listOfFollowers.end(), followeeId) != listOfFollowers.end()) {
+//                 listOfFollowers.erase(find(listOfFollowers.begin(), listOfFollowers.end(), followeeId));
+//             }
+//             followers[followerId] = listOfFollowers;
+//         }
+//     }
+// };
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter* obj = new Twitter();
+ * obj->postTweet(userId,tweetId);
+ * vector<int> param_2 = obj->getNewsFeed(userId);
+ * obj->follow(followerId,followeeId);
+ * obj->unfollow(followerId,followeeId);
+ */
