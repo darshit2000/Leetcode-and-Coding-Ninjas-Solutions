@@ -1,0 +1,80 @@
+class KthLargest {
+public:
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    int k;
+
+    KthLargest(int k, vector<int>& nums) {
+        this->k = k;
+        for(int i = 0  ; i < nums.size() ; i++) {
+            minHeap.push(nums[i]);
+            if(minHeap.size() > k) minHeap.pop();
+        }
+    }   
+    
+    int add(int val) {
+        minHeap.push(val);
+        if(minHeap.size() > k) minHeap.pop();
+        return minHeap.top();
+    }
+};
+
+
+
+
+
+
+// class KthLargest {
+// public:
+//     priority_queue<int> maxHeap;
+//     int k;
+
+//     KthLargest(int k, vector<int>& nums) {
+//         for(int i = 0  ; i < nums.size() ; i++) maxHeap.push(nums[i]);
+//         this->k = k;
+//     }   
+    
+//     int add(int val) {
+//         maxHeap.push(val);
+//         vector<int> temp;
+//         int curr = 1;
+//         while(curr < k) {
+//             temp.push_back(maxHeap.top());
+//             maxHeap.pop();
+//             curr++;
+//         }
+//         int ans = maxHeap.top();
+//         for(int i = 0 ; i < temp.size() ; i++) maxHeap.push(temp[i]);
+//         return ans;
+//     }
+// };
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * KthLargest* obj = new KthLargest(k, nums);
+ * int param_1 = obj->add(val);
+ */
+
+
+
+
+
+
+
+
+ // class KthLargest {
+// public:
+//     multiset<int> ms;
+//     int k;
+
+//     KthLargest(int k, vector<int>& nums) {
+//         for(int i = 0  ; i < nums.size() ; i++) ms.insert(nums[i]);
+//         this->k = k;
+//     }   
+    
+//     int add(int val) {
+//         ms.insert(val);
+//         vector<int> temp(ms.begin(), ms.end());
+//         if(k <= temp.size()) return temp[temp.size()-k];
+//         return -1;
+//     }
+// };
