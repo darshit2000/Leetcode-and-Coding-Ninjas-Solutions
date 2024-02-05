@@ -1,0 +1,25 @@
+int minCost(int arr[], int n)
+{
+	/*Write your code here. 
+	 *Don't write main().
+	 *Don't take input, it is passed as function argument.
+	 *Don't print output.
+	 *Taking input and printing output is handled automatically.
+	*/
+	priority_queue<int, vector<int>, greater<int>> minHeap;
+	int cost = 0;
+
+	for(int i = 0 ; i < n ; i++) {
+		minHeap.push(arr[i]);
+	}
+
+	while(minHeap.size() > 1) {
+		int val1 = minHeap.top();
+		minHeap.pop();
+		int val2 = minHeap.top();
+		minHeap.pop();
+		cost += (val1 + val2);
+		minHeap.push(val1 + val2);
+	}
+	return cost;
+}
