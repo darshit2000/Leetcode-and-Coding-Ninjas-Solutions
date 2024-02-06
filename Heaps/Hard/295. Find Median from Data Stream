@@ -1,0 +1,129 @@
+class MedianFinder {
+public:
+    priority_queue<int> maxHeap;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    int size = 0;
+    
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        minHeap.push(num);
+        maxHeap.push(minHeap.top());
+        minHeap.pop();
+        if(maxHeap.size() > minHeap.size()) {
+            minHeap.push(maxHeap.top());
+            maxHeap.pop();
+        }    
+        size++;
+    }
+    
+    double findMedian() { 
+        if(size % 2 == 0) {
+            return (maxHeap.top() + minHeap.top())/2.0;
+        } else {
+            return minHeap.top();
+        }
+    }
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class MedianFinder {
+// public:
+//     multiset<int> s;
+//     int size = 0;
+//     MedianFinder() {
+        
+//     }
+    
+//     void addNum(int num) {
+//         s.insert(num);
+//         size++;
+//     }
+    
+//     double findMedian() {
+//         auto it = s.begin();
+//         int i = 0;
+//         if(size % 2 == 0) {
+//             while(i != (size/2-1)) {
+//                 it++;
+//                 i++;
+//             }
+//             double v1 = (double)(*it);
+//             it++;
+//             double v2 = (double)(*it);
+//             return (v1+v2)/2.0;
+//         } else {
+//             while(i != (size/2)) {
+//                 it++;
+//                 i++;
+//             }
+//             return *it;
+//         }
+//     }
+// };
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
+
+
+
+
+
+
+
+
+// CN
+
+#include <bits/stdc++.h>
+
+vector<int> findMedian(vector<int> &arr, int n){
+	// Write your code here 
+    priority_queue<int> maxHeap;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    int size = 0;
+    vector<int> ans;
+
+    for(int i = 0 ; i < arr.size() ; i++) {
+        maxHeap.push(arr[i]);
+        minHeap.push(maxHeap.top());
+        maxHeap.pop();
+        if(minHeap.size() > maxHeap.size()) {
+            maxHeap.push(minHeap.top());
+            minHeap.pop();
+        }
+        size++;
+
+        if(size % 2 == 0) {
+            ans.push_back((minHeap.top() + maxHeap.top())/2);
+        } else {
+            ans.push_back(maxHeap.top());
+        }
+    }
+    return ans;
+}
