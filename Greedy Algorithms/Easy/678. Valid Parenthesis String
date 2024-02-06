@@ -1,0 +1,53 @@
+class Solution {
+public:
+    bool checkValidString(string s) {
+        int cmin = 0;
+        int cmax = 0;
+        for(int i = 0 ; i < s.length() ; i++) {
+            if(s[i] == '(') {
+                cmin++;
+                cmax++;
+            } else if(s[i] == ')') {
+                if(cmin > 0) cmin--;
+                cmax--;
+            } else if(s[i] == '*') {
+                if(cmin > 0) cmin--;
+                cmax++;
+            }
+            if(cmax < 0) return false;
+        }
+        return cmin==0;
+    }
+};
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     bool checkValidString(string s) {
+//         stack<pair<char,int>> stk1, stk2;
+//         for(int i = 0 ; i < s.length() ; i++) {
+//             if(s[i] == '(') stk1.push({s[i],i});
+//             else if(s[i] == '*') stk2.push({s[i],i});
+//             else {
+//                 if(!stk1.empty()) stk1.pop();
+//                 else if(stk1.empty() && !stk2.empty()) stk2.pop();
+//                 else if(stk1.empty() && stk2.empty()) return false;
+//             }
+//         }
+//         while(!stk1.empty() && !stk2.empty()) {
+//             if(stk1.top().second < stk2.top().second) {
+//                 stk1.pop();
+//                 stk2.pop();
+//             } else return false;
+//         }
+//         if(stk1.empty()) return true;
+//         return false;
+//     }
+// };
