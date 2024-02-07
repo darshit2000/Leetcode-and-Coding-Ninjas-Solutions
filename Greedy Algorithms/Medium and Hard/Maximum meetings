@@ -1,0 +1,22 @@
+int maximumMeetings(vector<int> &start, vector<int> &end)
+{
+    // Write your code here.
+    multimap<int,int> mpp;
+    int count = 0;
+    int lastEndTime = -1;
+    
+    for(int i = 0 ; i < start.size() ; i++) {
+        mpp.insert({end[i],start[i]});
+    }
+
+    auto it = mpp.begin();
+    
+    for(int i = 0 ; i < mpp.size() ; i++) {
+        if((*it).second > lastEndTime) {
+            count++;
+            lastEndTime = (*it).first;
+        }
+        it++;
+    }
+    return count;
+}
