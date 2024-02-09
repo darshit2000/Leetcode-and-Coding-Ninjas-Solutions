@@ -1,0 +1,38 @@
+#include <bits/stdc++.h> 
+/*
+
+    intervals[i][0] = start point of i'th interval
+    intervals[i][1] = finish point of i'th interval
+
+*/
+
+static bool compare(vector<int> &a, vector<int> &b) {
+    if(a[0] == b[0]) return a[1] < b[1];
+    else return a[0] < b[0];
+}
+
+vector<vector<int>> mergeIntervals(vector<vector<int>> &intervals)
+{
+    // Write your code here.
+    int n = intervals.size();
+    if(n == 1) return intervals;
+
+    sort(intervals.begin(), intervals.end(), compare);
+
+    vector<vector<int>> ans;
+    int start = intervals[0][0];
+    int end = intervals[0][1];
+
+    for(int i = 1 ; i < n ; i++) {
+        if(intervals[i][0] <= end) {
+            start = min(start, intervals[i][0]);
+            end = max(end, intervals[i][1]);
+        } else {
+            ans.push_back({start,end});
+            start = intervals[i][0];
+            end = intervals[i][1];
+        }
+    }
+    ans.push_back({start,end});
+    return ans;
+}
