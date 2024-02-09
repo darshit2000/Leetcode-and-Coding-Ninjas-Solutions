@@ -1,0 +1,123 @@
+// int calculateMinPatforms(int at[], int dt[], int n) {
+//     // Write your code here.
+    
+//     priority_queue<int, vector<int>, greater<int>> minHeap; 
+//     int mx = 1;
+
+//     // multimap<int,int> mpp;
+//     // for(int i = 0 ; i < n ; i++)  mpp.insert({at[i],dt[i]});
+
+//     vector<pair<int,int>>mpp;	
+//     for(int i = 0 ; i < n ; i++)  mpp.push_back({at[i], dt[i]});
+//     sort(mpp.begin(), mpp.end());
+
+//     for(auto item : mpp) {
+//         if(minHeap.empty()) {
+//             minHeap.push(item.second);
+//         }
+//         else {
+//             while(!minHeap.empty() && item.first > minHeap.top()) minHeap.pop();
+//             minHeap.push(item.second);
+//         }
+//         mx = max(mx, (int)minHeap.size());
+//     }
+//     return mx;
+// }
+
+
+
+
+
+
+
+
+int calculateMinPatforms(int at[], int dt[], int n) {
+    // Write your code here.
+    int platforms = 1;
+    int maxPlatforms = 1;
+    int left = 0;
+    int right = 1;
+
+    sort(at,at+n);
+    sort(dt,dt+n);
+
+    while(left < n && right < n) {
+        while(left <= right && left < n && dt[left] < at[right]) {
+            platforms--;
+            left++;
+        }
+        platforms++;
+        right++;
+        maxPlatforms = max(maxPlatforms, platforms);
+    }
+    return maxPlatforms;
+}
+
+
+
+
+
+
+
+
+// int calculateMinPatforms(int at[], int dt[], int n) {
+//     // Write your code here.
+//     int platforms = 1;
+//     int maxPlatforms = 1;
+//     int left = 0;
+//     int right = 1;
+
+//     sort(at,at+n);
+//     sort(dt,dt+n);
+
+//     while(left < n && right < n) {
+//         if(at[right] <= dt[left]) {
+//             platforms++;
+//             right++;
+//         } 
+//         else if(at[right] > dt[left]) {
+//             platforms--;
+//             left++;
+//         }
+//         maxPlatforms = max(maxPlatforms, platforms);
+//     }
+//     return maxPlatforms;
+// }
+
+
+
+
+
+
+
+
+
+
+
+// int calculateMinPatforms(int at[], int dt[], int n) {
+//     // Write your code here.
+//     multimap<int,int> mpp;
+//     multiset<int> platformSet;
+//     int platform = 1;
+//     int mx = 1;
+
+//     for(int i = 0 ; i < n ; i++) {
+//         mpp.insert({at[i],dt[i]});
+//     }
+
+//     for(auto item : mpp) {
+//     	    if(platformSet.size() == 0) {
+//     	        platformSet.insert(item.second);
+//     	    } 
+//     	    else {
+//                 auto it = platformSet.begin();
+//     	        while(platformSet.size() > 0 && (*it) < item.first) {
+//                     platformSet.erase(it);
+//                     it = platformSet.begin();
+//                 }
+//                 platformSet.insert(item.second);
+//     	    }
+//             mx = max(mx, (int)platformSet.size());
+//     	}
+//     	return mx;
+// }
