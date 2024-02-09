@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>    
+
+static bool compare(vector<int> &j1, vector<int> &j2) {
+    return j1[2] > j2[2];
+}
+
+vector<int> jobScheduling(vector<vector<int>> &jobs)
+{
+    // Write your code here
+    sort(jobs.begin(), jobs.end(), compare);
+ 
+    int maxProfit = 0;
+    int totalJobsDone = 0;
+    int maxDeadline = jobs[0][1];
+    int n = jobs.size();
+
+    for(int i = 0 ; i < n ; i++) {
+        maxDeadline = max(maxDeadline, jobs[i][1]);
+    }
+
+    int deadline[maxDeadline+1];
+    for(int i = 0 ; i <= maxDeadline ; i++) deadline[i] = -1;
+    
+    for(int i = 0 ; i < n ; i++) {
+        for(int d = jobs[i][1] ; d > 0 ; d--) {
+            if(deadline[d] == -1) {
+                deadline[d] = 1;
+                maxProfit += (jobs[i][2]);
+                totalJobsDone++;
+                break;
+            }
+        }
+    }
+
+    return {totalJobsDone,maxProfit};
+}
