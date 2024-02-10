@@ -1,28 +1,28 @@
-static bool compare(pair<int,int> p1, pair<int,int> p2) {
-    if(p1.first == p2.first) return p1.second > p2.second;
-    else return p1.first < p2.first;
-}
+// static bool compare(pair<int,int> p1, pair<int,int> p2) {
+//     if(p1.first == p2.first) return p1.second > p2.second;
+//     else return p1.first < p2.first;
+// }
 
-int calculateMinPatforms(int at[], int dt[], int n) {
-    // Write your code here.
-    vector<pair<int,int>> v;
-    int count = 0;
-    int mx = 0;
+// int calculateMinPatforms(int at[], int dt[], int n) {
+//     // Write your code here.
+//     vector<pair<int,int>> v;
+//     int count = 0;
+//     int mx = 0;
 
-    for(int i = 0 ; i < n ; i++) {
-        v.push_back({at[i],1});
-        v.push_back({dt[i],-1});
-    }
-    sort(v.begin(), v.end(), compare);
+//     for(int i = 0 ; i < n ; i++) {
+//         v.push_back({at[i],1});
+//         v.push_back({dt[i],-1});
+//     }
+//     sort(v.begin(), v.end(), compare);
 
-    // for(auto item : mpp) cout << "[" << item.first << "," << item.second << "]";
+//     // for(auto item : mpp) cout << "[" << item.first << "," << item.second << "]";
 
-    for(auto item : v) {
-        count += (item.second);
-        mx = max(mx, count);
-    }
-    return mx;
-}
+//     for(auto item : v) {
+//         count += (item.second);
+//         mx = max(mx, count);
+//     }
+//     return mx;
+// }
 
 
 
@@ -95,29 +95,29 @@ int calculateMinPatforms(int at[], int dt[], int n) {
 
 
 
-// int calculateMinPatforms(int at[], int dt[], int n) {
-//     // Write your code here.
-//     int platforms = 1;
-//     int maxPlatforms = 1;
-//     int left = 0;
-//     int right = 1;
+int calculateMinPatforms(int at[], int dt[], int n) {
+    // Write your code here.
+    int platforms = 0;
+    int maxPlatforms = 0;
+    int left = 0;
+    int right = 0;
 
-//     sort(at,at+n);
-//     sort(dt,dt+n);
+    sort(at,at+n);
+    sort(dt,dt+n);
 
-//     while(left < n && right < n) {
-//         if(at[right] <= dt[left]) {
-//             platforms++;
-//             right++;
-//         } 
-//         else if(at[right] > dt[left]) {
-//             platforms--;
-//             left++;
-//         }
-//         maxPlatforms = max(maxPlatforms, platforms);
-//     }
-//     return maxPlatforms;
-// }
+    while(left < n && right < n) {
+        if(at[right] <= dt[left]) {
+            platforms++;
+            right++;
+        } 
+        else if(at[right] > dt[left]) {
+            platforms--;
+            left++;
+        }
+        maxPlatforms = max(maxPlatforms, platforms);
+    }
+    return maxPlatforms;
+}
 
 
 
