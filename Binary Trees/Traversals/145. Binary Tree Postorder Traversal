@@ -1,0 +1,98 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+
+// Recursive
+
+// class Solution {
+// public:
+//     void postorder(TreeNode* root, vector<int> &ans) {
+//         if(root == NULL) return;
+//         postorder(root->left, ans);
+//         postorder(root->right, ans);
+//         ans.push_back(root->val);
+//     }
+//     vector<int> postorderTraversal(TreeNode* root) {
+//         vector<int> ans;
+//         postorder(root, ans);
+//         return ans;
+//     }
+// };
+
+
+
+// Iterative using 1 stack
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        if(!root) return {};
+        if(!root->left && !root->right) return {root->val};
+
+        vector<int> ans;
+        stack<TreeNode*> stk;
+        TreeNode* curr = root;
+        TreeNode* temp = NULL;
+
+        while(!stk.empty() || curr != NULL) {
+            if(curr) {
+                stk.push(curr);
+                curr = curr->left;
+            } else {
+                temp = stk.top()->right;
+                if(temp != NULL) {
+                    curr = stk.top()->right;
+                } else {
+                    temp = stk.top();
+                    stk.pop();
+                    ans.push_back(temp->val);
+                    
+                    while(!stk.empty() && temp == stk.top()->right) {
+                        temp = stk.top();
+                        stk.pop();
+                        ans.push_back(temp->val);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+// Iterative using 2 stacks
+
+// class Solution {
+// public:
+//     vector<int> postorderTraversal(TreeNode* root) {
+//         if(!root) return {};
+
+//         vector<int> ans;
+//         stack<TreeNode*> stk1;
+//         TreeNode* curr = root;
+//         stk1.push(curr);
+
+//         while(!stk1.empty()) {
+//             curr = stk1.top();
+//             ans.push_back(curr->val);
+//             stk1.pop();
+//             if(curr->left) stk1.push(curr->left);
+//             if(curr->right) stk1.push(curr->right);
+//         }
+//         reverse(ans.begin(), ans.end());
+//         return ans;
+//     }
+// };
