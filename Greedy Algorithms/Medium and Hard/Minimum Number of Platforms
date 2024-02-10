@@ -1,3 +1,38 @@
+static bool compare(pair<int,int> p1, pair<int,int> p2) {
+    if(p1.first == p2.first) return p1.second > p2.second;
+    else return p1.first < p2.first;
+}
+
+int calculateMinPatforms(int at[], int dt[], int n) {
+    // Write your code here.
+    vector<pair<int,int>> v;
+    int count = 0;
+    int mx = 0;
+
+    for(int i = 0 ; i < n ; i++) {
+        v.push_back({at[i],1});
+        v.push_back({dt[i],-1});
+    }
+    sort(v.begin(), v.end(), compare);
+
+    // for(auto item : mpp) cout << "[" << item.first << "," << item.second << "]";
+
+    for(auto item : v) {
+        count += (item.second);
+        mx = max(mx, count);
+    }
+    return mx;
+}
+
+
+
+
+
+
+
+
+
+
 // int calculateMinPatforms(int at[], int dt[], int n) {
 //     // Write your code here.
     
@@ -31,27 +66,27 @@
 
 
 
-int calculateMinPatforms(int at[], int dt[], int n) {
-    // Write your code here.
-    int platforms = 1;
-    int maxPlatforms = 1;
-    int left = 0;
-    int right = 1;
+// int calculateMinPatforms(int at[], int dt[], int n) {
+//     // Write your code here.
+//     int platforms = 1;
+//     int maxPlatforms = 1;
+//     int left = 0;
+//     int right = 1;
 
-    sort(at,at+n);
-    sort(dt,dt+n);
+//     sort(at,at+n);
+//     sort(dt,dt+n);
 
-    while(left < n && right < n) {
-        while(left <= right && left < n && dt[left] < at[right]) {
-            platforms--;
-            left++;
-        }
-        platforms++;
-        right++;
-        maxPlatforms = max(maxPlatforms, platforms);
-    }
-    return maxPlatforms;
-}
+//     while(left < n && right < n) {
+//         while(left <= right && left < n && dt[left] < at[right]) {
+//             platforms--;
+//             left++;
+//         }
+//         platforms++;
+//         right++;
+//         maxPlatforms = max(maxPlatforms, platforms);
+//     }
+//     return maxPlatforms;
+// }
 
 
 
@@ -110,7 +145,7 @@ int calculateMinPatforms(int at[], int dt[], int n) {
 //     	        platformSet.insert(item.second);
 //     	    } 
 //     	    else {
-//                 auto it = platformSet.begin();
+//              auto it = platformSet.begin();
 //     	        while(platformSet.size() > 0 && (*it) < item.first) {
 //                     platformSet.erase(it);
 //                     it = platformSet.begin();
