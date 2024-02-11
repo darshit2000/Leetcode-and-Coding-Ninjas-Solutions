@@ -1,0 +1,48 @@
+// Priority queue storing only k elements
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int,int> freq;
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> maxHeap;
+        vector<int> ans;
+
+        for(int i = 0 ; i < nums.size() ; i++) freq[nums[i]]++;
+
+        for(auto item : freq) {
+            maxHeap.push({item.second, item.first});
+            if(maxHeap.size() > k) maxHeap.pop();
+        }
+
+        while(!maxHeap.empty()) {
+            ans.push_back(maxHeap.top().second);
+            maxHeap.pop();
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+// Priority queue storing all elements all the time
+
+// class Solution {
+// public:
+//     vector<int> topKFrequent(vector<int>& nums, int k) {
+//         unordered_map<int,int> freq;
+//         priority_queue<pair<int,int>> maxHeap;
+//         vector<int> ans;
+
+//         for(int i = 0 ; i < nums.size() ; i++) freq[nums[i]]++;
+
+//         for(auto item : freq) maxHeap.push({item.second, item.first});
+
+//         for(int i = 0 ; i < k ; i++) {
+//             ans.push_back(maxHeap.top().second);
+//             maxHeap.pop();
+//         }
+//         return ans;
+//     }
+// };
