@@ -1,0 +1,112 @@
+// Method 1
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        int n = strs.size();
+        vector<vector<string>> ans;
+        unordered_map<string, int> mpp;
+        int index = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            string s = strs[i];
+            sort(s.begin(), s.end());
+            if(mpp.find(s) != mpp.end()) {
+                ans[mpp[s]].push_back(strs[i]);
+            } else {
+                ans.push_back({strs[i]});
+                mpp[s] = index;
+                index++;
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+// Method 2
+
+// class Solution {
+// public:
+//     vector<vector<string>> groupAnagrams(vector<string>& strs) {
+//         int n = strs.size();
+//         vector<vector<string>> ans;
+//         map<vector<int>, int> mpp;
+//         vector<int> freq(26,0);
+//         int index = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             fill(freq.begin(), freq.end(), 0);
+//             for(char i : strs[i]) freq[i - 'a']++;
+//             if(mpp.find(freq) != mpp.end()) {
+//                 ans[mpp[freq]].push_back(strs[i]);
+//             } else {
+//                 ans.push_back({strs[i]});
+//                 mpp[freq] = index;
+//                 index++;
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+
+
+
+
+// Method 3
+
+// class Solution {
+// public:
+//     vector<vector<string>> groupAnagrams(vector<string>& strs) {
+//         int n = strs.size();
+//         vector<vector<string>> ans;
+//         unordered_map<string, vector<string>> mpp;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             string s = strs[i];
+//             sort(s.begin(), s.end());
+//             if(mpp.find(s) != mpp.end()) {
+//                 mpp[s].push_back(strs[i]);
+//             } else {
+//                 mpp[s] = {strs[i]};
+//             }
+//         }
+
+//         for(auto item : mpp) ans.push_back(item.second);
+//         return ans;
+//     }
+// };
+
+
+
+
+
+// Method 4
+
+// class Solution {
+// public:
+//     vector<vector<string>> groupAnagrams(vector<string>& strs) {
+//         int n = strs.size();
+//         vector<vector<string>> ans;
+//         map<vector<int>, vector<string>> mpp;
+//         vector<int> freq(26,0);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             fill(freq.begin(), freq.end(), 0);
+//             for(char i : strs[i]) freq[i - 'a']++;
+//             if(mpp.find(freq) != mpp.end()) {
+//                 mpp[freq].push_back(strs[i]);
+//             } else {
+//                 mpp[freq] = {strs[i]};
+//             }
+//         }
+
+//         for(auto item : mpp) ans.push_back(item.second);
+//         return ans;
+//     }
+// };
