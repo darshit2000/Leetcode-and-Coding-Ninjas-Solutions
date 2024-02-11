@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        string newString = needle + "#" + haystack;
+
+        int n = newString.length();
+        int pLength = needle.length();
+        int sLength = haystack.length();
+
+        vector<int> lps(n,0);
+
+        for(int i = 1 ; i < n ; i++) {
+            int prevIndex = lps[i-1];
+
+            while(prevIndex > 0 && newString[prevIndex] != newString[i]) {
+                prevIndex = lps[prevIndex-1];
+            }
+
+            lps[i] = prevIndex + (newString[prevIndex] == newString[i] ? 1 : 0);
+        }
+
+        for(int i = pLength ; i < n ; i++) {
+            if(lps[i] == pLength) return (i - 2*pLength);
+        }
+        return -1;
+    }
+};
