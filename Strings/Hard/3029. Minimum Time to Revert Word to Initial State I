@@ -1,0 +1,18 @@
+class Solution {
+public:
+    
+    int minimumTimeToInitialState(string word, int k) {
+        int count = 0;
+        string temp = word;
+        while(true) {
+            if(temp.length() < k) {
+                if(word.starts_with(temp)) return count;
+                else return (count + 1);
+            }
+            count++;
+            temp.erase(0,k);
+            if(word.starts_with(temp)) return count;
+        }
+        return -1;
+    }
+};
