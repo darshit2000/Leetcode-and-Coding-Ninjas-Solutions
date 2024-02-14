@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        int count = 0;
+        int n = s.length();
+        stack<char> stk;
+
+        for(int i = 0 ; i < n ; i++) {
+            char ch = s[i];
+            if(ch == '(') stk.push(ch);
+            else if(ch == ')' && !stk.empty() && stk.top() == '(') stk.pop();
+            else {
+                count++;
+            }
+        }
+        count += stk.size();
+        return count;
+    }
+};
