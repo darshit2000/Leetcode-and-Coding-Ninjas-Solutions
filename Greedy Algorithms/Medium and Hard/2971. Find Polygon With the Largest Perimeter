@@ -5,12 +5,7 @@ public:
         if(n < 3) return -1;
 
         sort(nums.begin(), nums.end());
-        // for(int i : nums) cout << i << ",";
 
-        if(n == 3) {
-            if(nums[0]+nums[1] > nums[2]) return (nums[0]+nums[1]+nums[2]);
-            else return -1;
-        }
         long long p = (long long)accumulate(nums.begin(), nums.end(), (long long)0) - (long long)nums[n-1];
 
         int i = n-1;
