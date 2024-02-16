@@ -1,0 +1,85 @@
+class Solution {
+public:
+    int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+        int n = arr.size();
+        vector<int> v;
+        unordered_map<int,int> mpp;
+
+        for(int i = 0 ; i < n ; i++) mpp[arr[i]]++;
+
+        for(auto i : mpp) v.push_back(i.second);
+        sort(v.begin(), v.end());
+
+        int i = 0;
+        while(k > 0 && i < v.size()) {
+            if(v[i] <= k) k -= v[i];
+            else break;
+            i++;
+        }
+        return v.size()-i;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+//         int n = arr.size();
+//         vector<pair<int,int>> v;
+//         unordered_map<int,int> mpp;
+
+//         for(int i = 0 ; i < n ; i++) mpp[arr[i]]++;
+
+//         for(auto i : mpp) v.push_back({i.second, i.first});
+//         sort(v.begin(), v.end());
+
+//         for(auto i : v) cout << "[" << i.first << "," << i.second  << "]"; 
+
+//         int i = 0;
+//         while(k > 0 && i < v.size()) {
+//             if(v[i].first <= k) k -= v[i].first;
+//             else break;
+//             i++;
+//         }
+//         return v.size()-i;
+//     }
+// };
+
+
+
+
+
+
+// class Solution {
+// public:
+//     int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+//         unordered_map<int,int> mpp;
+//         multimap<int,int> mm;   
+//         int n = arr.size();
+
+//         for(int i = 0 ; i < n ; i++) mpp[arr[i]]++;
+
+//         for(auto item : mpp) mm.insert({item.second, item.first});
+
+//         for(auto i : mm) cout << "[" << i.first << "," << i.second  << "]"; 
+
+//         auto it = mm.begin();
+//         int c = 0;
+//         while(k > 0) {
+//             if(it->first <= k) k -= it->first;
+//             else break;
+//             it++;
+//             c++;
+//         }
+//         return mm.size()-c;
+//     }
+// };
