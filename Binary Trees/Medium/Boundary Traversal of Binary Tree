@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+
+/************************************************************
+
+    Following is the Binary Tree node structure:
+
+    template <typename T>
+    class TreeNode
+    {
+    public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data)
+        {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode()
+        {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+bool isLeaf(TreeNode<int> *node) {
+    if(node && !node->left && !node->right) return true;
+    return false;
+}
+
+void allLeafs(TreeNode<int> *root, vector<int> &leafLists) {
+    if(isLeaf(root)) leafLists.push_back(root->data);
+    else {
+        if(root->left) allLeafs(root->left, leafLists);
+        if(root->right) allLeafs(root->right, leafLists);
+    }
+}
+
+vector<int> traverseBoundary(TreeNode<int> *root)
+{
+	// Write your code here.
+    if(!root) return {};
+    
+    vector<int> ans, leafNodes, rightSide;
+
+    ans.push_back(root->data);
+
+    TreeNode<int> *temp = root->left;
+    while(temp) {
+        if(!isLeaf(temp)) ans.push_back(temp->data);
+        if(temp->left) temp = temp->left;
+        else temp = temp->right;
+    }
+
+    allLeafs(root, leafNodes);
+    ans.insert(ans.end(), leafNodes.begin(), leafNodes.end());
+
+    temp = root->right;
+    
+    while(temp) {
+        if(!isLeaf(temp)) rightSide.push_back(temp->data);
+        if(temp->right) temp = temp->right;
+        else temp = temp->left;
+    }
+    reverse(rightSide.begin(), rightSide.end());
+    ans.insert(ans.end(), rightSide.begin(), rightSide.end());
+
+    return ans;
+}
