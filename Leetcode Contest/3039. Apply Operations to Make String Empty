@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string lastNonEmptyString(string s) {
+        int n = s.length();
+        string ans = "";
+        vector<int> charMap(26,0);
+        int maxFreq = INT_MIN;
+        
+        for(char ch : s) {
+            charMap[ch - 'a']++;
+            maxFreq = max(maxFreq, charMap[ch - 'a']);
+        }
+                
+        for(int i = n-1 ; i >= 0 ; i--) {
+            if(charMap[s[i] - 'a'] == maxFreq) {
+                ans += s[i];
+                charMap[s[i] - 'a'] = 0;
+            }
+        }
+        reverse(ans.begin(), ans.end());
+        
+        return ans;
+    }
+};
+
