@@ -1,0 +1,65 @@
+#define maxNum 10000000
+
+class Solution {
+public:
+    // bool isPrime[maxNum+1];
+    // void sieve() {
+    //     for(int i = 0 ; i < maxNum ; i++) isPrime[i] = true;
+    //     isPrime[0] = false;
+    //     isPrime[1] = false;
+
+    //     for(int i = 2 ; i*i <= maxNum ; i++) {
+    //         if(isPrime[i] == true) {
+    //             for(int j = i*i ; j <= maxNum ; j+=i) {
+    //                 isPrime[j] = false;
+    //             }
+    //         }
+    //     }
+    // }
+    bool isPrime(int val) {
+        for(int i = 2 ; i*i <= val ; i++) {
+            if(val % i == 0) return false;
+        }
+        return true;
+    }
+    int mostFrequentPrime(vector<vector<int>>& mat) {
+        unordered_map<int,int> mpp;
+        int m = mat.size();
+        int n = mat[0].size();
+        vector<pair<int,int>> directions = {{1,0},{1,1},{0,1},{1,-1},{-1,0},{-1,-1},{0,-1},{-1,1}};
+        // sieve();
+
+        for(int i = 0 ; i < m ; i++) {
+            for(int j = 0 ; j < n ; j++) {        
+                for(auto item : directions) {
+                    int val = mat[i][j];
+                    int row = i + item.first;
+                    int col = j + item.second;
+
+                    while(row >= 0 && row < m && col >= 0 && col < n) {
+                        val = val*10 + mat[row][col];
+                        row += item.first;
+                        col += item.second;  
+                        
+                        if(isPrime(val) && val > 10) {
+                            mpp[val]++;
+                        }
+                    }   
+                }
+            }
+        }
+        int el = -1;
+        int freq =  0;
+        for(auto item : mpp) {
+            if(item.second > freq) {
+                freq = item.second;
+                el = item.first;
+            } else if(item.second == freq) {
+                if(el < item.first) {
+                    el = item.first;
+                }
+            }
+        }
+        return el;
+    }
+};
