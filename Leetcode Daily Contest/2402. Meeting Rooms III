@@ -1,0 +1,114 @@
+class Solution {
+public:
+    int mostBooked(int n, vector<vector<int>>& meetings) {
+        int s = meetings.size();
+        priority_queue<pair<uint32_t,int>, vector<pair<uint32_t,int>>, greater<pair<uint32_t,int>>> minHeap;
+        priority_queue<int, vector<int>, greater<int>> availableRooms;
+        vector<int> meetingFreq(n);
+        int emptyRoom = 0;
+
+        sort(meetings.begin(), meetings.end());
+        for(int i = 0 ; i < n ; i++) availableRooms.push(i);
+
+        int i = 0;
+
+        while(i < s) {
+            while(!minHeap.empty() && minHeap.top().first <= meetings[i][0]) {
+                availableRooms.push(minHeap.top().second);
+                minHeap.pop();
+            }
+            if(minHeap.size() < n) {
+                emptyRoom = availableRooms.top();
+                availableRooms.pop();
+                
+                minHeap.push({(uint32_t)meetings[i][1], emptyRoom});
+                meetingFreq[emptyRoom]++;
+
+                i++;
+            } else {    
+                auto meetingCompleted = minHeap.top();
+                minHeap.pop();
+                emptyRoom = meetingCompleted.second;
+                int currTime = meetingCompleted.first;
+                minHeap.push({currTime + (uint32_t)(meetings[i][1] - meetings[i][0]) , emptyRoom});
+                meetingFreq[emptyRoom]++;
+                i++;
+            }
+        }
+
+        int mx = 0;
+        int ans = -1;
+        for(int j = 0 ; j < n ; j++) {
+            if(meetingFreq[j] > mx) {
+                mx = meetingFreq[j];
+                ans = j;
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     int mostBooked(int n, vector<vector<int>>& meetings) {
+//         int s = meetings.size();
+//         priority_queue<pair<uint32_t,int>, vector<pair<uint32_t,int>>, greater<pair<uint32_t,int>>> minHeap;
+//         vector<int> meetingFreq(n);
+//         vector<int> currentlyOccupied(n);
+//         int emptyRoom = 0;
+
+//         sort(meetings.begin(), meetings.end());
+
+//         int i = 0;
+
+//         while(i < s) {
+//             while(!minHeap.empty() && minHeap.top().first <= meetings[i][0]) {
+//                 currentlyOccupied[minHeap.top().second] = 0;
+//                 minHeap.pop();
+//             }
+//             if(minHeap.size() < n) {
+//                 for(int k = 0 ; k < currentlyOccupied.size() ; k++) {
+//                     if(currentlyOccupied[k] == 0) {
+//                         emptyRoom = k;
+//                         currentlyOccupied[k] = 1;
+//                         break;
+//                     }
+//                 }
+                
+//                 minHeap.push({(uint32_t)meetings[i][1], emptyRoom});
+//                 meetingFreq[emptyRoom]++;
+//                 currentlyOccupied[emptyRoom] = 1;
+
+//                 i++;
+//             } else {    
+//                 auto meetingCompleted = minHeap.top();
+//                 minHeap.pop();
+//                 emptyRoom = meetingCompleted.second;
+//                 int currTime = meetingCompleted.first;
+//                 minHeap.push({currTime + (uint32_t)(meetings[i][1] - meetings[i][0]) , emptyRoom});
+//                 meetingFreq[emptyRoom]++;
+//                 i++;
+//             }
+//         }
+
+//         int mx = 0;
+//         int ans = -1;
+//         for(int j = 0 ; j < n ; j++) {
+//             if(meetingFreq[j] > mx) {
+//                 mx = meetingFreq[j];
+//                 ans = j;
+//             }
+//         }
+//         return ans;
+//     }
+// };
