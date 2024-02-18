@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int dp[2001][2001];
+    int solve(vector<int> &nums, int sum, int count, int &mx, int start, int end, int n) {
+        if(start >= n || end < 0 || start > end || (end-start+1) < 2) return 0;
+        if(dp[start][end] != -1) return dp[start][end];
+
+        int v1 = 0,v2 = 0,v3 = 0;
+        
+        if(nums[start]+nums[start+1] == sum) {
+            v1 = 1 + solve(nums, sum, count+1, mx, start+2, end, n);
+        } 
+        if(nums[start]+nums[end] == sum) {
+            v2 = 1 + solve(nums, sum, count+1, mx, start+1, end-1, n);
+        } 
+        if(nums[end-1]+nums[end] == sum) {
+            v3 = 1 + solve(nums, sum, count+1, mx, start, end-2, n);
+        } 
+        dp[start][end] = max(v1, max(v2,v3));
+        return dp[start][end];
+    }
+    
+    int maxOperations(vector<int>& nums) {
+        int n = nums.size();
+        if(n <= 2) return 1;
+        int mx = INT_MIN;
+        int count = 0;
+        
+        memset(dp,-1, sizeof(dp));
+        int a = solve(nums, nums[0]+nums[1], 1, mx, 2, n-1, n);
+        mx = max(mx, a+1);
+
+        memset(dp,-1, sizeof(dp));
+        a = solve(nums, nums[0]+nums[n-1], 1, mx, 1, n-2, n);
+        mx = max(mx, a+1);
+
+        memset(dp,-1, sizeof(dp));
+        a = solve(nums, nums[n-2]+nums[n-1], 1, mx, 0, n-3, n);
+        mx = max(mx, a+1);
+            
+        if(mx == INT_MIN) return 1;
+        return mx;
+    }
+};
