@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int countMatchingSubarrays(vector<int>& nums, vector<int>& pattern) {
+        int l = pattern.size() + 1;
+        int count = 0;
+        
+        for(int i = 0 ; i <= nums.size()-l ; i++) {
+            int t = 0;
+            for(int k = i ; k < i+l-1 ; k++) {
+                if((pattern[k-i] == 1 && nums[k] < nums[k+1]) || (pattern[k-i] == 0 && nums[k] == nums[k+1]) || (pattern[k-i] == -1 && nums[k] > nums[k+1])) {
+                    t++;
+                }
+            }
+            if(t == l-1) count++; 
+        }
+        return count;
+    }
+};
