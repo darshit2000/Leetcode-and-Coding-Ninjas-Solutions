@@ -1,0 +1,77 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        if(k == 0) return {target->val};
+
+        unordered_map<TreeNode*, TreeNode*> parent;
+        unordered_set<TreeNode*> visited;
+        queue<TreeNode*> getParentQueue, distanceKQueue;
+        vector<int> ans;
+        int distance = 0;
+
+        getParentQueue.push(root);
+        parent.insert({root,NULL});
+
+        while(!getParentQueue.empty()) {
+            int size = getParentQueue.size();
+
+            for(int i = 0 ; i < size ; i++) {
+                TreeNode* node = getParentQueue.front();
+                getParentQueue.pop();
+
+                if(node->left) {
+                    getParentQueue.push(node->left);
+                    parent[node->left] = node;
+                }
+                if(node->right) {
+                    getParentQueue.push(node->right);
+                    parent[node->right] = node;
+                }
+            }
+        }
+
+        distanceKQueue.push(target);
+        visited.insert(target);
+
+        while(distance < k) {
+            int size = distanceKQueue.size();
+
+            for(int i = 0 ; i < size ; i++) {
+                TreeNode *node = distanceKQueue.front();
+                distanceKQueue.pop();
+
+                if(parent[node] != NULL && visited.find(parent[node]) == visited.end()) {
+                    distanceKQueue.push(parent[node]);
+                    visited.insert(parent[node]);
+                }
+
+                if(node->left && visited.find(node->left) == visited.end()) {
+                    distanceKQueue.push(node->left);
+                    visited.insert(node->left);
+                }
+
+                if(node->right && visited.find(node->right) == visited.end()) {
+                    distanceKQueue.push(node->right);
+                    visited.insert(node->right);
+                }
+            }
+            distance++;
+        }
+
+        while(!distanceKQueue.empty()) {
+            ans.push_back(distanceKQueue.front()->val);
+            distanceKQueue.pop();
+        }
+
+        return ans;
+    }
+};
