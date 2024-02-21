@@ -1,0 +1,63 @@
+/*
+Following is the class structure of the Node class:
+
+class Node
+{
+public:
+    int data;
+    Node *left, *right;
+    Node()
+    {
+        this->data = 0;
+        left = NULL;
+    }
+    Node(int data)
+    {
+        this->data = data; 
+        this->left = NULL;
+        this->right = NULL;
+    }
+    Node(int data, Node* left, Node* right)
+    {
+        this->data = data;
+        this->left = left;
+        this->right = right;
+    }
+};
+*/
+
+bool isLeaf(Node* node) {
+    if(node && !node->left && !node->right) return true;
+    return false;
+}
+
+bool isParentSum(Node *root){
+    // Write your code here.
+    if(!root) return 0;
+    queue<Node*> q;
+    q.push(root);
+    
+    while(!q.empty()) {
+        int size = q.size();
+        int count = 0;
+
+        while(size--) {
+            int l = 0, r = 0;
+            Node* curr = q.front();
+            q.pop();
+
+            if(curr->left) {
+                q.push(curr->left);
+                l = curr->left->data;
+            }
+            if(curr->right) {
+                q.push(curr->right);
+                r = curr->right->data;
+            }
+            if(!isLeaf(curr)) {
+                if(curr->data != (l+r)) return false;
+            }
+        }
+    }
+    return true;
+}
