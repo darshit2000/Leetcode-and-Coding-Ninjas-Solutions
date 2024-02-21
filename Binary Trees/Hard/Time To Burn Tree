@@ -1,0 +1,104 @@
+#include <bits/stdc++.h>
+/************************************************************
+
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode 
+    {
+        public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) 
+        {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+int timeToBurnTree(BinaryTreeNode<int>* root, int start)
+{
+    // Write your code here
+    unordered_map<BinaryTreeNode<int>*, BinaryTreeNode<int>*> parent;
+    unordered_set<BinaryTreeNode<int>*> visited;
+    queue<BinaryTreeNode<int>*> getParentQueue, burnQueue;
+    stack<BinaryTreeNode<int>*> preorder;
+    vector<BinaryTreeNode<int>*> ans;
+    BinaryTreeNode<int>* startNode;
+    int time = 0;
+
+    // Find Parent
+
+    getParentQueue.push(root);
+
+    while(!getParentQueue.empty()) {
+        int size = getParentQueue.size();
+
+        for(int i = 0 ; i < size ; i++) {
+            BinaryTreeNode<int>* node = getParentQueue.front();
+            getParentQueue.pop();
+
+            if(node->left) {
+                parent[node->left] = node;
+                getParentQueue.push(node->left);
+            }
+            if(node->right) {
+                parent[node->right] = node;
+                getParentQueue.push(node->right);
+            }
+        }
+    }
+
+    // Find start node 
+
+    preorder.push(root);
+    while(!preorder.empty()) {
+        BinaryTreeNode<int> *node = preorder.top();
+        preorder.pop();
+
+        if(node->data == start) {
+            startNode = node;
+            break;
+        }
+
+        if(node->right) preorder.push(node->right);
+        if(node->left) preorder.push(node->left);
+    }
+
+
+
+    // BFS on start Node
+    burnQueue.push(startNode);
+    visited.insert(startNode);
+
+    while(!burnQueue.empty()) {
+        int size = burnQueue.size();
+
+        while(size--) {
+            BinaryTreeNode<int> *node = burnQueue.front();
+            burnQueue.pop();
+
+            if(parent[node] != NULL && visited.find(parent[node]) == visited.end()) {
+                burnQueue.push(parent[node]);
+                visited.insert(parent[node]);
+            }
+
+            if(node->left && visited.find(node->left) == visited.end()) {
+                burnQueue.push(node->left);
+                visited.insert(node->left);
+            }
+
+            if(node->right && visited.find(node->right) == visited.end()) {
+                burnQueue.push(node->right);
+                visited.insert(node->right);
+            }
+        }
+        if(burnQueue.size() != 0) time++;
+    }
+    
+    return time;
+}
