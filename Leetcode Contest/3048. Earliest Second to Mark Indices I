@@ -3,22 +3,17 @@ public:
     bool solve(vector<int>& nums, vector<int>& changeIndices, int seconds) {
         int n1 = nums.size();
         int n2 = changeIndices.size();
-        vector<int> isIndexPresent(n1, 0), isIndexTakenInVector(n1,0);
+        vector<int> isIndexPresent(n1, 0);
         vector<pair<int,int>> v;
-
-        for(int i = seconds ; i >= 0 ; i--) {
-            isIndexPresent[changeIndices[i]-1] = 1;
-        }
-        for(int i : isIndexPresent) {
-            if(i == 0) return false;
-        }
         
         for(int i = seconds ; i >= 0 ; i--) {
-            if(isIndexTakenInVector[changeIndices[i]-1] == 0) {
-                isIndexTakenInVector[changeIndices[i]-1] = 1;
+            if(isIndexPresent[changeIndices[i]-1] == 0) {
+                isIndexPresent[changeIndices[i]-1] = 1;
                 v.push_back({changeIndices[i]-1, i});
             }
         }
+
+        if(v.size() != n1) return false;
 
         int used = 0;
         for(int i = v.size()-1 ; i >= 0 ; i--) {
