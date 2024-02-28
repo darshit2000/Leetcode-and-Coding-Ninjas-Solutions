@@ -1,0 +1,123 @@
+class DisjointSet { 
+    public:
+        vector<int> parent, rank;
+        int size = 0;
+        DisjointSet(int n) {
+            parent.resize(n);
+            rank.resize(n, 0);
+            size = n;
+
+            for (int i = 0; i < n; i++)
+                parent[i] = i;
+        }
+
+        int findPar(int u) {
+            if (u == parent[u])
+                return u;
+
+            return parent[u] = findPar(parent[u]);
+        }
+
+        void unionFunc(int x, int y) {
+            int rootX = findPar(x);
+            int rootY = findPar(y);
+
+            if (rootX != rootY) {
+                if (rank[rootX] < rank[rootY])
+                    parent[rootX] = rootY;
+                else if (rank[rootX] > rank[rootY])
+                    parent[rootY] = rootX;
+                else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+            }
+        }
+
+        int totalComponents() {
+            set<int> s;
+            for(int i = 0 ; i < size ; i++) s.insert(findPar(i));
+            for(int i : s) cout << i << ",";
+            return s.size();
+        }
+};
+
+
+class Solution {
+public:
+    bool canTraverseAllPairs(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int,int> factorIndex;
+        DisjointSet ds(n);
+
+        for(int i = 0 ; i < n ; i++) {
+            int number = nums[i];
+            for(int factor = 2 ; factor*factor <= number ; factor++) {
+                if(number % factor != 0) continue;
+
+                if(factorIndex.find(factor) == factorIndex.end()) {
+                    factorIndex[factor] = i;
+                } else {
+                    ds.unionFunc(factorIndex[factor], i);
+                }
+
+                while(number % factor == 0) number /= factor;
+            }
+            if(number > 1) {
+                if(factorIndex.find(number) != factorIndex.end()) {
+                    ds.unionFunc(factorIndex[number], i);
+                } else {
+                    factorIndex[number] = i;
+                }
+            }
+        }
+
+        return (ds.totalComponents() == 1);
+    }
+};
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     bool canTraverseAllPairs(vector<int>& nums) {
+//         unordered_map<int, vector<int>> adjList;
+//         int n = nums.size();
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = i+1 ; j < n ; j++) {
+//                 if(__gcd(nums[i], nums[j]) != 1) {
+//                     adjList[i].push_back(j);
+//                     adjList[j].push_back(i);
+//                 }
+//             }
+//         }
+
+//         // BFS
+//         queue<int> q;
+//         vector<bool> visited(n, false);
+//         q.push(0);
+//         visited[0] = true;
+
+//         while(!q.empty()) {
+//             int element = q.front();
+//             q.pop();
+//             // cout << element << ",";
+//             for(int neighbourIndex : adjList[element]) {
+//                 if(visited[neighbourIndex] == false) {
+//                     visited[neighbourIndex] = true;
+//                     q.push(neighbourIndex);
+//                 }
+//             }
+//         }
+
+//         for(auto item : visited) {
+//             if(item == false) return false;
+//         }
+//         return true;
+//     }
+// };
