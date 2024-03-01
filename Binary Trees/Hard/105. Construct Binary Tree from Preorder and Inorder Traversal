@@ -13,7 +13,8 @@ class Solution {
 public:
 
     TreeNode* helper(vector<int> &preorder, vector<int> &inorder, int preStart, int preEnd, int inStart, int inEnd, unordered_map<int,int> &mpp) {
-        if(preStart > preEnd || inStart > inEnd)    return NULL;
+        // if(preStart > preEnd || inStart > inEnd)    return NULL;
+        if(preStart < 0 || inStart < 0 || preEnd >= preorder.size() || inEnd >= inorder.size() || preStart > preEnd || inStart > inEnd) return NULL;
 
         TreeNode* root = new TreeNode(preorder[preStart]);
 
