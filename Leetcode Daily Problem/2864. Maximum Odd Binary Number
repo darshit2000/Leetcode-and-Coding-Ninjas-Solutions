@@ -1,0 +1,51 @@
+class Solution {
+public:
+    string maximumOddBinaryNumber(string s) {
+        int n = s.length();
+        int c = count(s.begin(), s.end(), '1');
+
+        string ans = string(n, '0');
+
+        int totalOnes = c-1;
+        for(int i = 0 ; i < totalOnes ; i++) {
+            ans[i] = '1';
+        }
+        ans[n-1] = '1';
+        
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     string maximumOddBinaryNumber(string s) {
+//         int n = s.length();
+//         int c = 0;
+
+//         for(char ch : s) {
+//             if(ch == '1') c++;
+//         }
+
+//         string ans = "";
+//         int remainingOnes = c-1;
+
+//         for(int i = 0 ; i < n-1 ; i++) {
+//             if(remainingOnes > 0) {
+//                 ans += '1';
+//                 remainingOnes--;
+//             } else {
+//                 ans += '0';
+//             }
+//         }
+//         ans += '1';
+//         return ans;
+//     }
+// };
