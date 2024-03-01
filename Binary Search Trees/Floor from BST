@@ -1,0 +1,26 @@
+void helper(BinaryTreeNode<int> *node, int input, int &ans) {
+	if(!node) return;
+
+	if(node->data == input) {
+		ans = node->data;
+		return;
+	} else if(node->data < input) {
+		ans = node->data;
+		helper(node->right, input, ans);
+	} else {
+		helper(node->left, input, ans);
+	}
+}
+
+int Floor(BinaryTreeNode<int> *node, int input)
+{
+		/*Write your code here. 
+	 *Don't write main().
+	 *Don't take input, it is passed as function argument.
+	 *Don't print output.
+	 *Taking input and printing output is handled automatically.
+	*/ 
+	int ans = -1;
+	helper(node, input, ans);
+	return ans;
+}
