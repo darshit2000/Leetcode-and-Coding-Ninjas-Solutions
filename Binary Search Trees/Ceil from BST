@@ -28,7 +28,10 @@
 ************************************************************/
 void helper(BinaryTreeNode<int> *node, int x, int &ans) {
     if(!node) return;
-    if(node->data >= x) {
+    if(node->data == x) {
+        ans = node->data;
+        return;
+    } else if(node->data > x) {
         ans = node->data;
         helper(node->left, x, ans);
     } else {
