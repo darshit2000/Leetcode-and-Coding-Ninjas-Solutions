@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) { 
+        int ans = 0;
+        for(auto i : nums) {
+            if(i < k) ans++;
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+// class Solution {
+// public:
+//     int minOperations(vector<int>& nums, int k) {
+//         int n = nums.size();
+//         map<int,int> mpp;
+//         for(int i = 0 ; i < n ; i++) {
+//             mpp[nums[i]]++;
+//         }
+ 
+//         int ans = 0;
+//         for(auto item : mpp) {
+//             if(item.first < k) ans += item.second;
+//             else return ans;
+//         }
+//         return ans;
+//     }
+// };
