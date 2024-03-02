@@ -1,0 +1,91 @@
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans;
+        int ind1 = 0;
+        int ind2 = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            if(nums[i] < 0) {
+                ind1++;
+                ind2++;
+            }
+        }
+        ind2--;
+        
+        while(ind1 < n && ind2 >= 0) {
+            if(nums[ind1] < abs(nums[ind2])) {
+                ans.push_back(nums[ind1] * nums[ind1]);
+                ind1++;
+            } else {
+                ans.push_back(nums[ind2] * nums[ind2]);
+                ind2--;
+            }
+        }
+        while(ind1 < n) {
+            ans.push_back(nums[ind1] * nums[ind1]);
+            ind1++;
+        }
+        while(ind2 >= 0) {
+            ans.push_back(nums[ind2] * nums[ind2]);
+            ind2--;
+        }
+
+        return ans; 
+    }
+};
+
+
+
+
+
+
+// Merge procedure
+// class Solution {
+// public:
+//     vector<int> sortedSquares(vector<int>& nums) {
+//         vector<int> ans, pos, neg;
+//         for(int i : nums) {
+//             if(i < 0) neg.push_back(-1*i);
+//             else pos.push_back(i);
+//         }
+//         reverse(neg.begin(), neg.end());
+
+//         int ind1 = 0;
+//         int ind2 = 0;
+//         while(ind1 < pos.size() && ind2 < neg.size()) {
+//             if(pos[ind1] < neg[ind2]) {
+//                 ans.push_back(pos[ind1] * pos[ind1]);
+//                 ind1++;
+//             } else {
+//                 ans.push_back(neg[ind2] * neg[ind2]);
+//                 ind2++;
+//             }
+//         }
+//         while(ind1 < pos.size()) {
+//             ans.push_back(pos[ind1] * pos[ind1]);
+//             ind1++;
+//         }
+//         while(ind2 < neg.size()) {
+//             ans.push_back(neg[ind2] * neg[ind2]);
+//             ind2++;
+//         }
+//         return ans; 
+//     }
+// };
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<int> sortedSquares(vector<int>& nums) {
+//         vector<int> ans;
+//         for(int i : nums) ans.push_back(i*i);
+//         sort(ans.begin(), ans.end());
+//         return ans; 
+//     }
+// };
