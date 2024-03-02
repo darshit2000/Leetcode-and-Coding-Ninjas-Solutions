@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) {
+        priority_queue<uint64_t, vector<uint64_t>, greater<uint64_t>> minHeap;
+        int n = nums.size();
+        int ans = 0;
+        
+        for(int i = 0 ; i < n ; i++) minHeap.push(nums[i]);
+        
+        while(minHeap.size() >= 2) {
+            uint64_t el1 = minHeap.top();
+            minHeap.pop();
+            uint64_t el2 = minHeap.top();
+            minHeap.pop();
+            
+            if(el1 >= k) return ans;
+            
+            minHeap.push((uint64_t)2 * min(el1,el2) + max(el1,el2));
+            ans++;
+        }
+
+        return  ans;
+    }
+};
