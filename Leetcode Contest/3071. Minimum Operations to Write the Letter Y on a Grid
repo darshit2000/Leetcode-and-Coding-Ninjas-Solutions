@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int minimumOperationsToWriteY(vector<vector<int>>& grid) {
+        int n = grid.size();
+        
+        vector<int> freqY(3,0);
+        vector<int> freqNotY(3,0);
+
+        
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(i < n/2 && i == j) {
+                    freqY[grid[i][j]]++;
+                } 
+                else if(i < n/2 && j == (n-1-i)) {
+                    freqY[grid[i][j]]++;
+                }
+                else if(i >= n/2 && j == n/2) {
+                    freqY[grid[i][j]]++;
+                } 
+                else {
+                    freqNotY[grid[i][j]]++;
+                }
+            }
+        }
+        
+        int mn = INT_MAX;
+        int s = freqY[1] + freqY[2] + freqNotY[0] + freqNotY[2];
+        mn = min(mn, s);
+        s = freqY[1] + freqY[2] + freqNotY[0] + freqNotY[1];
+        mn = min(mn, s);
+        s = freqY[0] + freqY[2] + freqNotY[1] + freqNotY[2];
+        mn = min(mn, s);
+        s = freqY[0] + freqY[2] + freqNotY[0] + freqNotY[1];
+        mn = min(mn, s);
+        s = freqY[0] + freqY[1] + freqNotY[1] + freqNotY[2];
+        mn = min(mn, s);
+        s = freqY[0] + freqY[1] + freqNotY[0] + freqNotY[2];
+        mn = min(mn, s);
+
+        return mn;
+    }
+};
