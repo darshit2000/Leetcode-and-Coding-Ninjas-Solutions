@@ -1,0 +1,163 @@
+class Solution {
+public:
+    vector<int> countPairsOfConnectableServers(vector<vector<int>>& edges, int signalSpeed) {
+        unordered_map<int, vector<pair<int,int>>> mpp;
+        vector<int> ans(edges.size() + 1, 0);
+        
+        for(auto item : edges) {
+            mpp[item[0]].push_back({item[1], item[2]});
+            mpp[item[1]].push_back({item[0], item[2]});
+        }
+        
+        for(int i = 0 ; i <= edges.size() ; i++) {
+            int nodeCount = 0;
+            vector<int> validNodesCount;
+                
+            for(auto [n1,w1] : mpp[i]) {
+                queue<pair<int,pair<int,int>>> q;
+                int count =  0;
+                
+                q.push({n1,{i, w1}});
+                
+                while(!q.empty()) {
+                    int node = q.front().first;
+                    int parent = q.front().second.first;
+                    int dist = q.front().second.second;
+                    q.pop();
+
+                    if(dist % signalSpeed == 0) count++;
+                    
+                    for(auto [adj,w2] : mpp[node]) {
+                        if(adj != parent) {
+                            q.push({adj, {node, dist + w2}});
+                        }
+                    }
+                }
+
+                if(count > 0) {
+                    validNodesCount.push_back(count);
+                    nodeCount += count;
+                }
+            }   
+            int total = 0;
+            if(validNodesCount.size() > 1) { 
+                for(auto i : validNodesCount) {
+                    total += i * (nodeCount - i);
+                }               
+            }    
+            ans[i] = total/2;
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<int> countPairsOfConnectableServers(vector<vector<int>>& edges, int signalSpeed) {
+//         unordered_map<int, vector<pair<int,int>>> mpp;
+//         vector<int> ans;
+        
+//         for(auto item : edges) {
+//             mpp[item[0]].push_back({item[1], item[2]});
+//             mpp[item[1]].push_back({item[0], item[2]});
+//         }
+        
+//         for(int i = 0 ; i <= edges.size() ; i++) {
+//             int total = 0;
+//             int nodeCount = 0;
+                
+//             for(auto [n1,w1] : mpp[i]) {
+//                 queue<pair<int,pair<int,int>>> q;
+//                 int count =  0;
+                
+//                 q.push({n1,{i, w1}});
+                
+//                 while(!q.empty()) {
+//                     int node = q.front().first;
+//                     int parent = q.front().second.first;
+//                     int dist = q.front().second.second;
+//                     q.pop();
+
+//                     if(dist % signalSpeed == 0) count++;
+                    
+//                     for(auto [n2,w2] : mpp[node]) {
+//                         if(n2 != parent) {
+//                             q.push({n2, {node,dist + w2}});
+//                         }
+//                     }
+//                 }
+//                 total += (nodeCount * count);
+//                 nodeCount += count;
+//             }        
+//             ans.push_back(total);
+//         }
+//         return ans;
+//     }
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<int> countPairsOfConnectableServers(vector<vector<int>>& edges, int signalSpeed) {
+//         unordered_map<int, vector<pair<int,int>>> mpp;
+//         vector<int> ans;
+        
+//         for(auto item : edges) {
+//             mpp[item[0]].push_back({item[1], item[2]});
+//             mpp[item[1]].push_back({item[0], item[2]});
+//         }
+        
+//         for(int i = 0 ; i <= edges.size() ; i++) {
+//             int total = 0;
+//             int nodeCount = 0;
+                
+//             for(auto [n1,w1] : mpp[i]) {
+//                 queue<pair<int,int>> q;
+//                 unordered_set<int> visited;
+//                 int count =  0;
+                
+//                 q.push({n1,w1});
+//                 visited.insert(n1);
+//                 visited.insert(i);
+                
+//                 while(!q.empty()) {
+//                     pair<int,int> curr = q.front();
+//                     q.pop();
+
+//                     if(curr.second % signalSpeed == 0) count++;
+                    
+//                     for(auto [n2,w2] : mpp[curr.first]) {
+//                         if(visited.find(n2) == visited.end()) {
+//                             q.push({n2, w2 + curr.second});
+//                             visited.insert(n2);
+//                         }
+//                     }
+//                 }
+//                 total += (nodeCount * count);
+//                 nodeCount += count;
+//             }        
+//             ans.push_back(total);
+//         }
+//         return ans;
+//     }
+// };
+
+
