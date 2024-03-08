@@ -1,0 +1,46 @@
+class Solution {
+public:
+    string reorganizeString(string s) {
+        int n = s.length();
+        vector<int> v(26);
+        priority_queue<pair<int,char>> maxHeap;
+        string ans;
+
+        for(char c : s) v[c - 'a']++;
+
+        for(int i = 0 ; i < 26 ; i++) {
+            if(v[i] > 0) {
+                maxHeap.push({v[i], i + 'a'});
+            }
+        }
+        
+        while(!maxHeap.empty()) {
+            int freq = maxHeap.top().first;
+            char ch = maxHeap.top().second;
+            maxHeap.pop();
+
+            if(ans.empty() || ch != ans.back()) {
+                ans += ch;
+                if(freq-1 > 0) {
+                    maxHeap.push({freq-1, ch});
+                }
+            } else {
+                if(maxHeap.empty()) return "";
+
+                int secondCh = maxHeap.top().second;
+                int secondFreq = maxHeap.top().first;
+                maxHeap.pop();
+
+                ans += secondCh;
+
+                maxHeap.push({freq, ch});
+                if(secondFreq - 1 > 0) {
+                    maxHeap.push({secondFreq-1, secondCh});
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
