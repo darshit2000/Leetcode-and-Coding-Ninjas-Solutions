@@ -1,0 +1,68 @@
+// O(n)
+
+class Solution {
+public:
+    long long numberOfWeeks(vector<int>& milestones) {
+        // {total milestones, taskNo}
+        int n = milestones.size();
+        long long sum = 0;
+        int mx = INT_MIN;
+        
+        for(int i : milestones) {
+            sum += ((long long)i);
+            mx = max(mx, i);
+        }
+
+        if(mx <= sum - mx) return sum;
+        else {
+            return 2 * (sum - mx) + 1;
+        }
+    }
+};
+
+
+
+
+// O(n*sum(milestones))
+
+// class Solution {
+// public:
+//     long long numberOfWeeks(vector<int>& milestones) {
+//         // {total milestones, taskNo}
+//         priority_queue<pair<int,int>> maxHeap;
+//         int n = milestones.size();
+//         vector<int> v;
+
+//         for(int i = 0 ; i < n ; i++) maxHeap.push({milestones[i], i});
+
+//         while(!maxHeap.empty()) {
+//             int task = maxHeap.top().second;
+//             int milestoneRemaining = maxHeap.top().first;
+//             maxHeap.pop();
+
+//             if(v.empty() || v.back() != task) {
+//                 v.push_back(task);
+//                 if(milestoneRemaining - 1 > 0) maxHeap.push({milestoneRemaining - 1, task});
+//             } else {
+//                 if(maxHeap.empty()) return v.size();
+
+//                 int newTask = maxHeap.top().second;
+//                 int newTaskMilestones = maxHeap.top().first;
+//                 maxHeap.pop();
+
+//                 v.push_back(newTask);
+//                 if(newTaskMilestones - 1 > 0) maxHeap.push({newTaskMilestones - 1, newTask});
+
+//                 maxHeap.push({milestoneRemaining, task});
+//             }
+//         }
+//         return v.size();
+//     }
+// };
+
+/*
+    3 2 1 3 2 3
+    1 3 2 3 2 3
+
+    0 1 0 1 0 2 0 _ 0
+*/
