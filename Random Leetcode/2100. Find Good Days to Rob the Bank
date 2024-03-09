@@ -1,0 +1,83 @@
+// O(n)   prefixSum
+
+class Solution {
+public:
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        int n = security.size();
+        if(2 * time + 1 > n) return {};
+        vector<int> ans;
+        vector<int> prefix(n,0), suffix(n,0);
+
+        for(int i = 1 ; i < n ; i++) {
+            if(security[i] <= security[i-1]) {
+                prefix[i] = 1 + prefix[i-1];
+            }
+        }
+
+        for(int i = n-2 ; i >= 0 ; i--) {
+            if(security[i] <= security[i+1]) {
+                suffix[i] = 1 + suffix[i+1];
+            }
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            if(prefix[i] >= time && suffix[i] >= time) ans.push_back(i);
+        }
+        
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+// O(n^2)
+
+// class Solution {
+// public:
+//     vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+//         int n = security.size();
+//         if(2 * time + 1 > n) return {};
+//         vector<int> ans;
+//         if(time == 0) {
+//             for(int i = 0 ; i < n ; i++) ans.push_back(i);
+//             return ans;
+//         }
+
+//         int i = time;
+//         int j = 0;
+
+//         while(i < (n - time)) {
+//             if(security[i] <= security[i-1] && security[i] <= security[i+1]) {
+//                 int timeLeft = time;
+//                 j = i;
+//                 int day = i;
+//                 while(timeLeft > 0) {
+//                     if(security[j] <= security[j-1] && security[i] <= security[i+1]) {
+//                         j--;
+//                         i++;
+//                         timeLeft--;
+//                     } else {
+//                         break;
+//                     }
+//                 }
+
+//                 if(timeLeft != 0) {
+//                     i = day + 1;
+//                     continue;
+//                 } else {
+//                     ans.push_back(day);
+//                     i = day + 1;
+//                 }
+
+//             } else {
+//                 i++;
+//             }
+//         }
+//         return ans;
+//     }
+// };
