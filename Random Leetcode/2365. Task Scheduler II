@@ -1,0 +1,31 @@
+#define ll long long
+
+class Solution {
+public:
+    long long taskSchedulerII(vector<int>& tasks, int space) {
+        unordered_map<ll,ll> mpp;
+        ll n = tasks.size();
+
+        ll i = 0;
+        ll time = 0;
+
+        while(i < n) {
+            time++;
+            ll task = (ll)tasks[i];
+
+            if(mpp[task] == 0) {
+                mpp[task] = time;
+                i++;
+            } else {
+                ll timeOfLastExecution = mpp[task];
+                if(time - timeOfLastExecution - 1 >= space) {
+                    mpp[task] = time;
+                    i++;
+                } else {
+                    time = (timeOfLastExecution + space);
+                }
+            }
+        }
+        return time;
+    }
+};
