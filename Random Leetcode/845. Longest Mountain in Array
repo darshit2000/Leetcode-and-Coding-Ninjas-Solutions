@@ -1,0 +1,81 @@
+// O(n)     two pointers  (start after the index where the first mountain ended)
+
+class Solution {
+public:
+    int longestMountain(vector<int>& arr) {
+        int n = arr.size();
+        if(n < 3) return 0;
+        int mx = 0;
+        
+        int i = 1;
+        int j = 0;
+        while(i < n-1) {
+            if(arr[i] > arr[i-1] && arr[i] > arr[i+1]) {
+                int leftCount = 0;
+                int rightCount = 0;
+                j = i;
+
+                while(j > 0 && arr[j] > arr[j-1]) {
+                    leftCount++;
+                    j--;
+                }
+                while(i < n-1 && arr[i] > arr[i+1]) {
+                    rightCount++;
+                    i++;
+                }
+                if(leftCount > 0 && rightCount > 0) {
+                    mx = max(mx, leftCount + rightCount + 1);
+                }
+            } else {
+                i++;
+            }
+        }
+        
+        return mx;
+    }
+};
+
+
+
+
+
+
+
+// O(n^2)   Checking every element one by one if it is a peek and if it is then find the longest mountain
+
+// class Solution {
+// public:
+//     int longestMountain(vector<int>& arr) {
+//         int n = arr.size();
+//         if(n < 3) return 0;
+//         int mx = 0;
+
+//         for(int i = 1 ; i < n-1 ; i++) {
+//             if(arr[i] > arr[i-1] && arr[i] > arr[i+1]) {
+//                 int total1 = 0, total2 = 0;
+//                 int curr = arr[i];
+//                 int j = i-1;
+//                 while(j >= 0) {
+//                     if(arr[j] < curr) {
+//                         total1++;
+//                         curr = arr[j];
+//                         j--;
+//                     } else break;
+//                 }
+//                 j = i+1;
+//                 curr = arr[i];
+//                 while(j < n) {
+//                     if(arr[j] < curr) {
+//                         total2++;
+//                         curr = arr[j];
+//                         j++;
+//                     } else break;
+//                 }
+//                 if(total1 > 0 && total2 > 0) {
+//                     mx = max(mx, total1 + total2 + 1);
+//                 }
+//             }
+//         }
+//         return mx;
+//     }
+// };
