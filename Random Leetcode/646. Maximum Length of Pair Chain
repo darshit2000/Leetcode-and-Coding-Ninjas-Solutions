@@ -1,51 +1,76 @@
-// DP
+// DP 1 (LIS)
 
 class Solution {
 public:
-
-    int findInd(vector<vector<int>>& pairs, int i) {
-        int n = pairs.size();
-        int end = pairs[i][1];
-        int low = i + 1;
-        int high = n - 1;
-        int ans = n;
-
-        while(low <= high) {
-            int mid = (low + high)/2;
-
-            if(pairs[mid][0] > end) {
-                ans = mid;
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return ans;
-    }
-
     int findLongestChain(vector<vector<int>>& pairs) {
         int n = pairs.size();
         int count = 1;
-        int mx = 0;
-        vector<int> dp(n+1, 0);
-        dp[n-1] = 1;
+        vector<int> dp(n, 1);
 
         sort(pairs.begin(), pairs.end());
 
-        for(int i = n-2 ; i >= 0 ; i--) {
-            int exclude = dp[i+1];
-            int index = findInd(pairs, i);
-            int include = 1 + dp[index];
-            mx = max(include, exclude);
-            dp[i] = mx;
+        for(int i = 1 ; i < n ; i++) {
+            for(int j = 0 ; j < i ; j++) {
+                if(pairs[j][1] < pairs[i][0]) {
+                    dp[i] = max(dp[i], 1 + dp[j]);
+                }
+            }
         }
-
-        return dp[0];
+        return *max_element(dp.begin(), dp.end());
     }
 };
 
 
 
+
+
+
+
+// DP 2
+
+// class Solution {
+// public:
+
+//     int findInd(vector<vector<int>>& pairs, int i) {
+//         int n = pairs.size();
+//         int end = pairs[i][1];
+//         int low = i + 1;
+//         int high = n - 1;
+//         int ans = n;
+
+//         while(low <= high) {
+//             int mid = (low + high)/2;
+
+//             if(pairs[mid][0] > end) {
+//                 ans = mid;
+//                 high = mid - 1;
+//             } else {
+//                 low = mid + 1;
+//             }
+//         }
+//         return ans;
+//     }
+
+//     int findLongestChain(vector<vector<int>>& pairs) {
+//         int n = pairs.size();
+//         int count = 1;
+//         int mx = 0;
+//         vector<int> dp(n+1, 0);
+//         dp[n-1] = 1;
+
+//         sort(pairs.begin(), pairs.end());
+
+//         for(int i = n-2 ; i >= 0 ; i--) {
+//             int exclude = dp[i+1];
+//             int index = findInd(pairs, i);
+//             int include = 1 + dp[index];
+//             mx = max(include, exclude);
+//             dp[i] = mx;
+//         }
+
+//         return dp[0];
+//     }
+// };
 
 
 
