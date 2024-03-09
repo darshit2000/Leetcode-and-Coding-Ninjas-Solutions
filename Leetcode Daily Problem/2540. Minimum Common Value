@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int getCommon(vector<int>& nums1, vector<int>& nums2) {
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+
+        int left = 0, right = 0;
+
+        while(left < n1 && right < n2) {
+            if(nums1[left] < nums2[right]) left++;
+            else if(nums1[left] > nums2[right]) right++;
+            else if(nums1[left] == nums2[right]) return nums1[left];
+        }
+        return -1;
+    }
+};
