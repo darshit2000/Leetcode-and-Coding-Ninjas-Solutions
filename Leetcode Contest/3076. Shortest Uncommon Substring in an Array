@@ -1,3 +1,5 @@
+https://leetcode.com/problems/shortest-uncommon-substring-in-an-array/
+
 class Solution {
 public:
     vector<string> shortestSubstrings(vector<string>& arr) {
