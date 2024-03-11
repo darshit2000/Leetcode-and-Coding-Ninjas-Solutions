@@ -1,0 +1,45 @@
+https://leetcode.com/problems/maximum-strength-of-k-disjoint-subarrays/description/
+
+
+// Top down memoization
+
+class Solution {
+public:
+    int n;
+    vector<vector<vector<long long>>> v;
+
+    long long helper(int index, vector<int>& nums, long long k, bool start_new) {
+        if(k == 0) {
+            return 0;
+        }
+
+        if(index >= n) {
+            return -1e18;
+        }
+
+        if(v[index][k][start_new] != -1) return v[index][k][start_new];
+
+        long long notTake = -1e18, take = -1e18;
+
+        if(start_new) {
+            notTake = helper(index + 1, nums, k, true);
+        }
+
+        if(k % 2 != 0) {
+            take = helper(index + 1, nums, k, false) + (k * nums[index]);
+            take = max(take, helper(index + 1, nums, k-1, true) + (k * nums[index]));
+        } else {
+            take = helper(index + 1, nums, k, false) - (k * nums[index]);
+            take = max(take, helper(index + 1, nums, k-1, true) - (k * nums[index]));
+        }
+
+        return v[index][k][start_new] = max(take, notTake);
+    }
+    long long maximumStrength(vector<int>& nums, int k) {
+        n = nums.size();
+        bool start_new = true;
+        v.resize(n+1, vector<vector<long long>>(k+1, vector<long long>(2,-1)));
+        return helper(0, nums, k, start_new);
+    }
+};
+
