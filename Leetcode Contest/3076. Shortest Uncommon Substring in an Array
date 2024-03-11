@@ -1,0 +1,167 @@
+class Solution {
+public:
+    vector<string> shortestSubstrings(vector<string>& arr) {
+        int n = arr.size();
+        vector<string> ans;
+        
+        for(int i = 0 ; i < n ; i++) {
+            string str1 = arr[i];
+            string bestAns = "";
+
+            for(int startIndex = 0 ; startIndex < str1.length() ; startIndex++) {
+                string subStr;
+
+                for(int curr = startIndex ; curr < str1.length() ; curr++) {
+                    subStr += str1[curr];
+                    bool isBest = true;
+
+                    for(int j = 0 ; j < n ; j++) {
+                        if(j == i) continue;
+
+                        string str2 = arr[j];
+                        if(str2.find(subStr) != string::npos) {
+                            isBest = false;
+                            break;
+                        }
+                    }
+                    if(isBest == false) continue;
+
+                    if(bestAns.length() == 0) {
+                        bestAns = subStr;
+                    } else {
+                        if(isBest == true) {
+                            if(bestAns.length() == subStr.length()) {
+                                bestAns = min(bestAns, subStr);
+                            } else if(subStr.length() < bestAns.length()) {
+                                bestAns = subStr;
+                            }
+                        }
+                    }
+                }
+            }
+            ans.push_back(bestAns);
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<string> shortestSubstrings(vector<string>& arr) {
+//         int n = arr.size();
+//         vector<string> ans;
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             string str1 = arr[i];
+//             set<string> substrSet;
+            
+            
+//             for(int j = 0 ; j < str1.length() ; j++) {
+//                 string subStr;
+//                 for(int k = j ; k < str1.length() ; k++) {
+//                     subStr += str1[k];
+//                     substrSet.insert(subStr);
+//                 }
+//             }
+
+//             set<string> toDelete;
+//             for(int l = 0 ; l < n ; l++) {
+//                 if(i == l) continue;
+//                 for(string str2 : substrSet) {
+//                     if(arr[l].find(str2) != string::npos) {
+//                         toDelete.insert(str2);
+//                     }
+//                 }
+//             }
+
+//             for(string str3 : toDelete) {
+//                 if(substrSet.find(str3) != substrSet.end()) substrSet.erase(str3); 
+//             }
+
+//             vector<string> substrVector(substrSet.begin(), substrSet.end());
+
+//             auto myComp = [] (string a, string b) {
+//                 if(a.length() == b.length()) return a < b;
+//                 return a.length() < b.length();
+//             };
+
+//             sort(substrVector.begin(), substrVector.end(), myComp);
+
+//             if(substrVector.size() > 0) {
+//                 ans.push_back(substrVector[0]);
+//             } else {
+//                 ans.push_back("");
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<string> shortestSubstrings(vector<string>& arr) {
+//         int n = arr.size();
+//         vector<string> ans;
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             string str1 = arr[i];
+//             map<string, int> mpp;
+            
+//             for(int j = 0 ; j < str1.length() ; j++) {
+//                 string subStr;
+//                 for(int k = j ; k < str1.length() ; k++) {
+//                     subStr += str1[k];
+//                     mpp[subStr] = 1;
+//                 }
+//             }
+            
+//             for(int l = 0 ; l < n ; l++) {
+//                 if(i == l) continue;
+                
+//                 string str2 = arr[l];
+//                 for(int j = 0 ; j < str2.length() ; j++) {
+//                     string subStr;
+//                     for(int k = j ; k < str2.length() ; k++) {
+//                         subStr += str2[k];
+//                         mpp.erase(subStr);
+//                     }
+//                 }
+//             }
+            
+//             map<int, set<string>> mpp2;
+//             for(auto [s,t] : mpp) {
+//                 int len = s.length();
+//                 mpp2[len].insert(s);
+//             }
+            
+//             if(mpp2.size() > 0) {
+//                 auto it = mpp2.begin();
+//                 set<string> temp2 = (*it).second;
+//                 auto it2 = temp2.begin();
+                
+//                 ans.push_back((*it2));
+//             } else {
+//                 ans.push_back("");
+//             }
+//         }
+//         return ans;
+//     }
+// };
