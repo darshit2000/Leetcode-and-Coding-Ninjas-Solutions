@@ -1,0 +1,45 @@
+// O(n)   Two Pointers
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int n = nums.size();
+        int left = 0;
+
+        for(int right = 0 ; right < n ; right++) {
+            if(left == 0 || left == 1 || nums[right] != nums[left-2]) {
+                nums[left] = nums[right];
+                left++;
+            }
+        }  
+        return left;
+    }
+};
+
+
+
+
+
+
+
+// Using Map
+
+// class Solution {
+// public:
+//     int removeDuplicates(vector<int>& nums) {
+//         map<int,int> mpp;
+
+//         for(int i : nums) mpp[i]++;
+
+//         int k = 0;
+//         for(auto [num, freq] : mpp) {
+//             nums[k] = num;
+//             k++;
+//             if(freq >= 2) {
+//                 nums[k] = num;
+//                 k++;
+//             }
+//         }
+//         return k;
+//     }
+// };
