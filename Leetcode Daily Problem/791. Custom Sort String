@@ -1,0 +1,32 @@
+https://leetcode.com/problems/custom-sort-string/?envType=daily-question&envId=2024-03-11
+
+
+class Solution {
+public:
+    string customSortString(string order, string s) {
+        int n2 = s.length();
+        int n1 = order.length();
+        vector<int> charMap(26, 0);
+        string ans = "";
+
+        for(int i = 0 ; i < n2 ; i++) {
+            charMap[s[i] - 'a']++;
+        }
+
+        for(int i = 0 ; i < n1 ; i++) {
+            while(charMap[order[i] - 'a'] > 0) {
+                ans += order[i];
+                charMap[order[i] - 'a']--;
+            }
+        }
+
+        for(int i = 0 ; i < n2 ; i++) {
+            while(charMap[s[i] - 'a'] > 0) {
+                ans += s[i];
+                charMap[s[i] - 'a']--;
+            }
+        }
+
+        return ans;
+    }
+};
