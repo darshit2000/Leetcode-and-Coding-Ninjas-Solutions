@@ -1,0 +1,38 @@
+// Using 1 set
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        set<int> s;
+        vector<int> ans;
+        
+        for(int i : nums1) s.insert(i);
+        for(int i : nums2) {
+            if(s.find(i) != s.end()) {
+                ans.push_back(i);
+                s.erase(s.find(i));
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+// Using 2 sets
+
+// class Solution {
+// public:
+//     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+//         set<int> s1, s2;
+        
+//         for(int i : nums1) s1.insert(i);
+//         for(int i : nums2) {
+//             if(s1.find(i) != s1.end()) s2.insert(i);
+//         }
+
+//         vector<int> ans(s2.begin(), s2.end());
+//         return ans;
+//     }
+// };
