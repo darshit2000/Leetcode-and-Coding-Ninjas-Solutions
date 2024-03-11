@@ -1,0 +1,26 @@
+class Solution {
+public:
+    long long maximumHappinessSum(vector<int>& happiness, int k) {
+        int n = happiness.size();
+        priority_queue<int> maxHeap;
+        long long total = 0;
+        
+        for(int i = 0 ; i < n ; i++) {
+            maxHeap.push(happiness[i]);
+        }
+        
+        int i = 0;
+        
+        while(k > 0) {
+            k--;
+            int curr = maxHeap.top();
+            maxHeap.pop();
+            if(curr - i > 0) {
+                total += ((long long)(curr - i));
+            } 
+            i++;
+        }
+      
+        return total;
+    }
+};
