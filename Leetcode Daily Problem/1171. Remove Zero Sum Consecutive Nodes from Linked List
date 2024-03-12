@@ -1,0 +1,93 @@
+https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/?envType=daily-question&envId=2024-03-12
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* removeZeroSumSublists(ListNode* head) {
+        if(!head) return NULL;
+
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode* curr = dummy;
+
+        while(curr) {
+            int sum = 0;
+            ListNode *nextNode = curr->next;
+
+            while(nextNode) {
+                sum += nextNode->val;
+                if(sum == 0) {
+                    curr->next = nextNode->next;
+                }
+                nextNode = nextNode->next;
+            }
+            curr = curr->next;
+        }
+
+        return dummy->next;
+    }
+};
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     ListNode* removeZeroSumSublists(ListNode* head) {
+//         if(!head) return NULL;
+
+//         unordered_map<int,ListNode*> mpp;
+//         int sum = 0;
+//         ListNode* dummy = new ListNode(0);
+//         dummy->next = head;
+//         ListNode* curr = head;
+
+//         mpp[0] = dummy;
+
+//         while(curr) {
+//             sum += curr->val;
+
+//             if(mpp.find(sum) != mpp.end()) {
+//                 ListNode* temp = mpp[sum]->next;
+//                 int toDeleteSum = sum;
+
+//                 // we dont want to delete sum zero from map, so we are not taking the curr node into consideration
+//                 while(temp != curr) {                  
+//                     toDeleteSum += temp->val;
+//                     mpp.erase(toDeleteSum);   
+//                     temp = temp->next; 
+//                 }
+
+//                 mpp[sum]->next = curr->next;
+//             } else {
+//                 mpp[sum] = curr;
+//             }
+
+//             curr = curr->next;
+//         }
+
+//         return dummy->next;
+//     }
+// };
+
+
+
+
+
+
+
