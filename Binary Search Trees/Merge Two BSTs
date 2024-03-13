@@ -1,0 +1,57 @@
+https://www.codingninjas.com/studio/problems/merge-two-bsts_920474?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+/*************************************************************
+
+    Following is the Binary Tree node structure:
+
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+
+*************************************************************/
+
+void inorder(TreeNode* root, vector<int> &v) {
+    if(!root) return;
+
+    inorder(root->left, v);
+    v.push_back(root->data);
+    inorder(root->right, v);
+}
+
+vector<int> mergeBST(TreeNode *root1, TreeNode *root2)
+{
+    // Write your code here.
+    vector<int> v1, v2, ans;
+    inorder(root1, v1);
+    inorder(root2, v2);
+
+    int left = 0;
+    int right = 0;
+
+    while(left < v1.size() && right < v2.size()) {
+        if(v1[left] < v2[right]) {
+            ans.push_back(v1[left]);
+            left++;
+        } else {
+            ans.push_back(v2[right]);
+            right++;
+        }
+    }
+    while(left < v1.size()) {
+        ans.push_back(v1[left]);
+        left++;
+    }
+    while(right < v2.size()) {
+        ans.push_back(v2[right]);
+        right++;
+    }
+
+    return ans;
+}
