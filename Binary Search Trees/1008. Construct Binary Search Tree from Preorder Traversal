@@ -1,0 +1,67 @@
+https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/description/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+
+// O(3N)
+
+class Solution {
+public:
+    TreeNode* construct(vector<int> &preorder, int &index, int upperBound) {
+        if(index >= preorder.size() || preorder[index] >= upperBound) return NULL;
+
+        TreeNode* root = new TreeNode(preorder[index++]);
+
+        root->left = construct(preorder, index, root->val);
+        root->right = construct(preorder, index, upperBound);
+
+        return root;
+    }
+
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int index = 0;
+        return construct(preorder, index, INT_MAX);
+    }
+};
+
+
+
+
+
+
+// O(N logN)
+
+// class Solution {
+// public:
+//     TreeNode* construct(vector<int> &inorder, vector<int> &preorder, int inStart, int inEnd, int preStart, int preEnd) {
+//         if(inStart > inEnd || preStart > preEnd || inEnd >= inorder.size() || preEnd >= preorder.size() || inStart < 0 || preStart < 0) return NULL;
+
+//         int rootData = preorder[preStart];
+//         TreeNode* root = new TreeNode(rootData);
+
+//         int rootPos = lower_bound(inorder.begin(), inorder.end(), rootData) - inorder.begin();
+//         int elementsBeforeRoot = rootPos - inStart;
+
+//         root->left = construct(inorder, preorder, inStart, rootPos - 1, preStart + 1, preStart + elementsBeforeRoot);
+//         root->right = construct(inorder, preorder, rootPos + 1, inEnd, preStart + elementsBeforeRoot + 1, preEnd);
+//         return root;
+//     }
+
+//     TreeNode* bstFromPreorder(vector<int>& preorder) {
+//         vector<int> inorder(preorder.begin(), preorder.end());
+//         sort(inorder.begin(), inorder.end());
+
+//         return construct(inorder, preorder, 0, inorder.size()-1, 0, preorder.size()-1);
+//     }
+// };
