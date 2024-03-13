@@ -1,0 +1,101 @@
+/*************************************************************
+
+    Following is the Binary Tree node structure
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+
+*************************************************************/
+
+pair<int, int> predecessorSuccessor(TreeNode *root, int key)
+{
+    // Write your code here.
+
+    int pre = -1, succ = -1;
+    TreeNode* node = root;
+
+    // find succ
+    while(node) {
+        if(key < node->data) {
+            succ = node->data;
+            node = node->left;
+        } else if(node->data <= key) {
+            node = node->right;
+        } 
+    }
+
+    // find pred
+    node = root;
+    while(node) {
+        if(node->data < key) {
+            pre = node->data;
+            node = node->right;
+        } else if(node->data >= key) {
+            node = node->left;
+        } 
+    }
+
+    return {pre, succ};
+}
+
+
+// pair<int, int> predecessorSuccessor(TreeNode *root, int key)
+// {
+//     // Write your code here.
+
+//     TreeNode* parent = NULL;
+//     TreeNode* node = root;
+
+//     while(node) {
+//         if(key < node->data) {
+//             parent = node;
+//             node = node->left;
+//         } else if(node->data < key) {
+//             parent = node;
+//             node = node->right;
+//         } else break;
+//     }
+
+//     if(node) {
+//         int pre, succ;
+//         TreeNode* curr = node->left;
+
+//         if(curr == NULL) {
+//             curr = parent;
+//             if(parent && parent->data < node->data) {
+//                 pre = parent->data;
+//             } else {
+//                 pre = -1;
+//             }
+//         }
+//         else {
+//             while(curr->right) curr = curr->right;
+//             pre = curr->data;
+//         }
+
+//         curr = node->right;
+//         if(curr == NULL) {
+//             curr = parent;
+//             if(parent && parent->data > node->data) {
+//                 succ = parent->data;
+//             } else {
+//                 succ = -1;
+//             }
+//         }
+//         else {
+//             while(curr->left) curr = curr->left;
+//             succ = curr->data;
+//         }
+
+//         return {pre,succ};
+
+//     } else {
+//         return {};
+//     }
+// }
