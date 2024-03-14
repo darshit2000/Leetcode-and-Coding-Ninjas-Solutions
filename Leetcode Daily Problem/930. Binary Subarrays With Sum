@@ -1,0 +1,149 @@
+// class Solution {
+// public:
+//     int atMostSumSubArrays(vector<int> &nums, int goal, int n) {
+//         if(goal < 0) return 0;
+
+//         int left = 0;
+//         int right = 0;
+//         int totalSubArrays = 0;
+//         int sum = 0;
+
+//         while(right < n) {
+//             sum += nums[right];
+
+//             while(sum > goal) {
+//                 sum -= nums[left];
+//                 left++;
+//             }
+
+//             if(sum <= goal) {
+//                 totalSubArrays += (right - left + 1);
+//             }
+            
+//             right++;
+//         }
+//         return totalSubArrays;
+//     }
+
+//     int numSubarraysWithSum(vector<int>& nums, int goal) {
+//         int n = nums.size();
+//         // cout << atMostSumSubArrays(nums, goal, n);
+//         return atMostSumSubArrays(nums, goal, n) - atMostSumSubArrays(nums, goal-1, n);
+//     }
+// };
+
+
+
+// Using Hashmap
+
+// class Solution {
+// public:
+//     int numSubarraysWithSum(vector<int>& nums, int goal) {
+//         int n = nums.size();
+//         unordered_map<int,int> mpp;
+//         mpp[0] = 1;
+//         int sum = 0;
+//         int count = 0;
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             sum += nums[i];
+//             if(mpp.find(sum - goal) != mpp.end()) {
+//                 count += mpp[sum-goal];
+//             }
+//             mpp[sum]++;
+//         }
+//         return count;
+//     }
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+// DPP Method 1
+
+// class Solution {
+// public:
+//     int numSubarraysWithSum(vector<int>& nums, int goal) {
+//         int n = nums.size();
+//         unordered_map<int,int> mpp;
+//         mpp[0] = 1;
+//         int count = 0;
+//         int sum = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             sum += nums[i];
+
+//             if(mpp.find(sum - goal) != mpp.end()) {
+//                 count += mpp[sum - goal];
+//             }
+
+//             mpp[sum]++;
+//         }
+//         return count;
+//     }
+// };
+
+
+
+// DPP Method 2
+
+class Solution {
+public:
+    int n;
+
+    int atMost(vector<int>& nums, int k) {
+        if(k < 0) return 0;
+
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+        int count = 0;
+
+        while(right < n) {
+            sum += nums[right];
+
+            while(sum > k) {
+                sum -= nums[left];
+                left++;
+            }
+
+            if(sum <= k) {
+                count += (right - left + 1);
+            }
+
+            right++;
+        }
+        return count;
+    }
+
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        n = nums.size();
+        return atMost(nums, goal) - atMost(nums, goal-1);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
