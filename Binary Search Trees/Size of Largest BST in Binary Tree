@@ -1,0 +1,50 @@
+/*
+    Following is Binary Tree Node structure:
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+*/
+
+class Info {
+    public:
+        int minValue, maxValue, size;
+        Info(int a, int b, int c) {
+            minValue = a;
+            maxValue = b;
+            size = c;
+        }
+};
+
+Info helper(TreeNode* root) {
+    if(!root) {
+        return Info(INT_MAX, INT_MIN, 0);
+    }
+    Info iLeft = helper(root->left);
+    Info iRight = helper(root->right);
+
+    if(iLeft.maxValue < root->data && root->data < iRight.minValue) {
+        int newSize = 1 + iLeft.size + iRight.size;
+        int newMinValue = min(root->data, iLeft.minValue);
+        int newMaxValue = max(root->data, iRight.maxValue);
+        return Info(newMinValue, newMaxValue, newSize);
+    } else {
+        int newSize = max(iLeft.size, iRight.size);
+        int newMinValue = INT_MIN;
+        int newMaxValue = INT_MAX;
+        return Info(newMinValue, newMaxValue, newSize);
+    }
+}
+
+int largestBST(TreeNode * root){
+    // Write your code here.
+    Info ans = helper(root);
+    return ans.size;
+}
+
+
