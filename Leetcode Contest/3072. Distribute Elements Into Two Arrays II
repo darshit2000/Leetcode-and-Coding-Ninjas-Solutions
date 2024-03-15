@@ -1,0 +1,211 @@
+https://leetcode.com/problems/distribute-elements-into-two-arrays-ii/description/
+
+// Order statistics tree with less_equal
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+ 
+template<class T>
+using order_multiset = tree<T,null_type,greater_equal<T>,rb_tree_tag,tree_order_statistics_node_update>;
+
+class Solution {
+public:
+    vector<int> resultArray(vector<int>& nums) {
+        int n = nums.size();
+        order_multiset<int> s1, s2;
+        vector<int> arr1, arr2;
+
+        arr1.push_back(nums[0]);
+        s1.insert(nums[0]);
+        arr2.push_back(nums[1]);
+        s2.insert(nums[1]);
+
+        for(int i = 2 ; i < n ; i++) {
+            int x = s1.order_of_key(nums[i]);
+            int y = s2.order_of_key(nums[i]);
+
+            if(x > y) {
+                arr1.push_back(nums[i]);
+                s1.insert(nums[i]);
+            } else if(x < y) {
+                arr2.push_back(nums[i]);
+                s2.insert(nums[i]);
+            } else {
+                if((int)s1.size() <= (int)s2.size()) {
+                    arr1.push_back(nums[i]);
+                    s1.insert(nums[i]);
+                } else {
+                    arr2.push_back(nums[i]);
+                    s2.insert(nums[i]);
+                }
+            }
+        }
+
+        arr1.insert(arr1.end(), arr2.begin(), arr2.end());
+        return arr1;
+    }
+};
+
+
+
+
+
+
+
+
+
+// Order statistics tree with less_equal
+
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+// using namespace __gnu_pbds;
+ 
+// template<class T>
+// using order_multiset = tree<T,null_type,less_equal<T>,rb_tree_tag,tree_order_statistics_node_update>;
+
+// class Solution {
+// public:
+//     vector<int> resultArray(vector<int>& nums) {
+//         int n = nums.size();
+//         order_multiset<int> s1, s2;
+//         vector<int> arr1, arr2;
+
+//         arr1.push_back(nums[0]);
+//         s1.insert(nums[0]);
+//         arr2.push_back(nums[1]);
+//         s2.insert(nums[1]);
+
+//         for(int i = 2 ; i < n ; i++) {
+//             int x = (int)s1.size() - s1.order_of_key(nums[i]+1);
+//             int y = (int)s2.size() - s2.order_of_key(nums[i]+1);
+
+//             if(x > y) {
+//                 arr1.push_back(nums[i]);
+//                 s1.insert(nums[i]);
+//             } else if(x < y) {
+//                 arr2.push_back(nums[i]);
+//                 s2.insert(nums[i]);
+//             } else {
+//                 if((int)s1.size() <= (int)s2.size()) {
+//                     arr1.push_back(nums[i]);
+//                     s1.insert(nums[i]);
+//                 } else {
+//                     arr2.push_back(nums[i]);
+//                     s2.insert(nums[i]);
+//                 }
+//             }
+//         }
+
+//         arr1.insert(arr1.end(), arr2.begin(), arr2.end());
+//         return arr1;
+//     }
+// };
+
+
+
+
+
+
+
+
+
+
+// Using only vectors
+
+// class Solution {
+// public:
+
+//     int greaterCount(vector<int> &v, int number) {
+//         int t = upper_bound(v.begin(), v.end(), number) - v.begin();
+//         return v.size() - t;
+//     }
+
+//     vector<int> resultArray(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> arr1, arr2;
+//         vector<int> sortedArr1, sortedArr2;
+//         arr1.push_back(nums[0]);
+//         arr2.push_back(nums[1]);
+
+//         sortedArr1.push_back(nums[0]);
+//         sortedArr2.push_back(nums[1]);
+
+//         for(int i = 2 ; i < n ; i++) {
+//             int x = greaterCount(sortedArr1, nums[i]);
+//             int y = greaterCount(sortedArr2, nums[i]);
+
+//             if(x > y) {
+//                 arr1.push_back(nums[i]);
+//                 sortedArr1.insert(sortedArr1.end() - x, nums[i]);
+//             }
+//             else if(x < y) {
+//                 arr2.push_back(nums[i]);
+//                 sortedArr2.insert(sortedArr2.end() - y, nums[i]);
+//             } 
+//             else if(x == y && sortedArr1.size() <= sortedArr2.size()) {
+//                 arr1.push_back(nums[i]);
+//                 sortedArr1.insert(sortedArr1.end() - x, nums[i]);
+//             }
+//             else if(x == y && sortedArr1.size() > sortedArr2.size()) {
+//                 arr2.push_back(nums[i]);
+//                 sortedArr2.insert(sortedArr2.end() - y, nums[i]);
+//             }
+//         }
+//         arr1.insert(arr1.end(), arr2.begin(), arr2.end());
+//         return arr1;
+//     }
+// };
+
+
+
+
+
+
+
+// Using set and vector
+
+// class Solution {
+// public:
+
+//     int greaterCount(multiset<int> &s, int number) {
+//         vector<int> v(s.begin(), s.end());
+//         int t = upper_bound(v.begin(), v.end(), number) - v.begin();
+//         return v.size() - t;
+//     }
+
+//     vector<int> resultArray(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> arr1, arr2;
+//         multiset<int> s1, s2;
+//         arr1.push_back(nums[0]);
+//         arr2.push_back(nums[1]);
+
+//         s1.insert(nums[0]);
+//         s2.insert(nums[1]);
+
+//         for(int i = 2 ; i < n ; i++) {
+//             int x = greaterCount(s1, nums[i]);
+//             int y = greaterCount(s2, nums[i]);
+
+//             if(x > y) {
+//                 arr1.push_back(nums[i]);
+//                 s1.insert(nums[i]);
+//             }
+//             else if(x < y) {
+//                 arr2.push_back(nums[i]);
+//                 s2.insert(nums[i]);
+//             } 
+//             else if(x == y && s1.size() <= s2.size()) {
+//                 arr1.push_back(nums[i]);
+//                 s1.insert(nums[i]);
+//             }
+//             else if(x == y && s1.size() > s2.size()) {
+//                 arr2.push_back(nums[i]);
+//                 s2.insert(nums[i]);
+//             }
+//         }
+//         arr1.insert(arr1.end(), arr2.begin(), arr2.end());
+//         return arr1;
+//     }
+// };
