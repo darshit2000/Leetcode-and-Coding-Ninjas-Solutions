@@ -1,0 +1,29 @@
+https://leetcode.com/problems/find-the-sum-of-encrypted-integers/description/
+
+
+class Solution {
+public:
+    int encrypt(int x) {
+        int mx = 0;
+        int count = 0;
+        while(x > 0) {
+            mx = max(mx, x%10);
+            count++;
+            x = x/10;
+        }
+        
+        int newNum = 0;
+        for(int i = 0 ; i < count ; i++) {
+            newNum = newNum*10 + mx;
+        }
+        return newNum;
+    }
+    
+    int sumOfEncryptedInt(vector<int>& nums) {
+        int sum = 0;
+        for(int i = 0 ; i < nums.size() ; i++) {
+            sum += encrypt(nums[i]);
+        }
+        return sum;
+    }
+};
