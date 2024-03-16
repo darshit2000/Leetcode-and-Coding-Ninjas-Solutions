@@ -1,0 +1,45 @@
+https://leetcode.com/problems/mark-elements-on-array-by-performing-queries/description/
+
+
+class Solution {
+public:
+    vector<long long> unmarkedSumArray(vector<int>& nums, vector<vector<int>>& queries) {
+        int n = nums.size();
+        int m = queries.size();
+        
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> minHeap;
+        vector<int> marked(n, 0);
+        uint64_t init = 0;
+        uint64_t sum = accumulate(nums.begin(), nums.end(), init);
+        vector<long long> ans;
+        
+        for(int i = 0 ; i < n ; i++) {
+            minHeap.push({nums[i], i});
+        }
+        
+        for(int i = 0 ; i < m ; i++) {
+            int index = queries[i][0];
+            int k = queries[i][1];
+            
+            if(marked[index] == 0) {
+                marked[index] = 1;
+                sum -= nums[index];
+            }
+            
+            while(k > 0 && !minHeap.empty()) {
+                int element = minHeap.top().first;
+                int newIndex = minHeap.top().second;
+                minHeap.pop();
+                
+                if(marked[newIndex] == 0) {
+                    marked[newIndex] = 1;
+                    sum -= nums[newIndex];
+                    k--;
+                }
+            }
+            ans.push_back(sum);
+        }
+        
+        return ans;
+    }
+};
