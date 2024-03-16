@@ -1,0 +1,53 @@
+https://leetcode.com/problems/replace-question-marks-in-string-to-minimize-its-value/description/
+
+
+class Solution {
+public:
+    string minimizeStringValue(string s) {
+        priority_queue<pair<int,char>, vector<pair<int,char>>, greater<pair<int,char>>> minHeap;
+        vector<int> freq(26,0);
+        // multiset<char> set1;
+        vector<int> req;
+        string ans = "";
+        int n = s.length();
+        
+        for(int i = 0 ; i < n ; i++) {
+            if(s[i] != '?') freq[s[i] - 'a']++;
+        }
+        
+        for(int i = 0 ; i < 26 ; i++) {
+            minHeap.push({freq[i], i + 'a'});
+        }
+        
+        for(int i = 0 ; i < n ; i++) {
+            if(s[i] == '?') {
+                char ch = minHeap.top().second;
+                int f = minHeap.top().first;
+                minHeap.pop();
+                
+                // set1.insert(ch);
+                req.push_back(ch-'a');
+                minHeap.push({f+1, ch});
+            }
+        }
+        
+        sort(req.begin(), req.end());
+        int index = 0;
+        for(int i = 0 ; i < n ; i++) {
+            if(s[i] == '?') {
+                s[i] = req[index] + 'a';
+                index++;
+            }
+        }
+
+        // auto it = set1.begin();
+        // for(int i = 0 ; i < n ; i++) {
+        //     if(s[i] == '?') {
+        //         s[i] = *it;
+        //         it++;
+        //     }
+        // }
+
+        return s;
+    }
+};
