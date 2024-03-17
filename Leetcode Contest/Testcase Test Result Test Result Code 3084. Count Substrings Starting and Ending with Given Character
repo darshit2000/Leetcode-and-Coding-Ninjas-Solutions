@@ -1,0 +1,83 @@
+// direct formula
+
+// class Solution {
+// public:
+//     long long countSubstrings(string s, char c) {        
+//         long long n = count(s.begin(), s.end(), c);
+        
+//         return (n * (n + 1)) / 2;
+//     }
+// };
+
+
+
+
+
+
+/*  a....a...a   For 1st 'a', there will be 1 substring ([0,0]), for 2nd 'a', there will be 2 substrings ([0,5] & [5,5]) and so on.
+    0    5   8
+*/
+
+class Solution {
+public:
+    long long countSubstrings(string s, char c) {
+        long long ans = 0;
+        
+        int charCount = 0;
+        
+        for(int i = 0 ; i < s.length() ; i++) {
+            if(s[i] == c) {
+                charCount++;
+                ans += charCount;
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+// Don't do this
+
+// class Solution {
+// public:
+//     vector<int> getLPS(string s) {
+//         int n = s.length();
+//         vector<int> lps(n,0);
+
+//         for(int i = 1 ; i < n ; i++) {
+//             int prevIndex = lps[i-1];
+
+//             while(prevIndex > 0 && s[prevIndex] != s[i]) {
+//                 prevIndex = lps[prevIndex-1];
+//             }
+
+//             lps[i] = prevIndex + (s[prevIndex] == s[i] ? 1 : 0);
+//         }
+//         return lps;
+//     }
+    
+//     long long countSubstrings(string s, char c) {
+//         long long ans = 0;
+        
+//         int count = 0;
+//         string newString = "";
+//         newString += c;
+//         newString += "$";
+//         newString += s;
+//         vector<int> lps = getLPS(newString);
+        
+//         for(int i = 2 ; i < newString.length() ; i++) {
+//             if(lps[i] == 1) count++;
+//         }
+        
+//         for(int i = count-1 ; i >= 1 ; i--) ans += i;
+        
+//         return ans + count;
+//     }
+// };
