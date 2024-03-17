@@ -1,0 +1,15 @@
+https://www.codingninjas.com/studio/problems/creating-and-printing_1214551?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+
+vector < vector < int >> printAdjacency(int n, int m, vector < vector < int >> & edges) {
+    // Write your code here.
+    vector<vector<int>> adjList(n);
+    for(int i = 0 ; i < n ; i++) adjList[i].push_back(i);
+
+    for(auto& item : edges) {
+        adjList[item[0]].push_back(item[1]);
+        adjList[item[1]].push_back(item[0]);
+    }
+
+    return adjList;
+}
