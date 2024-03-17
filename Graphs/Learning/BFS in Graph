@@ -1,0 +1,25 @@
+https://www.codingninjas.com/studio/problems/bfs-in-graph_973002?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+vector<int> bfsTraversal(int n, vector<vector<int>> &adj){
+    // Write your code here.
+    queue<int> q;
+    vector<bool> visited(n, false);
+    vector<int> ans;
+    q.push(0);
+    visited[0] = true;
+
+    while(!q.empty()) {
+        int curr = q.front();
+        ans.push_back(curr);
+        q.pop();
+
+        for(auto& neighbour : adj[curr]) {
+            if(visited[neighbour] == false) {
+                visited[neighbour] = true;
+                q.push(neighbour);
+            }
+        }
+    }
+    return ans;
+}
