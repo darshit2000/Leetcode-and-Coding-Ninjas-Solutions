@@ -1,0 +1,8 @@
+https://www.codingninjas.com/studio/problems/counting-graphs_8357237?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+
+int countingGraphs(int N)
+{
+    // Write your code here.
+    return (pow(2,N*(N-1)/2));
+}
