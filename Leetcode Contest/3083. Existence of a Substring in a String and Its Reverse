@@ -1,0 +1,13 @@
+class Solution {
+public:
+    bool isSubstringPresent(string s) {
+        string rev = string(s.rbegin(), s.rend());
+        int n = s.length();
+        
+        for(int i = 0 ; i <= n-2 ; i++) {
+            string ss = s.substr(i, 2);
+            if(rev.find(ss) != string::npos) return true;
+        }
+        return false;
+    }
+};
