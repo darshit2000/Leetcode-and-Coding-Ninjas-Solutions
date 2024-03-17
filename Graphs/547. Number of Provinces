@@ -1,0 +1,105 @@
+https://leetcode.com/problems/number-of-provinces/description/
+
+
+// Union Find
+
+// class DisjointSet {
+//     public: 
+//         vector<int> parent, size;
+//         int components;
+
+//         DisjointSet(int n) {
+//             components = n;
+//             parent.resize(n);
+//             size.resize(n, 1);
+
+//             for(int i = 0 ; i < n ; i++) parent[i] = i;
+//         }
+
+//         int find(int u) {
+//             if(u == parent[u]) return u;
+//             return parent[u] = find(parent[u]);
+//         }
+
+//         void merge(int u, int v) {
+//             int parent_u = find(u);
+//             int parent_v = find(v);
+
+//             if(parent_u == parent_v) return;
+
+//             if(size[parent_u] < size[parent_v]) {
+//                 parent[parent_u] = parent_v;
+//                 size[parent_v] += size[parent_u];
+//             } else {
+//                 parent[parent_v] = parent_u;
+//                 size[parent_u] += size[parent_v];
+//             }
+//             components--;
+//         }
+
+//         int getComponents() {
+//             return components;
+//         }
+// };
+
+// class Solution {
+// public:
+//     int findCircleNum(vector<vector<int>>& isConnected) {
+//         int n = isConnected.size();
+//         DisjointSet ds(n);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(isConnected[i][j] == 1) {
+//                     ds.merge(i,j);
+//                 }
+//             }
+//         }
+//         return ds.getComponents();
+//     }
+// };
+
+
+
+
+
+
+// DFS
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
+        vector<vector<int>> adj(n);
+        vector<bool> visited(n, false);
+        int count = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(isConnected[i][j] == 1) {
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }
+
+        auto dfs = [&visited, &adj] (auto &dfs, int root) -> void {
+            visited[root] = true;
+
+            for(int neighbour : adj[root]) {
+                if(visited[neighbour] == false) {
+                    dfs(dfs, neighbour);
+                }
+            }
+        };
+
+        for(int i = 0 ; i < n ; i++) {
+            if(visited[i] == false) {
+                count++;
+                dfs(dfs, i);
+            }
+        }
+
+        return count;
+    }
+};
