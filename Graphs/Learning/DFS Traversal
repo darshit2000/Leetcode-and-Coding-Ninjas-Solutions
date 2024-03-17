@@ -1,0 +1,35 @@
+https://www.codingninjas.com/studio/problems/dfs-traversal_630462?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+void dfs(int root, vector<bool> &visited, vector<vector<int>> &adj, vector<int> &temp) {
+    visited[root] = true;
+    temp.push_back(root);
+    
+    for(auto &neighbour : adj[root]) {
+        if(visited[neighbour] == false) {
+            dfs(neighbour, visited, adj, temp);
+        }
+    } 
+}
+
+vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
+{
+    // Write your code here
+    vector<vector<int>> ans;
+    vector<bool> visited(V, false);
+    vector<vector<int>> adj(V);
+
+    for(auto& e : edges) {
+        adj[e[0]].push_back(e[1]);
+        adj[e[1]].push_back(e[0]);
+    }
+    
+    for(int i = 0 ; i < V ; i++) {
+        if(visited[i] == false) {
+            vector<int> temp;
+            dfs(i, visited, adj, temp);
+            ans.push_back(temp);
+        }
+    }
+    return ans;
+}
