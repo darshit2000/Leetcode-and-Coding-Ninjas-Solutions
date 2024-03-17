@@ -1,0 +1,110 @@
+// Taking a freq f as reference and then check for the rest of the freq whether they are in the range [freq, freq+k]. If they are less than freq, then delete them all and if they are bigger than freq+k, then substract the necessary.
+
+// sorting vector of freq and then running j from i+1 (maintaining prefix sum)
+
+class Solution {
+public:
+    int minimumDeletions(string word, int k) {
+        int mn = INT_MAX;
+        vector<int> v(26);
+
+        for(char ch : word) v[ch - 'a']++;
+
+        sort(v.begin(), v.end());                
+
+        int psum = 0;
+        for(int i = 0 ; i < 26 ; i++) {
+            int count = 0;
+            for(int j = 25 ; j >= i+1 ; j--) {
+                if(v[j] - v[i] > k) {
+                    count += (v[j] - (v[i] + k));
+                } else break;
+            }
+            count += psum;
+            mn = min(mn, count);
+
+            psum += v[i];
+        }
+        
+        return mn;
+    }
+};
+
+
+
+
+
+
+
+
+// Check all the freq array all the times (0 to 26 in both for loops)
+// Using single vector
+
+// class Solution {
+// public:
+//     int minimumDeletions(string word, int k) {
+//         int mn = INT_MAX;
+//         vector<int> charMap(26);
+
+//         for(char ch : word) charMap[ch - 'a']++;
+        
+//         for(int i = 0 ; i < 26 ; i++) {
+//             int count = 0;
+//             for(int j = 0 ; j < 26 ; j++) {
+//                 if(charMap[j] < charMap[i]) {
+//                     count += charMap[j];
+//                 }
+//                 else if(abs(charMap[j] - charMap[i]) > k) {
+//                     count += abs(charMap[j] - charMap[i] - k);
+//                 }
+//             }
+//             mn = min(mn, count);
+//         }
+        
+//         return mn;
+//     }
+// };
+
+
+
+
+
+// Check all the freq array all the times (0 to 26 in both for loops)
+// using map and 1 extra vector
+
+// class Solution {
+// public:
+//     int minimumDeletions(string word, int k) {
+//         int mn = INT_MAX;
+//         vector<int> charMap(26);
+//         map<int,int> mpp;
+//         vector<int> v;
+
+//         for(char ch : word) charMap[ch - 'a']++;
+                
+//         for(int i = 0 ; i < 26 ; i++) {
+//             if(charMap[i] != 0) mpp[charMap[i]]++;
+//         }
+        
+//         for(auto& [freq, freqOfFreq] : mpp) v.push_back(freq);
+
+//         for(int i : v) cout << i << ",";
+
+//         for(int i = 0 ; i < v.size() ; i++) {
+//             int count = 0;
+//             int mxElement = v[i];
+//             for(int j = 0 ; j < v.size() ; j++) {
+//                 if(v[j] < v[i]) {
+//                     count += v[j]*mpp[v[j]];
+//                 }
+//                 else if(abs(v[j] - v[i]) > k) {
+//                     count += (abs(v[j] - v[i] - k) * mpp[v[j]]);
+//                 }
+//             }
+//             cout << endl << count;
+//             mn = min(mn, count);
+//         }
+        
+//         return mn;
+//     }
+// };
