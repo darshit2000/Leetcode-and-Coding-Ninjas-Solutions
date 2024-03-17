@@ -1,0 +1,155 @@
+https://www.codingninjas.com/studio/problems/find-the-number-of-states_1377943?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+// Union Find
+
+class DisjointSet {
+    public:
+        vector<int> parent, size;
+        int components;
+
+        DisjointSet(int n) {
+            components = n;
+            parent.resize(n);
+            size.resize(n,1);
+            for(int i = 0 ; i < n ; i++) parent[i] = i;
+        }
+
+        int find(int u) {
+            if(u == parent[u]) return u;
+
+            return parent[u] = find(parent[u]);
+        }
+
+        void merge(int u, int v ) {
+            int parent_u = find(u);
+            int parent_v = find(v);
+
+            if(parent_u == parent_v) return;
+
+            if(size[parent_u] < size[parent_v]) {
+                parent[u] = parent_v;
+                size[parent_v] += size[parent_u];
+            } else {
+                parent[parent_v] = parent_u;
+                size[parent_u] += size[parent_v];
+            }
+
+            components--;
+        }
+
+        int getComponents() {
+            return components;
+        }
+
+        bool isConnected() {
+            return (size[find(0)] == size.size());
+        }
+
+        bool connected(int u, int v) {
+            return (find(u) == find(v));
+        }
+};
+
+int findNumOfProvinces(vector<vector<int>>& roads, int n) {
+    // Write your code here.
+    DisjointSet ds(n);
+
+    for(int i = 0 ; i < n ; i++) {
+        for(int j = 0 ; j < n ; j++) {
+            if(i != j && roads[i][j] == 1) {
+                ds.merge(i, j);
+            }
+        }
+    }
+
+    return ds.getComponents();
+}
+
+
+
+
+
+
+// dfs
+
+// void dfs(int root, vector<bool> &visited, vector<vector<int>> &adj) {
+//     visited[root] = true;
+
+//     for(auto& neighbour : adj[root]) {
+//         if(visited[neighbour] == false) {
+//             dfs(neighbour, visited, adj);
+//         }
+//     }
+// }
+
+// int findNumOfProvinces(vector<vector<int>>& roads, int n) {
+//     // Write your code here.
+//     vector<vector<int>> adj(n);
+
+//     for(int i = 0 ; i < n ; i++) {
+//         for(int j = 0 ; j < n ; j++) {
+//             if(i != j && roads[i][j] == 1) {
+//                 adj[i].push_back(j);
+//             }
+//         }
+//     }
+
+//     vector<bool> visited(n, false);
+//     int total = 0;
+
+//     for(int i = 0 ; i < n ; i++) {
+//         if(visited[i] == false) {
+//             total++;
+//             dfs(i, visited, adj);
+//         }
+//     }
+//     return total;
+// }
+
+
+
+
+
+
+
+
+// bfs
+
+// int findNumOfProvinces(vector<vector<int>>& roads, int n) {
+//     // Write your code here.
+//     vector<vector<int>> adj(n);
+
+//     for(int i = 0 ; i < n ; i++) {
+//         for(int j = 0 ; j < n ; j++) {
+//             if(i != j && roads[i][j] == 1) {
+//                 adj[i].push_back(j);
+//             }
+//         }
+//     }
+
+//     vector<bool> visited(n, false);
+//     int total = 0;
+
+//     for(int i = 0 ; i < n ; i++) {
+//         if(visited[i] == false) {
+//             total++;
+//             queue<int> q;
+//             q.push(i);
+//             visited[0] = true;
+
+//             while(!q.empty()) {
+//                 int curr = q.front();
+//                 q.pop();
+
+//                 for(auto& neighbour : adj[curr]) {
+//                     if (visited[neighbour] == false) {
+//                         visited[neighbour] = true;
+//                         q.push(neighbour);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     return total;
+// }
