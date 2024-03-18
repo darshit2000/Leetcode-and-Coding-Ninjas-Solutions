@@ -1,0 +1,36 @@
+https://leetcode.com/problems/flood-fill/description/
+
+
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int m = image.size();
+        int n = image[0].size();
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        queue<pair<int,int>> q;
+        int sColor = image[sr][sc];
+
+        q.push({sr,sc});
+        image[sr][sc] = color;
+        visited[sr][sc] = true;
+
+        while(!q.empty()) {
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+            
+            for(auto& d : dir) {
+                int nRow = row + d[0];
+                int nCol = col + d[1];
+
+                if(nRow >= 0 && nRow < m && nCol >= 0 && nCol < n && image[nRow][nCol] == sColor && visited[nRow][nCol] == false) {
+                    visited[nRow][nCol] = true;
+                    image[nRow][nCol] = color;
+                    q.push({nRow, nCol});
+                }
+            }
+        }
+        return image;
+    }
+};
