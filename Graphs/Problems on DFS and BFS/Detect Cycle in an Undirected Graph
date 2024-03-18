@@ -1,0 +1,75 @@
+// bool dfs() 
+
+class Graph {
+
+bool dfs(int root, int parent, vector<int> adjList[], vector<bool> &visited) {
+    visited[root] = true;
+
+    for(auto neighbour : adjList[root]) {
+        if(!visited[neighbour]) {
+            if(dfs(neighbour, root, adjList, visited) == true) return true;
+        }
+        else if(visited[neighbour] == true && neighbour != parent) {
+            return true;
+        }
+    }
+    return false;
+}
+
+public:
+    bool detectCycle(int V, vector<int> adj[]) {
+        // Write your code here.
+        vector<bool> visited(V, false);
+
+        for(int i = 0 ; i < V ; i++) {
+            if(visited[i] == false) {
+                if(dfs(i, -1, adj, visited) == true) return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+
+
+
+
+
+// void dfs()
+
+// class Graph {
+
+// void dfs(int root, int parent, vector<int> adjList[], vector<bool> &visited, bool &cycle) {
+//     visited[root] = true;
+
+//     for(auto neighbour : adjList[root]) {
+//         if(!visited[neighbour]) {
+//             dfs(neighbour, root, adjList, visited, cycle);
+//             if(cycle) return;
+//         }
+//         else if(visited[neighbour] == true && neighbour != parent) {
+//             cycle = true;
+//             return;
+//         }
+//     }
+//     return;
+// }
+
+// public:
+//     bool detectCycle(int V, vector<int> adj[]) {
+//         // Write your code here.
+//         vector<bool> visited(V, false);
+//         vector<vector<int>> adjList(V);
+//         bool cycle = false;
+
+//         for(int i = 0 ; i < V ; i++) {
+//             if(visited[i] == false) {
+//                 dfs(i, -1, adj, visited, cycle);
+//                 if(cycle) return true;
+//             }
+//         }
+
+//         return false;
+//     }
+// };
