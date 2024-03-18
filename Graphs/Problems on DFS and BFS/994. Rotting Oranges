@@ -1,0 +1,101 @@
+https://leetcode.com/problems/rotting-oranges/description/
+
+
+// level order traversal logic (storing {row,col} in queue)
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        queue<pair<int,int>> q;
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        int minutes = 0;
+        int fresh = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < m ; j++) {
+                if(grid[i][j] == 2) q.push({i,j});
+                if(grid[i][j] == 1) fresh++;
+            }
+        }
+
+        while(!q.empty() && fresh > 0) {
+            int size = q.size();
+
+            while(size--) {
+                int row = q.front().first;
+                int col = q.front().second;
+                visited[row][col] = true;
+                q.pop();
+
+                for(auto& d : dir) {
+                    int newRow = row + d[0];
+                    int newCol = col + d[1];
+
+                    if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1 && visited[newRow][newCol] == false) {
+                        visited[newRow][newCol] = true;
+                        q.push({newRow, newCol});
+                        fresh--;
+                    }
+                }
+            }
+            minutes++;
+        }
+
+        if(fresh > 0) return -1;
+
+        return minutes;
+    }
+};
+
+
+
+
+
+
+
+
+// storing {{i,j}, time} in queue
+
+// class Solution {
+// public:
+//     int orangesRotting(vector<vector<int>>& grid) {
+//         int m = grid.size();
+//         int n = grid[0].size();
+//         vector<vector<bool>> visited(m, vector<bool>(n, false));
+//         queue<pair<pair<int,int>, int>> q;
+//         vector<vector<int>> dir = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+//         int minutes = 0;
+//         int fresh = 0;
+
+//         for(int i = 0 ; i < m ; i++) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(grid[i][j] == 2) q.push({{i,j}, 0});
+//                 if(grid[i][j] == 1) fresh++;
+//             }
+//         }
+
+//         while(!q.empty() && fresh > 0) {
+//             int row = q.front().first.first;
+//             int col = q.front().first.second;
+//             int time = q.front().second;
+//             q.pop();
+//             visited[row][col] = true;
+
+//             for(auto& v : dir) {
+//                 int rowToCheck = row + v[0];
+//                 int colToCheck = col + v[1];
+//                 if(rowToCheck >= 0 && rowToCheck < m && colToCheck >= 0 && colToCheck < n && grid[rowToCheck][colToCheck] == 1 && visited[rowToCheck][colToCheck] == false) {
+//                     visited[rowToCheck][colToCheck] = true;
+//                     q.push({{rowToCheck, colToCheck}, time+1});
+//                     minutes = max(minutes, time + 1);
+//                     fresh--;
+//                 }
+//             }
+//         }
+//         if(fresh > 0) return -1;
+//         return minutes;
+//     }
+// };
