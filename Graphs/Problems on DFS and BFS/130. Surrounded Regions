@@ -1,0 +1,112 @@
+https://leetcode.com/problems/surrounded-regions/description/
+
+
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        int n = board.size();
+        int m = board[0].size();
+
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        auto dfs = [&] (auto &dfs, pair<int,int> p) -> void {
+            int row = p.first;
+            int col = p.second;
+            visited[row][col] = true;
+
+            for(auto &d : dir) {
+                int nRow = row + d[0];
+                int nCol = col + d[1];
+
+                if(nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && visited[nRow][nCol] == false && board[nRow][nCol] == 'O') {
+                    dfs(dfs, {nRow, nCol});
+                }
+            }
+        };
+
+        int row = 0;
+        for(int col = 0 ; col < m ; col++) {
+            if(board[row][col] == 'O') dfs(dfs, {row,col});
+        }
+
+        row = n-1;
+        for(int col = 0 ; col < m ; col++) {
+            if(board[row][col] == 'O') dfs(dfs, {row,col});
+        }
+
+        int col = 0;
+        for(int row = 0 ; row < n ; row++) {
+            if(board[row][col] == 'O') dfs(dfs, {row,col});
+        }
+
+        col = m-1;
+        for(int row = 0 ; row < n ; row++) {
+            if(board[row][col] == 'O') dfs(dfs, {row,col});
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < m ; j++) {
+                if(board[i][j] == 'O' && visited[i][j] == false) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+// TLE
+
+// class Solution {
+// public:
+//     void solve(vector<vector<char>>& board) {
+//         int n = board.size();
+//         int m = board[0].size();
+
+//         vector<pair<int,int>> v;
+//         vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < m ; j++) {
+//                 if(board[i][j] == 'O') {
+//                     v.push_back({i,j});
+//                 }
+//             }
+//         }
+
+//         auto dfs = [&] (auto &dfs, pair<int,int> p, vector<vector<bool>> &visited) -> bool {
+//             int row = p.first;
+//             int col = p.second;
+//             if(row == 0 || row == n-1 || col == 0 || col == m-1) return true;
+//             visited[row][col] = true;
+
+//             for(auto &d : dir) {
+//                 int nRow = row + d[0];
+//                 int nCol = col + d[1];
+
+//                 if(nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && visited[nRow][nCol] == false && board[nRow][nCol] == 'O') {
+//                     if(dfs(dfs, {nRow, nCol}, visited) == true) return true;
+//                 }
+//             }
+//             return false;
+//         };
+
+//         for(int i = 0 ; i < v.size() ; i++) {
+//             vector<vector<bool>> visited(n, vector<bool>(m, false));
+//             bool res = dfs(dfs, v[i], visited);
+//             if(res == false) {
+//                 board[v[i].first][v[i].second] = 'X';
+//             }
+//         }
+//     }
+// };
