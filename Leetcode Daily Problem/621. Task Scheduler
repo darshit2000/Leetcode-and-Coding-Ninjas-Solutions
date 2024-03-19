@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        priority_queue<int> ready;
+        // {ready time, freq remainng}
+        queue<pair<int,int>> waiting;
+        vector<int> v(26, 0);
+        int time = 0;
+
+        for(char ch : tasks) v[ch - 'A']++;
+
+        for(int i : v) {
+            if(i != 0) ready.push(i);
+        }
+
+        while(!ready.empty() || !waiting.empty()) {
+            time++;
+
+            if(!ready.empty()) {
+                int f = ready.top();
+                ready.pop();
+                if(f - 1 > 0) {
+                    waiting.push({time + n, f - 1});
+                }
+            }
+
+            while(!waiting.empty() && waiting.front().first == time) {
+                ready.push(waiting.front().second);
+                waiting.pop();
+            }
+        }
+        return time;
+    } 
+};
