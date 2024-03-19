@@ -1,0 +1,93 @@
+https://leetcode.com/problems/word-ladder/description/
+
+
+// bfs
+// delete the word from the set inside the if(s.find(temp) != s.end()) block because in this, all the words that were found in dict will be deleted together. If we write s.erase(word) outside (after q.pop()), then the words will be deleted one by one and the if(s.find(temp) != s.end()) will take more time to find because there are more elements in the set. Whereas if we delete from set initially, then all the words are deleted together and then the set size will be small and it will take les time to find the word in if(s.find(temp) != s.end())
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        int n = wordList.size();
+        unordered_set<string> s(wordList.begin(), wordList.end());
+        queue<pair<string,int>> q;
+
+        if(s.find(endWord) == s.end()) return 0;
+        if(beginWord == endWord) return 1;
+
+        int count = 0;
+
+        q.push({beginWord, 1});
+        s.erase(beginWord);
+
+        while(!q.empty()) {
+            string word = q.front().first;
+            int c = q.front().second;
+
+            q.pop();
+            // s.erase(word);       // do not erase it here (will be deleted one by one)
+            
+            for(int ch = 0 ; ch < 26 ; ch++) {
+                for(int i = 0 ; i < word.length() ; i++) {
+                    string temp = word;
+                    if(temp[i] == ch + 'a') continue;
+                    temp[i] = ch + 'a';
+
+                    if(temp == endWord) return c + 1;
+
+                    if(s.find(temp) != s.end()) {
+                        q.push({temp, c + 1});
+                        s.erase(temp);          // Erase it here together
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+// DFS : doesnot gurantee shortest path
+
+// class Solution {
+// public:
+//     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+//         int n = wordList.size();
+//         unordered_set<string> s;
+//         for(int i = 0 ; i < wordList.size() ; i++) {
+//             s.insert(wordList[i]);
+//         }
+
+//         if(s.find(endWord) == s.end()) return 0;
+//         vector<char> choice = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+//         int count = 0;
+
+//         auto dfs = [&] (auto &dfs, string str) -> int {
+//             count++;
+//             if(str == endWord) return count;
+//             s.erase(str);
+
+//             for(char &ch : choice) {
+//                 for(int i = 0 ; i < str.length() ; i++) {
+//                     string temp = str;
+//                     temp[i] = ch;
+//                     if(s.find(temp) != s.end()) {
+//                         return dfs(dfs, temp);
+//                     }
+//                 }
+//             }
+//             return 0;
+//         };
+
+//         return dfs(dfs, beginWord);
+//     }
+// };
