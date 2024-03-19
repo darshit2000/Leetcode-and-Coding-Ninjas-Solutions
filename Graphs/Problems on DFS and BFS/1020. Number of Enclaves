@@ -1,0 +1,125 @@
+https://leetcode.com/problems/number-of-enclaves/
+
+
+
+// bfs
+
+// class Solution {
+// public:
+//     int numEnclaves(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         int m = grid[0].size();
+//         vector<vector<bool>> visited(n, vector<bool>(m, false));
+//         vector<vector<int>> dir = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+//         queue<pair<int,int>> q;
+//         int count = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < m ; j++) {
+//                 if(i == 0 || i == n-1 || j == 0 || j == m-1) {
+//                     if(grid[i][j] == 1 && visited[i][j] == false) {
+//                         q.push({i,j});
+//                         visited[i][j] = true;
+//                     }
+//                 }
+//             }
+//         }
+
+//         while(!q.empty()) {
+//             int size = q.size();
+
+//             while(size--) {
+//                 int row = q.front().first;
+//                 int col = q.front().second;
+
+//                 q.pop();
+
+//                 for(auto &d : dir) {
+//                     int nRow = row + d[0];
+//                     int nCol = col + d[1];
+
+//                     if(nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && visited[nRow][nCol] == false && grid[nRow][nCol] == 1) {
+//                         q.push({nRow, nCol});
+//                         visited[nRow][nCol] = true;
+//                     }
+//                 }
+//             }
+//         }
+
+    
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < m ; j++) {
+//                 if(grid[i][j] == 1 && visited[i][j] == false) count++;
+//             }
+//         }
+//         return count;
+//     }
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+// dfs 
+
+class Solution {
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> visited(n, vector<int>(m, 0));
+        vector<vector<int>> dir = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+        int count = 0;
+
+        auto dfs = [&] (auto &dfs, pair<int,int> p) -> void {
+            int row = p.first;
+            int col = p.second;
+            visited[row][col] = 1;
+
+            for(auto &d : dir) {
+                int nRow = row + d[0];
+                int nCol = col + d[1];
+
+                if(nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && visited[nRow][nCol] == 0 && grid[nRow][nCol] == 1) {
+                    dfs(dfs, {nRow, nCol});
+                }
+            }
+        };
+
+        int row = 0;
+        for(int col = 0 ; col < m ; col++) {
+            if(grid[row][col] == 1) dfs(dfs, {row,col});
+        }
+
+        row = n-1;
+        for(int col = 0 ; col < m ; col++) {
+            if(grid[row][col] == 1) dfs(dfs, {row,col});
+        }
+
+        int col = 0;
+        for(int row = 0 ; row < n ; row++) {
+            if(grid[row][col] == 1) dfs(dfs, {row,col});
+        }
+    
+        col = m-1;
+        for(int row = 0 ; row < n ; row++) {
+            if(grid[row][col] == 1) dfs(dfs, {row,col});
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < m ; j++) {
+                if(grid[i][j] == 1 && visited[i][j] == false) count++;
+            }
+        }
+        return count;
+    }
+};
+
+
