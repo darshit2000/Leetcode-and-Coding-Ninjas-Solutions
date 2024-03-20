@@ -96,13 +96,13 @@ public:
                 if(color[neighbour] == color[node]) return false;
 
                 if(color[neighbour] == -1) {
-                    // here we cannot write " return dfs(dfs, neighbour, 1-c); "
-                    // because if this dfs() call is true for one neighbour, 
-                    // it will not necessarily be true for all other neighbours, 
-                    // so if current dfs(dfs, neighbour_1, 1-c) is true, 
-                    // we need to check for other neighbours dfs(dfs, neighbour_2, 1-c)
-                    // But if dfs(dfs, neighbour_1, 1-c) == false, then we don't need to check for other 
-                    // neighbour also and we can directly return false
+                    /*  Here we cannot write " return dfs(dfs, neighbour, 1-c); "
+                        because if this dfs() call is true for one neighbour, 
+                        it will not necessarily be true for all other neighbours, 
+                        so if current dfs(dfs, neighbour_1, 1-c) is true, 
+                        we need to check for other neighbours dfs(dfs, neighbour_2, 1-c)
+                        But if dfs(dfs, neighbour_1, 1-c) == false, then we don't need to check for other 
+                        neighbour also and we can directly return false     */
                     if(dfs(dfs, neighbour, 1 - c) == false) return false;
                 }
             }
@@ -111,7 +111,7 @@ public:
 
         for(int i = 0 ; i < n ; i++) {
             if(color[i] == -1) {
-                if(dfs(dfs, i, 0) == false) return false;;
+                if(dfs(dfs, i, 0) == false) return false;
             }
         }
         return true;
