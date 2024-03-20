@@ -1,0 +1,111 @@
+https://leetcode.com/problems/course-schedule-ii/description/
+
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> ans;
+        vector<vector<int>> adj(numCourses);
+        vector<int> vis(numCourses, 0);
+        vector<int> pathVisited(numCourses, 0);
+
+        for(int i = 0 ; i < prerequisites.size() ; i++) {
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }
+
+        auto dfs = [&] (auto &dfs, int node) -> bool {
+            vis[node] = 1;
+            pathVisited[node] = 1;
+
+            for(auto &neighbour : adj[node]) {
+                if(vis[neighbour] == 0) {
+                    if(dfs(dfs, neighbour) == true) return true;
+                } 
+                else if(pathVisited[neighbour] == 1) return true;
+            } 
+            pathVisited[node] = 0;
+            ans.push_back(node);
+            return false;
+        };
+
+        for(int i = 0 ; i < numCourses ; i++) {
+            if(vis[i] == 0) {
+                if(dfs(dfs, i) == true) return {}; 
+            }
+        }
+
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// first found if its possible to get topo sort or not and if possible, then again ran the topo sort algo
+
+// class Solution {
+// public:
+//     bool canFinish(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>> &adj) {
+        
+//         vector<int> vis(numCourses, 0);
+//         vector<int> pathVisited(numCourses, 0);
+
+//         auto dfs = [&] (auto &dfs, int node, vector<vector<int>> &adj) -> bool {
+//             vis[node] = 1;
+//             pathVisited[node] = 1;
+
+//             for(auto &neighbour : adj[node]) {
+//                 if(vis[neighbour] == 0) {
+//                     if(dfs(dfs, neighbour, adj) == true) return true;
+//                 } else if(pathVisited[neighbour] == 1) return true;
+//             } 
+//             pathVisited[node] = 0;
+//             return false;
+//         };
+
+//         for(int i = 0 ; i < numCourses ; i++) {
+//             if(vis[i] == 0) {
+//                 if(dfs(dfs, i, adj) == true) return false;
+//             }
+//         }
+//         return true;
+//     }
+//     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+//         vector<int> ans;
+//         vector<vector<int>> adj(numCourses);
+//         vector<int> vis(numCourses, 0);
+
+//         for(int i = 0 ; i < prerequisites.size() ; i++) {
+//             adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+//         }
+
+//         bool isPossible = canFinish(numCourses, prerequisites, adj);
+
+//         if(isPossible == false) return {};
+
+//         auto dfs = [&] (auto &dfs, int node) -> void {
+//             vis[node] = 1;
+
+//             for(auto &neighbour : adj[node]) {
+//                 if(vis[neighbour] == 0) {
+//                     dfs(dfs, neighbour);
+//                 }
+//             } 
+//             ans.push_back(node);
+//         };
+
+//         for(int i = 0 ; i < numCourses ; i++) {
+//             if(vis[i] == 0) dfs(dfs, i);
+//         }
+//         reverse(ans.begin(), ans.end());
+//         return ans;
+//     }
+// };
