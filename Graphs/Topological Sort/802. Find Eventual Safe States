@@ -1,0 +1,80 @@
+https://leetcode.com/problems/find-eventual-safe-states/description/
+
+// taking less time
+
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int> vis(n, 0);
+        vector<int> pathVisited(n, 0);
+        vector<int> safe(n, 1);
+        vector<int> ans;
+
+        auto dfs = [&] (auto &dfs, int node) -> bool {
+            vis[node] = 1;
+            pathVisited[node] = 1;
+
+            for(auto &neighbour : graph[node]) {
+                if(vis[neighbour] == 0) {
+                    if(dfs(dfs, neighbour) == true) {
+                        safe[node] = 0;
+                        return true;
+                    }
+                } else if(pathVisited[neighbour] == 1) {
+                    safe[node] = 0;
+                    return true;
+                }
+            } 
+            
+            safe[node] = 1;
+            pathVisited[node] = 0;
+            return false;
+        };
+
+        for(int i = 0 ; i < n ; i++) {
+            if(safe[i] == 1) {
+                if(dfs(dfs, i) == false) ans.push_back(i);  
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+// Very more time
+
+// class Solution {
+// public:
+//     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+//         int n = graph.size();
+//         vector<int> ans;
+
+//         auto dfs = [&] (auto &dfs, int node, vector<int> &vis, vector<int> &pathVisited) -> bool {
+//             vis[node] = 1;
+//             pathVisited[node] = 1;
+
+//             for(auto &neighbour : graph[node]) {
+//                 if(vis[neighbour] == 0) {
+//                     if(dfs(dfs, neighbour, vis, pathVisited) == true) return true;
+//                 } else if(pathVisited[neighbour] == 1) return true;
+//             } 
+//             pathVisited[node] = 0;
+//             return false;
+//         };
+
+//         for(int i = 0 ; i < n ; i++) {
+//             vector<int> vis(n, 0);
+//             vector<int> pathVisited(n, 0);
+//             if(dfs(dfs, i, vis, pathVisited) == false) ans.push_back(i); 
+//         }
+//         return ans;
+//     }
+// };
