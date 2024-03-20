@@ -1,0 +1,119 @@
+https://leetcode.com/problems/is-graph-bipartite/description/
+
+
+// union find
+
+// class DisjointSet {
+//     public:
+//         vector<int> parent, sz;
+//         int components;
+
+//         DisjointSet(int n) {
+//             components = n;
+
+//             sz.resize(n, 1);
+//             parent.resize(n);
+
+//             for(int i = 0 ; i < n ; i++) parent[i] = i;
+//         }
+
+//         int find(int u) {
+//             if(u == parent[u]) return u;
+//             return parent[u] = find(parent[u]);
+//         }
+
+//         void merge(int u, int v) {
+//             int parent_u = find(u);
+//             int parent_v = find(v);
+
+//             if(parent_u == parent_v) return;
+
+//             if(sz[parent_u] < sz[parent_v]) {
+//                 parent[parent_u] = parent_v;
+//                 sz[parent_v] += sz[parent_u];
+//             } else {
+//                 parent[parent_v] = parent_u;
+//                 sz[parent_u] += sz[parent_v];
+//             }
+
+//             components--;
+//         }
+
+//         bool isConnected(int u, int v) {
+//             return (parent[u] == parent[v]);
+//         }
+
+//         int getComponents() {
+//             return components;
+//         }
+// };
+
+// class Solution {
+// public:
+//     bool isBipartite(vector<vector<int>>& graph) {
+//         int n = graph.size();
+//         DisjointSet ds(n);
+
+//         vector<int> vis(n, 0);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int parent = i;
+//             for(int j = 0 ; j < graph[i].size() ; j++) {
+//                 int first_adjacent_node_of_parent = graph[i][0];
+//                 int current_adjacent_node_of_parent = graph[i][j];
+
+//                 // For the first node, this will not work. For further iterations, 
+//                 // if we find the parent and its adjacent node in same group, then return false
+//                 if(ds.find(parent) == ds.find(current_adjacent_node_of_parent)) return false;
+
+//                 // as parent and its adj nodes cannot be in same group, so we are merging all the adj nodes in one group  
+//                 // and parent is in other group. We are not merging the parent here.
+//                 ds.merge(first_adjacent_node_of_parent, current_adjacent_node_of_parent);
+//             }
+//         }
+//         return true;
+//     }
+// };
+
+
+
+
+
+
+
+// dfs  (2 coloring problem)
+
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int> color(n, -1);
+        
+        auto dfs = [&] (auto &dfs, int node, int c) -> bool {
+            color[node] = c;
+
+            for(auto& neighbour : graph[node]) {
+                if(color[neighbour] == color[node]) return false;
+
+                if(color[neighbour] == -1) {
+                    // here we cannot write " return dfs(dfs, neighbour, 1-c); "
+                    // because if this dfs() call is true for one neighbour, 
+                    // it will not necessarily be true for all other neighbours, 
+                    // so if current dfs(dfs, neighbour_1, 1-c) is true, 
+                    // we need to check for other neighbours dfs(dfs, neighbour_2, 1-c)
+                    // But if dfs(dfs, neighbour_1, 1-c) == false, then we don't need to check for other 
+                    // neighbour also and we can directly return false
+                    if(dfs(dfs, neighbour, 1 - c) == false) return false;
+                }
+            }
+            return true;
+        };
+
+        for(int i = 0 ; i < n ; i++) {
+            if(color[i] == -1) {
+                if(dfs(dfs, i, 0) == false) return false;;
+            }
+        }
+        return true;
+    }
+};
