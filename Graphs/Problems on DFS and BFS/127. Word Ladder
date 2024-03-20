@@ -26,13 +26,13 @@ public:
             q.pop();
             // s.erase(word);       // do not erase it here (will be deleted one by one)
             
+            if(word == endWord) return c;
+            
             for(int ch = 0 ; ch < 26 ; ch++) {
                 for(int i = 0 ; i < word.length() ; i++) {
                     string temp = word;
                     if(temp[i] == ch + 'a') continue;
                     temp[i] = ch + 'a';
-
-                    if(temp == endWord) return c + 1;
 
                     if(s.find(temp) != s.end()) {
                         q.push({temp, c + 1});
