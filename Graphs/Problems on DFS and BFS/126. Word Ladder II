@@ -111,7 +111,12 @@ public:
 //                 string word = vec.back();
 
 //                 if(word == endWord) {
-//                     ans.push_back(vec);
+//                     if(ans.empty()) {
+//                         ans.push_back(vec);
+//                     }
+//                     else if(ans[0].size() == vec.size()) {
+//                         ans.push_back(vec);
+//                     }
 //                 }
 
 //                 for(int i = 0 ; i < word.length() ; ++i) {
