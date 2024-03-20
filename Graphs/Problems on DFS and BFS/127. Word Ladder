@@ -2,7 +2,9 @@ https://leetcode.com/problems/word-ladder/description/
 
 
 // bfs
-// delete the word from the set inside the if(s.find(temp) != s.end()) block because in this, all the words that were found in dict will be deleted together. If we write s.erase(word) outside (after q.pop()), then the words will be deleted one by one and the if(s.find(temp) != s.end()) will take more time to find because there are more elements in the set. Whereas if we delete from set initially, then all the words are deleted together and then the set size will be small and it will take les time to find the word in if(s.find(temp) != s.end())
+// delete the word from the set inside the if(s.find(temp) != s.end()) block because in this, all the words that were found in dict will be deleted together. 
+// If we write s.erase(word) outside (after q.pop()), then the words will be deleted one by one and the if(s.find(temp) != s.end()) will take more time to find because there are more elements in the set. 
+// Whereas if we delete from set initially, then all the words are deleted together and then the set size will be small and it will take les time to find the word in if(s.find(temp) != s.end())
 
 class Solution {
 public:
