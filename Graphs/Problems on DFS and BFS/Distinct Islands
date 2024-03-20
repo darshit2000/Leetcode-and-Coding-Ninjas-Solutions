@@ -1,0 +1,37 @@
+https://www.codingninjas.com/studio/problems/distinct-islands_630460?leftPanelTabValue=PROBLEM
+
+
+#include <bits/stdc++.h>
+
+int distinctIslands(int** arr, int n, int m)
+{
+    //Write your code here
+    vector<vector<int>> vis(n, vector<int>(m, 0));
+    vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+    set<vector<pair<int,int>>> s;
+
+    auto dfs = [&] (auto &dfs, int row, int col, int row0, int col0, vector<pair<int,int>> &v) -> void {
+        vis[row][col] = 1;
+        v.push_back({row - row0, col - col0});
+
+        for(auto &d : dir) {
+            int nrow = row + d[0];
+            int ncol = col + d[1];
+
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && vis[nrow][ncol] == 0 && arr[nrow][ncol] == 1) {
+                dfs(dfs, nrow, ncol, row0, col0, v);
+            }
+        }
+    };
+
+    for(int i = 0 ; i < n ; i++) {
+        for(int j = 0 ; j < m ; j++) {
+            if(vis[i][j] == 0 && arr[i][j] == 1) {
+                vector<pair<int,int>> v;
+                dfs(dfs, i, j, i, j, v);
+                s.insert(v);
+            }
+        }
+    }
+    return s.size();
+}
