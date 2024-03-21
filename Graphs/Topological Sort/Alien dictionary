@@ -1,0 +1,46 @@
+string getAlienLanguage(vector<string> &dictionary, int tot)
+{
+    // Write your code here.
+    int n = dictionary.size();
+    vector<unordered_set<int>> adj(tot);
+    vector<int> vis(tot, 0);
+    vector<char> ans;
+    
+    for(int i = 0 ; i < n ; i++) {
+        for(int j = i + 1 ; j < n ; j++) {
+            string word1 = dictionary[i];
+            string word2 = dictionary[j];
+            int mn = min(word1.length(), word2.length());
+
+            int k = 0;
+            while(k < mn) {
+                if(word1[k] != word2[k]) break;
+                k++;
+            }
+
+            if (k < mn && word1[k] != word2[k]) {
+                adj[word1[k] - 'a'].insert(word2[k] - 'a');
+            }
+        }
+    }
+
+    auto dfs = [&] (auto &dfs, char node) -> void {
+        vis[node - 'a'] = 1;
+
+        for(int n : adj[node - 'a']) {
+            if(vis[n] == 0) {
+                dfs(dfs, n + 'a');
+            }
+        }
+        ans.push_back(node);
+    };
+
+    for(int i = 0 ; i < tot ; i++) {
+        if(vis[i] == 0) {
+            dfs(dfs, i+'a');
+        }
+    }
+
+    string str(ans.rbegin(), ans.rend());
+    return str;
+}
