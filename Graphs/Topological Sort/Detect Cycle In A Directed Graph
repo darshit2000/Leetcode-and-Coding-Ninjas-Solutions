@@ -1,0 +1,31 @@
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+  // Write your code here.
+  vector<vector<int>> adj(n+1);
+  vector<int> vis(n+1, 0);
+  vector<int> pathVisited(n+1, 0);
+
+  for(int i = 0  ; i < edges.size() ; i++) {
+    adj[edges[i].first].push_back(edges[i].second);
+  }
+
+  auto dfs = [&] (auto &dfs, int node) -> bool {
+    vis[node] = 1;
+    pathVisited[node] = 1;
+
+    for(auto&neighbour : adj[node]) {
+      if(vis[neighbour] == 0) {
+        if(dfs(dfs, neighbour) == true) return true;
+      } else if(pathVisited[neighbour] == 1) return true;
+    }
+
+    pathVisited[node] = 0;
+    return false;
+  };
+
+  for(int i = 0 ; i < n ; i++) {
+    if(vis[i] == 0) {
+      if(dfs(dfs, i) == true) return true;
+    }
+  }
+  return false;
+}
