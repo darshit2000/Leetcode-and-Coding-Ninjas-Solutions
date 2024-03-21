@@ -1,0 +1,32 @@
+https://www.codingninjas.com/studio/problems/topological-sorting_973003?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
+
+vector<int> topologicalSort(vector<vector<int>> &graph, int edges, int nodes) {
+    // Write your code here!
+    vector<int> ans;
+    vector<vector<int>> adj(nodes);
+    vector<int> indegree(nodes, 0);
+    queue<int> q;
+
+    for(int i = 0 ; i < edges ; i++) {
+        adj[graph[i][0]].push_back(graph[i][1]);
+        indegree[graph[i][1]]++;
+    }
+
+    for(int i = 0 ; i < nodes ; i++) {
+        if(indegree[i] == 0) q.push(i);
+    }
+
+    while(!q.empty()) {
+        int curr = q.front();
+        q.pop();
+
+        ans.push_back(curr);
+
+        for(int neighbour : adj[curr]) {
+            indegree[neighbour]--;
+            if(indegree[neighbour] == 0) q.push(neighbour);
+        }
+    }
+    
+    return ans;
+}
