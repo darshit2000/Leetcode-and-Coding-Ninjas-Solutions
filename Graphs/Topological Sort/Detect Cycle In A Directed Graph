@@ -1,3 +1,6 @@
+https://www.codingninjas.com/studio/problems/detect-cycle-in-a-directed-graph_1062626?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+
 int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
   // Write your code here.
   vector<vector<int>> adj(n+1);
