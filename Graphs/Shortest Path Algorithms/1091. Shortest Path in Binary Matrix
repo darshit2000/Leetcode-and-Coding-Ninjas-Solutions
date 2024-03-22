@@ -1,0 +1,90 @@
+https://leetcode.com/problems/shortest-path-in-binary-matrix/description/
+
+
+// simple bfs   (optimal in this case as the distance are increasing only by 1)
+
+class Solution {
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+
+        if(grid[0][0] != 0 || grid[n-1][n-1] != 0) return -1;
+
+        vector<vector<int>> dir = {{1,0}, {-1,0}, {0,1}, {0,-1}, {1,1}, {-1,-1}, {-1,1}, {1,-1}};
+        queue<pair<pair<int,int>,int>> q;
+        vector<vector<int>> vis(n, vector<int>(n,0));
+
+        q.push({{0,0}, 1});
+
+        while(!q.empty()) {
+            int row = q.front().first.first;
+            int col = q.front().first.second;
+            int dist = q.front().second;
+
+            if(row == n-1 && col == n-1) return dist;
+
+            q.pop();
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n && vis[nrow][ncol] == 0 && grid[nrow][ncol] == 0) {
+                    q.push({{nrow,ncol}, dist + 1});
+                    vis[nrow][ncol] = 1;
+                }
+            }
+        }
+        return -1;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+// dijkstra (not optimal in this case because the distance are increasing only by one, so queue will by default store the 
+// distances in sorted order, so no need to take extra logn factor)
+
+// class Solution {
+// public:
+//     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+//         int n = grid.size();
+
+//         if(grid[0][0] != 0 || grid[n-1][n-1] != 0) return -1;
+
+//         vector<vector<int>> dir = {{1,0}, {-1,0}, {0,1}, {0,-1}, {1,1}, {-1,-1}, {-1,1}, {1,-1}};
+//         priority_queue<pair<int, pair<int,int>>, vector<pair<int, pair<int,int>>>, greater<pair<int, pair<int,int>>>> pq;
+//         vector<vector<int>> dist(n, vector<int>(n,INT_MAX));
+
+//         pq.push({1, {0,0}});
+
+//         while(!pq.empty()) {
+//             int row = pq.top().second.first;
+//             int col = pq.top().second.second;
+//             int steps = pq.top().first;
+
+//             if(row == n-1 && col == n-1) return steps;
+
+//             pq.pop();
+
+//             for(auto& d : dir) {
+//                 int nrow = row + d[0];
+//                 int ncol = col + d[1];
+
+//                 if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n && grid[nrow][ncol] == 0) {
+//                     if(dist[nrow][ncol] > steps + 1) {
+//                         dist[nrow][ncol] = steps + 1;
+//                         pq.push({steps + 1, {nrow, ncol}});
+//                     }
+//                 }
+//             }
+//         }
+//         return -1;
+//     }
+// };
