@@ -1,0 +1,37 @@
+https://www.codingninjas.com/studio/problems/single-source-shortest-path_8416371?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+
+// bfs
+
+vector<int> shortestPath(int n, vector<vector<int>>&edges, int src) {
+    // Write your code here.
+    vector<vector<int>> adj(n);
+    queue<pair<int,int>> q;
+    vector<int>vis(n, 0);
+    vector<int> ans(n, -1);
+    
+    for(auto & e : edges) {
+        adj[e[0]].push_back(e[1]);
+        adj[e[1]].push_back(e[0]);
+    }
+
+    q.push({src,0});
+    vis[src] = 1;
+    ans[src] = 0;
+
+    while(!q.empty()) {
+        int node = q.front().first;
+        int len = q.front().second;
+        q.pop();
+
+        for(int neighbour : adj[node]) {
+            if(vis[neighbour] == 0) {
+                ans[neighbour] = len + 1;
+                q.push({neighbour, len + 1});
+                vis[neighbour] = 1;
+            }
+        }
+    }
+    return ans;
+}
