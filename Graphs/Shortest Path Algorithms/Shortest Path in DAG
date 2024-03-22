@@ -1,0 +1,117 @@
+https://www.codingninjas.com/studio/problems/shortest-path-in-dag_8381897?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+// topo sort can be used to find the shortest path in DAG, for cyclic graph, dijkstra can be used
+
+vector<int> shortestPathInDAG(int n, int m, vector<vector<int>> &edges)
+{
+    // Write your code here
+    vector<vector<pair<int,int>>> adj(n);
+    vector<int> dist(n, INT_MAX);
+    vector<int> vis(n, 0);
+    stack<int> stk;
+    
+    for(auto & e : edges) {
+        adj[e[0]].push_back({e[1], e[2]});
+    }
+
+    dist[0] = 0;
+
+    // simple dfs to find topo sort
+    // O(V+E)
+    auto dfs = [&] (auto &dfs, int node) -> void {
+        vis[node] = 1;
+
+        for(auto p : adj[node]) {
+            int neighbour = p.first;
+
+            if(!vis[neighbour]) {
+                dfs(dfs, neighbour);
+            }
+        }
+
+        stk.push(node);
+    };
+
+    int src = 0;
+    // ony one dfs call is required as we need to find the shortest distance from the src only.
+    dfs(dfs, src);
+
+    // we will keep popping the stk until we find that the first element is not the source, because as this is the
+    // topo ordereing, if the top elements are not source, then anyways they cannot be reached from the source and 
+    // so, we will keep popping them.
+    while(!stk.empty() && stk.top() != src) stk.pop();
+
+    // relax the edges one by one by taking the elements one by one from the stack
+    // O(V+E)
+    while(!stk.empty()) {
+        int node = stk.top();
+        stk.pop();
+
+        for(auto p : adj[node]) {
+            int neighbour = p.first;
+            int wt = p.second;
+
+            if(dist[neighbour] > wt + dist[node]) {
+                dist[neighbour] = wt + dist[node];
+            }
+        }
+    }
+    
+
+    // for disconnected components / nodes which are not reachabel from 0
+    for(int i = 0 ; i < n ; i++){
+        if(dist[i] == INT_MAX){
+            dist[i] = -1;
+        }
+    }
+    return dist;
+}
+
+
+
+
+
+
+
+
+// bfs
+
+// vector<int> shortestPathInDAG(int n, int m, vector<vector<int>> &edges)
+// {
+//     // Write your code here
+//     vector<vector<pair<int,int>>> adj(n);
+//     queue<pair<int,int>> q;
+//     vector<int> ans(n, INT_MAX);
+    
+//     for(auto & e : edges) {
+//         adj[e[0]].push_back({e[1], e[2]});
+//     }
+
+//     q.push({0,0});
+//     ans[0] = 0;
+
+//     while(!q.empty()) {
+//         int node = q.front().first;
+//         int distTillNow = q.front().second;
+//         q.pop();
+
+//         for(auto p : adj[node]) {
+//             if(ans[p.first] > p.second + distTillNow) {
+//                 ans[p.first] = p.second + distTillNow;
+//                 q.push({p.first, ans[p.first]});
+//             }
+//         }
+//     }
+
+//     // for disconnected components / nodes which are not reachabel from 0
+//     for(int i=0;i<n;i++){
+//         if(ans[i]==INT_MAX){
+//             ans[i]=-1;
+//         }
+//     }
+//     return ans;
+// }
+
+
+
