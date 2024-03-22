@@ -1,0 +1,89 @@
+https://www.codingninjas.com/studio/problems/dijkstra's-shortest-path_985358?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+// using pq
+
+vector<int> dijkstra(vector<vector<int>> &edge, int vertices, int edges, int source)
+{
+    // Write your code here.
+    // 'edge' contains {u, v, distance} vectors.
+    vector<vector<pair<int,int>>> adj(vertices);
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    vector<int> dist(vertices, INT_MAX);
+
+    for(auto& e : edge) {
+        int u = e[0];
+        int v = e[1];
+        int wt = e[2];
+
+        adj[u].push_back({v,wt});
+        adj[v].push_back({u,wt});
+    }
+
+    dist[source] = 0;
+    pq.push({0, source});
+
+    while(!pq.empty()) {
+        int node = pq.top().second;
+        int distToReachNode = pq.top().first;
+
+        pq.pop();
+
+        for(auto& p : adj[node]) {
+            int neighbour = p.first;
+            int wt = p.second;
+
+            if(dist[neighbour] > distToReachNode + wt) {
+                dist[neighbour] = distToReachNode + wt;
+                pq.push({dist[neighbour], neighbour});
+            }
+        }
+    }
+    return dist;
+}
+
+
+
+
+
+// using sets
+
+// vector<int> dijkstra(vector<vector<int>> &edge, int vertices, int edges, int source)
+// {
+//     // Write your code here.
+//     // 'edge' contains {u, v, distance} vectors.
+//     vector<vector<pair<int,int>>> adj(vertices);
+//     set<pair<int,int>> st;
+//     vector<int> dist(vertices, INT_MAX);
+
+//     for(auto& e : edge) {
+//         int u = e[0];
+//         int v = e[1];
+//         int wt = e[2];
+
+//         adj[u].push_back({v,wt});
+//         adj[v].push_back({u,wt});
+//     }
+
+//     dist[source] = 0;
+//     st.insert({0, source});
+
+//     while(!st.empty()) {
+//         int node = (*st.begin()).second;
+//         int distToReachNode = (*st.begin()).first;
+
+//         st.erase({distToReachNode, node});
+
+//         for(auto& p : adj[node]) {
+//             int neighbour = p.first;
+//             int wt = p.second;
+
+//             if(dist[neighbour] > distToReachNode + wt) {
+//                 if(dist[neighbour] != INT_MAX) st.erase({dist[neighbour], neighbour});
+//                 dist[neighbour] = distToReachNode + wt;
+//                 st.insert({dist[neighbour], neighbour});
+//             }
+//         }
+//     }
+//     return dist;
+// }
