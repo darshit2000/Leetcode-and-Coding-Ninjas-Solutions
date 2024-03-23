@@ -1,0 +1,99 @@
+https://leetcode.com/problems/cheapest-flights-within-k-stops/description/
+
+
+
+// Take priority based on the number on stops and not on total cost {stops, {city, cost}} because here the 
+// judging criteria is that we need to take min number of stops and not the min dist.
+// If the stops are <= k, then we can check of min dist
+
+// queue can be used in case of pq because the number of stops are increasing by 1 
+// and so there is no need of pq and simple queue will work.
+
+// queue (bfs)
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<int> dist(n, INT_MAX);
+        
+        queue<pair<int, pair<int, long long>>> q;
+        vector<vector<pair<int,long long>>> adj(n);
+
+        for(auto& e : flights) {
+            int source = e[0];
+            int destination = e[1];
+            long long c = e[2];
+
+            adj[source].push_back({destination, c});
+        }
+
+        q.push({-1, {src, 0}});
+
+        while(!q.empty()) {
+            int city = q.front().second.first;
+            int stops = q.front().first;
+            long long cost = q.front().second.second;
+
+            q.pop();
+
+            for(auto& p : adj[city]) {
+                int neighbour = p.first;
+                long long c = p.second;
+
+                if(dist[neighbour] > cost + c && stops + (neighbour != dst) < k) {
+                    dist[neighbour] = cost + c;
+                    q.push({stops + (neighbour != dst), {neighbour, dist[neighbour]}});
+                }
+            }
+        }
+        
+        return (dist[dst] != INT_MAX) ? dist[dst] : -1;
+    }
+};
+
+
+
+
+
+
+// pq
+
+// class Solution {
+// public:
+//     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+//         vector<int> dist(n, INT_MAX);
+//         // {stops, {city, cost}}
+//         priority_queue<pair<int, pair<int, long long>>, vector<pair<int, pair<int, long long>>>, greater<pair<int, pair<int, long long>>>> pq;
+//         vector<vector<pair<int,long long>>> adj(n);
+
+//         for(auto& e : flights) {
+//             int source = e[0];
+//             int destination = e[1];
+//             long long c = e[2];
+
+//             adj[source].push_back({destination, c});
+//         }
+
+//         pq.push({-1, {src, 0}});
+
+//         while(!pq.empty()) {
+//             int city = pq.top().second.first;
+//             int stops = pq.top().first;
+//             long long cost = pq.top().second.second;
+
+//             pq.pop();
+
+//             for(auto& p : adj[city]) {
+//                 int neighbour = p.first;
+//                 long long c = p.second;
+
+//                 if(dist[neighbour] > cost + c && stops + (neighbour != dst) < k) {
+//                     dist[neighbour] = cost + c;
+//                     pq.push({stops + (neighbour != dst), {neighbour, dist[neighbour]}});
+//                 }
+//             }
+//         }
+        
+//         return (dist[dst] != INT_MAX) ? dist[dst] : -1;
+//     }
+// };
