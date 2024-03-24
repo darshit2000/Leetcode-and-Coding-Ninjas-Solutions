@@ -1,0 +1,28 @@
+https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/description/
+
+
+class Solution {
+public:
+    int maximumLengthSubstring(string s) {
+        vector<int> v(26, 0);
+        
+        int left = 0;
+        int right = 0;
+        int n = s.length();
+        int mx = 0;
+        
+        while(right < n) {
+            v[s[right] - 'a']++;
+            
+            while(v[s[right] - 'a'] > 2) {
+                v[s[left] - 'a']--;
+                left++;
+            }
+            
+            mx = max(mx, right - left + 1);
+            
+            right++;
+        }
+        return mx;
+    }
+};
