@@ -1,0 +1,149 @@
+https://leetcode.com/problems/longest-common-suffix-queries/description/
+
+
+class Node {
+    public:
+        Node* links[26];
+        int minLen, index;
+
+        Node() {
+            minLen = INT_MAX;
+            index = -1;
+
+            for(int i = 0 ; i < 26 ; i++) links[i] = NULL;
+        }
+};
+
+class Trie {
+    public:
+        Node* root;
+
+        Trie() {
+            root = new Node();
+        }
+        
+        Node* getNode() {
+            Node* newNode = new Node();   
+            newNode->minLen = INT_MAX;
+            newNode->index = -1;
+            for(int i = 0 ; i < 26 ; i++) newNode->links[i] = NULL;
+
+            return newNode;
+        }
+
+        void put(string word, int index) {
+            Node* curr = root;
+            int n = word.length();
+            for(int i = 0 ; i < n ; i++) {
+                char ch = word[i];
+
+                if(curr->links[ch - 'a'] == NULL) {
+                    curr->links[ch - 'a'] = getNode(); 
+                } 
+                curr = curr->links[ch - 'a'];
+                if(curr->minLen > n) {
+                    curr->minLen = n;
+                    curr->index = index;
+                }
+            }
+        }
+
+        int findInd(string word) {
+            Node* curr = root;
+            for(int i = 0 ; i < word.length() ; i++) {
+                char ch = word[i];
+
+                if(curr->links[ch - 'a'] == NULL)  break;
+
+                curr = curr->links[ch - 'a'];
+            }
+            return curr->index;
+        }
+};
+
+class Solution {
+public:
+    vector<int> stringIndices(vector<string>& wordsContainer, vector<string>& wordsQuery) {
+        int n1 = wordsContainer.size();
+        int n2 = wordsQuery.size();
+        vector<int> ans(n2);
+        Trie* trie = new Trie();
+        int tmpIdx = 0;
+        int mn = INT_MAX;
+        
+        for(int i = 0 ; i < n1 ; i++) {
+            string word = wordsContainer[i];
+            reverse(word.begin(), word.end());
+            trie->put(word, i);
+            if(word.length() < mn) {
+                mn = word.length();
+                tmpIdx = i;
+            }
+        }
+
+        for(int i = 0 ; i < n2 ; i++) {
+            string word = wordsQuery[i];
+            reverse(word.begin(), word.end());
+            int idx = trie->findInd(word);
+            ans[i] = (idx == -1) ? tmpIdx : idx;
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+// wrong answer
+
+// class Solution {
+// public:
+//     vector<int> getLPS(string s) {
+//         int n = s.length();
+//         vector<int> lps(n,0);
+
+//         for(int i = 1 ; i < n ; i++) {
+//             int prevIndex = lps[i-1];
+
+//             while(prevIndex > 0 && s[prevIndex] != s[i]) {
+//                 prevIndex = lps[prevIndex-1];
+//             }
+
+//             lps[i] = prevIndex + (s[prevIndex] == s[i] ? 1 : 0);
+//         }
+//         return lps;
+//     }
+    
+//     vector<int> stringIndices(vector<string>& wordsContainer, vector<string>& wordsQuery) {
+//         vector<int> ans;
+//         int n1 = wordsContainer.size();
+//         int n2 = wordsQuery.size();
+        
+//         for(int i = 0 ; i < n2 ; i++) {
+//             string curr = string(wordsQuery[i].rbegin(), wordsQuery[i].rend());
+//             pair<int,pair<int,int>> currAns = {INT_MIN,{INT_MAX,-1}};
+            
+//             for(int j = 0 ; j < n1 ; j++) {
+//                 string curr2 = string(wordsContainer[j].rbegin(), wordsContainer[j].rend());
+                
+//                 string tmp = curr;
+//                 tmp += "#";
+//                 tmp += curr2;
+                
+//                 vector<int> lps = getLPS(tmp);
+                
+//                 for(int k = tmp.length() - 1 ; k >= curr.length()  ; k--) {
+//                     if(lps[k] > currAns.first) {
+//                         currAns = {lps[k], {curr2.length(), j}};
+//                     } else if(lps[k] == currAns.first && curr2.length() < currAns.second.first) {
+//                         currAns = {lps[k], {curr2.length(), j}};
+//                     }
+//                 }
+//             }
+//             ans.push_back(currAns.second.second);
+//         }
+//         return ans;
+//     }
+// };
