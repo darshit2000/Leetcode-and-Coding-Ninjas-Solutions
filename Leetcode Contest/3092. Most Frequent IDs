@@ -1,0 +1,56 @@
+https://leetcode.com/problems/most-frequent-ids/description/
+
+
+
+// using Max Heap
+
+class Solution {
+public:
+    vector<long long> mostFrequentIDs(vector<int>& nums, vector<int>& freq) {
+        unordered_map<long long,long long> mpp;
+        priority_queue<pair<long long,long long>> maxHeap;
+        int n = nums.size();
+        vector<long long> ans;
+        
+        for(int i = 0 ; i < n ; i++) {
+            mpp[nums[i]] += (long long)freq[i];
+            maxHeap.push({mpp[nums[i]], nums[i]});
+
+            while(!maxHeap.empty()) {
+                // Heap ma je max freq nu element che, agar aeni freq update nathi thai (je map maathi khabr padse), toh aene ans ma naakhi do
+                // else aene pop kri do
+                if(mpp[maxHeap.top().second] == maxHeap.top().first) {
+                    ans.push_back(maxHeap.top().first);
+                    break;
+                } else {
+                    maxHeap.pop();
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+// using map and set
+
+// class Solution {
+// public:
+//     vector<long long> mostFrequentIDs(vector<int>& nums, vector<int>& freq) {
+//         unordered_map<long long,long long> mpp;
+//         set<pair<long long,long long>> st;
+//         int n = nums.size();
+//         vector<long long> ans;
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             st.erase({mpp[nums[i]], nums[i]});
+//             mpp[nums[i]] += (long long)freq[i];
+//             st.insert({mpp[nums[i]], nums[i]});
+//             ans.push_back((*st.rbegin()).first);
+//         }
+//         return ans;
+//     }
+// };
