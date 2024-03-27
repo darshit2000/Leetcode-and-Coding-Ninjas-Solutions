@@ -1,0 +1,30 @@
+https://www.naukri.com/code360/problems/floyd-warshall_2041979?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+int floydWarshall(int n, int m, int src, int dest, vector<vector<int>> &edges) {
+    // Write your code here.
+    vector<vector<int>> dist(n+1, vector<int>(n+1, 1e9));
+
+    for(auto& e : edges) {
+        int u = e[0];
+        int v = e[1];
+        int wt = e[2];
+
+        dist[u][v] = wt;
+    }
+
+    for(int i = 1 ; i <= n ; i++) {
+        dist[i][i] = 0;
+    }
+
+    for(int via = 1 ; via <= n ; via++) {
+        for(int i = 1 ; i <= n ; i++) {
+            for(int j = 1 ; j <= n ; j++) {
+                if(dist[i][via] != 1e9 && dist[via][j] != 1e9) {
+                    dist[i][j] = min(dist[i][j], dist[i][via] + dist[via][j]);
+                }
+            }
+        }
+    }
+    return dist[src][dest];
+}
