@@ -2,19 +2,28 @@ https://leetcode.com/problems/first-missing-positive/description/?envType=daily-
 
 
 
+// elemets of array as index because here we only need the values [1,n]
+
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
         int n = nums.size();
 
+        // invalid numbers
         for(int i = 0 ; i < n ; i++) {
-            while(nums[i] >= 1 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
-                swap(nums[i], nums[nums[i] - 1]);  
+            if(nums[i] <= 0 || nums[i] > n) nums[i] = n+1;
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = abs(nums[i]) - 1;
+
+            if(idx >= 0 && idx < n && nums[idx] > 0) {
+                nums[idx] = nums[idx] * -1;
             }
         }
 
         for(int i = 0 ; i < n ; i++) {
-            if(nums[i] != i+1) return i+1;
+            if(nums[i] > 0) return i+1;
         }
         return n+1;
     }
@@ -22,6 +31,33 @@ public:
 
 
 
+
+
+
+
+// cycle sort 1
+
+// class Solution {
+// public:
+//     int firstMissingPositive(vector<int>& nums) {
+//         int n = nums.size();
+
+//         for(int i = 0 ; i < n ; i++) {
+//             while(nums[i] >= 1 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
+//                 swap(nums[i], nums[nums[i] - 1]);  
+//             }
+//         }
+
+//         for(int i = 0 ; i < n ; i++) {
+//             if(nums[i] != i+1) return i+1;
+//         }
+//         return n+1;
+//     }
+// };
+
+
+
+// cycle sort 2
 
 // class Solution {
 // public:
