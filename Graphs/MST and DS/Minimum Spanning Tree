@@ -1,0 +1,65 @@
+https://www.naukri.com/code360/problems/minimum-spanning-tree_631769?leftPanelTabValue=PROBLEM
+
+
+#include <algorithm>
+
+class DisjointSet {
+  public:
+    vector<int> parent, size;
+    int components;
+
+    DisjointSet(int n) {
+      components = n;
+      parent.resize(n);
+      size.resize(n, 1);
+
+      for(int i = 0 ; i < n ; i++) parent[i] = i;
+    }
+
+    int find(int u) {
+      if(parent[u] == u) return u;
+      return parent[u] = find(parent[u]);
+    }
+
+    void merge(int u, int v) {
+      int parent_u = find(u);
+      int parent_v = find(v);
+
+      if(parent_u == parent_v) return;
+
+      if(size[parent_u] < size[parent_v]) {
+        parent[parent_u] = parent_v;
+        size[parent_v] += size[parent_u];
+      } else {
+        parent[parent_v] = parent_u;
+        size[parent_u] += size[parent_v];
+      }
+      components--;
+    }
+};
+
+int minimumSpanningTree(vector<vector<int>>& edges, int n)
+{
+  /*
+    Don't write main().
+    Don't read input, it is passed as function argument.    
+    No need to print anything.
+    Taking input and printing output is handled automatically.
+  */
+
+  int mn = 0;
+  DisjointSet ds(n);
+  sort(edges.begin(), edges.end(), [](vector<int>& a, vector<int>& b) { return a[2] < b[2]; });
+
+  for(auto& e : edges) {
+    int u = e[0];
+    int v = e[1];
+    int wt = e[2];
+
+    if(ds.find(u) != ds.find(v)) {
+      ds.merge(u,v);
+      mn += wt;
+    }
+  }
+  return mn;
+}
