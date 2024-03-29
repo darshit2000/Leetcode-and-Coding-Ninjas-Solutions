@@ -1,0 +1,63 @@
+https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/description/?envType=daily-question&envId=2024-03-29
+
+
+
+#include <algorithm>
+
+// Method 1 (finding at most and then subtracting it from total)
+
+class Solution {
+public:
+    long long atMostButNotEqual(vector<int> &nums, int k, int mx) {
+        long long total = 0;
+        long long count = 0;
+        long long n = nums.size();
+
+        for(int left = 0, right = 0 ; right < n ; right++) {
+            if(nums[right] == mx) count++;
+
+            while(count >= k) {
+                if(nums[left] == mx) count--;
+                left++;
+            }
+
+            if(count < k) {
+                total += (right - left + 1);
+            }
+        }
+        return total;
+    }
+    long long countSubarrays(vector<int>& nums, int k) {
+        long long n = nums.size();
+        int mx = *max_element(nums.begin(), nums.end());
+        long long total = atMostButNotEqual(nums, k, mx);
+
+        return (n*(n+1))/2 - total;
+    }
+};
+
+
+
+
+// Method 2 (directly finding atleast) 
+
+// class Solution {
+// public:
+//     long long countSubarrays(vector<int>& nums, int k) {
+//         long long n = nums.size();
+//         int mx = *max_element(nums.begin(), nums.end());
+//         long long total = 0;
+//         long long count = 0;
+
+//         for(int left = 0, right = 0 ; right < n ; right++) {
+//             if(nums[right] == mx) count++;
+
+//             while(count >= k) {
+//                 total += (n - right);
+//                 if(nums[left] == mx) count--;
+//                 left++;
+//             }
+//         }
+//         return total;
+//     }
+// };
