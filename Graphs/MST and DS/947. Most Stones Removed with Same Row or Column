@@ -1,0 +1,274 @@
+https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/description/
+
+
+class DisjointSet {
+    public:
+        vector<int> parent, size;
+        int components;
+        int dsSize;
+
+        DisjointSet(int n) {
+            dsSize = n;
+            parent.resize(n);
+            size.resize(n,1);
+            components = n;
+
+            for(int i = 0 ; i < n ; i++) parent[i] = i;
+        }
+
+        int find(int u) {
+            if(u == parent[u]) return u;
+
+            return parent[u] = find(parent[u]);
+        }
+
+        void merge(int u, int v) {
+            int parent_u = find(u);
+            int parent_v = find(v);
+
+            if(parent_u == parent_v) return;
+
+            if(size[parent_u] < size[parent_v]) {
+                parent[parent_u] = parent_v;
+                size[parent_v] += size[parent_u];
+            } else {
+                parent[parent_v] = parent_u;
+                size[parent_u] += size[parent_v];
+            }
+            components--;
+        }
+
+        int totalComponents() {
+            return components;
+        }
+
+        // size[validComponent] will be aleast 2 because in 1 stone, the x coord and y coord will be combined.
+        // size[not valid component] will be 1 because there is not stone at that row/col.
+        int validComponents() {
+            int count = 0;
+            for(int i = 0 ; i < dsSize ; i++) {
+                // in (0,1), (1,0), (1,1) ->    0 1 2 3
+                // 0 combines with 3 (0,1)      // 0 combines with 3 (0,1)      // 0 combines with 3 (0,1)
+                /*
+                    0 <- 3
+                    ^-- 1 <- 2  
+
+                    So if we only do if(size[i] > 1) count++;, then size(0) = 4 & size[1] = 2. But we only need to count '0'
+                    So, first check if parent[i] == i
+                */
+                if(parent[i] == i && size[i] > 1) count++;
+            }
+            return count;
+        }
+};
+
+// DS 1     O(n) time   (striver)
+
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int n = stones.size();
+
+        int maxRow = 0, maxCol = 0;
+        for(auto it : stones) {
+            maxRow = max(maxRow, it[0]);
+            maxCol = max(maxCol, it[1]);
+        }
+
+        DisjointSet ds(maxRow + maxCol + 2);
+
+        for(int i = 0 ; i < n ; i++) {
+            int x = stones[i][0];
+            int y = stones[i][1];
+
+            ds.merge(x, y + maxRow + 1);
+        }
+
+        return n - ds.validComponents();
+    }   
+};
+
+
+
+
+// DS 2       O(n) time
+
+// class Solution {
+// public:
+//     int removeStones(vector<vector<int>>& stones) {
+//         int n = stones.size();
+//         DisjointSet ds(n);
+//         unordered_map<int, unordered_set<int>> adjRow, adjCol;
+//         vector<unordered_set<int>> adj(n);
+//         vector<int> vis(n, 0);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             adjRow[x].insert(i);
+//             adjCol[y].insert(i);
+//         }
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             for(int it : adjRow[x]) {
+//                 if(it != i) {
+//                     adj[i].insert(it);
+//                 }
+//             }
+//             for(int it : adjCol[y]) {
+//                 if(it != i) {
+//                     adj[i].insert(it);
+//                 }
+//             }
+//         }
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(auto& neighbour : adj[i]) {
+//                 ds.merge(i, neighbour);
+//             }
+//         }
+
+//         return n - ds.totalComponents();
+//     }   
+// };
+
+
+
+
+
+// DS 3     O(n^2) time
+
+// class Solution {
+// public:
+//     int removeStones(vector<vector<int>>& stones) {
+//         int n = stones.size();
+//         DisjointSet ds(n);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(i == j) continue;
+
+//                 if(stones[j][0] == x || stones[j][1] == y) {
+//                     ds.merge(i, j);
+//                 }
+//             }
+//         }
+
+//         return n - ds.totalComponents();
+//     }   
+// };
+
+
+
+
+// dfs 1    O(n) time
+
+// class Solution {
+// public:
+//     int removeStones(vector<vector<int>>& stones) {
+//         int n = stones.size();
+//         unordered_map<int, unordered_set<int>> adjRow, adjCol;
+//         vector<unordered_set<int>> adj(n);
+//         vector<int> vis(n, 0);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             adjRow[x].insert(i);
+//             adjCol[y].insert(i);
+//         }
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             for(int it : adjRow[x]) {
+//                 if(it != i) {
+//                     adj[i].insert(it);
+//                 }
+//             }
+//             for(int it : adjCol[y]) {
+//                 if(it != i) {
+//                     adj[i].insert(it);
+//                 }
+//             }
+//         }
+
+//         auto dfs = [&] (auto& dfs, int i) -> void {
+//             vis[i] = 1;
+
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             for(auto& neighbourIndex : adj[i]) {
+//                 if(vis[neighbourIndex] == 0) {
+//                     dfs(dfs, neighbourIndex);
+//                 }
+//             }
+//         };
+        
+//         int count = 0;
+//         for(int i = 0 ; i < n ; i++) {
+//             if(vis[i] == 0) {
+//                 dfs(dfs, i);
+//                 count++;
+//             }
+//         }
+//         return n - count;
+//     }   
+// };
+
+
+
+
+// dfs 2    O(n^2) time
+
+// class Solution {
+// public:
+//     int removeStones(vector<vector<int>>& stones) {
+//         int n = stones.size();
+//         vector<vector<int>> adj(n);
+//         vector<int> vis(n, 0);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(stones[j][0] == x || stones[j][1] == y) {
+//                     adj[i].push_back(j);
+//                 }
+//             }
+//         }
+
+//         auto dfs = [&] (auto& dfs, int i) -> void {
+//             vis[i] = 1;
+
+//             int x = stones[i][0];
+//             int y = stones[i][1];
+
+//             for(auto& neighbourIndex : adj[i]) {
+//                 if(vis[neighbourIndex] == 0) {
+//                     dfs(dfs, neighbourIndex);
+//                 }
+//             }
+//         };
+        
+//         int count = 0;
+//         for(int i = 0 ; i < n ; i++) {
+//             if(vis[i] == 0) {
+//                 dfs(dfs, i);
+//                 count++;
+//             }
+//         }
+//         return n - count;
+//     }   
+// };
