@@ -1,0 +1,21 @@
+https://leetcode.com/problems/shortest-subarray-with-or-at-least-k-i/description/
+
+
+
+class Solution {
+public:
+    int minimumSubarrayLength(vector<int>& nums, int k) {
+        int n = nums.size();
+        int mn = INT_MAX;
+        for(int i = 0 ; i < n ; i++) {
+            int curr = 0;
+            for(int j = i ; j < n ; j++) {
+                curr = curr | nums[j];
+                if(curr >= k) {
+                    mn = min(mn, j - i + 1);
+                }
+            }
+        }
+        return mn != INT_MAX ? mn : -1;
+    }
+};
