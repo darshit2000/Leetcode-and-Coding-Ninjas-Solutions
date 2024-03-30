@@ -1,0 +1,91 @@
+https://leetcode.com/problems/shortest-subarray-with-or-at-least-k-ii/description/
+
+
+
+class Solution {
+public:
+    int minimumSubarrayLength(vector<int>& nums, int k) {
+        int n = nums.size();
+        int mn = 1e9;
+        vector<int> v(32, 0);
+        long curr = 0;
+
+        for (int right = 0, left = 0; right < n; ++right) {
+            
+            for(int bit = 0 ; bit < 32 ; bit++) {
+                if((nums[right] & (1<<bit)) != 0) v[31-bit]++;
+            }
+
+            curr = 0;
+            for(int i = 0 ; i < 32 ; i++) {
+                if(v[31-i] > 0) curr += (long)pow(2,i);
+            }
+            
+            while (curr >= k && left <= right) {
+                mn = min(mn, right - left + 1);
+            
+                for(int bit = 0 ; bit < 32 ; bit++) {
+                    if((nums[left] & (1<<bit)) != 0) v[31-bit]--;
+                }
+
+                curr = 0;
+                for(int i = 0 ; i < 32 ; i++) {
+                    if(v[31-i] > 0) curr += (long)pow(2,i);
+                }
+                
+                left++;
+            }
+        }
+
+        return (mn != 1e9) ? mn : -1;
+    }
+};
+
+
+
+
+// TLE
+
+// class Solution {
+// public:
+//     int minimumSubarrayLength(vector<int>& nums, int k) {
+//         int n = nums.size();
+//         int min_length = INT_MAX;
+//         vector<int> v(32, 0);
+//         string s1 = "";
+
+//         for (int right = 0, left = 0; right < n; ++right) {
+//             bitset<32> b1(nums[right]);
+            
+//             s1 = "";
+//             for(int i = 31 ; i >= 0 ; i--) {
+//                 v[i] += b1[31-i];
+                
+//                 if(v[i] > 0) s1 = "1" + s1;
+//                 else if(v[i] == 0) s1 = "0" + s1;
+//             } 
+            
+//             bitset<32> b2(s1);
+            
+//             while (b2.to_ulong() >= k && left <= right) {
+//                 min_length = min(min_length, right - left + 1);
+                
+//                 bitset<32> b3(nums[left]);
+//                 s1 = "";
+                
+//                 for(int i = 31 ; i >= 0 ; i--) {
+//                     v[i] -= b3[31-i];
+                    
+//                     if(v[i] > 0) s1 = "1" + s1;
+//                     else s1= "0" + s1;
+//                 } 
+                
+//                 b2 = bitset<32>(s1);
+                
+//                 left++;
+//             }
+//         }
+
+//         return (min_length != INT_MAX) ? min_length : -1;
+//     }
+// };
