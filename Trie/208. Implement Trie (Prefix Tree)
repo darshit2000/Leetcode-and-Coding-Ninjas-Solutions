@@ -1,0 +1,76 @@
+https://leetcode.com/problems/implement-trie-prefix-tree/description/
+
+
+
+class Node {
+    public:
+        bool isEnd;
+        vector<Node*> links;
+
+        Node() {
+            isEnd = false;
+            links.resize(26);
+            for(int i = 0 ; i < 26 ; i++) links[i] = NULL;
+        }
+};
+
+class Trie {
+public:
+    Node* root;
+    Trie() {
+        root = new Node();
+    }
+    
+    void insert(string word) {
+        int n = word.length();
+        Node* curr = root;
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = word[i] - 'a';
+
+            if(curr->links[idx] == NULL) {
+                curr->links[idx] = new Node();
+            }
+            curr = curr->links[idx];
+        }
+        curr->isEnd = true;
+    }
+    
+    bool search(string word) {
+        int n = word.length();
+        Node* curr = root;
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = word[i] - 'a';
+
+            if(curr->links[idx] == NULL) {
+                return false;
+            }
+            curr = curr->links[idx];
+        }
+        return curr->isEnd;
+    }
+    
+    bool startsWith(string prefix) {
+        int n = prefix.length();
+        Node* curr = root;
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = prefix[i] - 'a';
+
+            if(curr->links[idx] == NULL) {
+                return false;
+            }
+            curr = curr->links[idx];
+        }
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
