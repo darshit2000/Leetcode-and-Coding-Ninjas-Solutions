@@ -1,0 +1,96 @@
+https://www.naukri.com/code360/problems/implement-trie_1387095?leftPanelTabValue=PROBLEM
+
+
+
+#include <bits/stdc++.h> 
+class Node {
+    public: 
+        vector<Node*> links;
+        int countW, countP;
+        bool isEnd;
+
+        Node() {
+            links.resize(26);
+            for(int i = 0 ; i < 26 ; i++) links[i] = NULL;
+            countW = 0;
+            countP = 0;
+            isEnd = false;
+        }
+};
+class Trie{
+
+    public:
+    Node* root;
+
+    Trie(){
+        // Write your code here.
+        root = new Node();
+    }
+
+    void insert(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int n = word.length();
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = word[i] - 'a';
+
+            if(curr->links[idx] == NULL) {
+                curr->links[idx] = new Node();
+            }
+
+            curr = curr->links[idx];
+            curr->countP++;
+        }
+        curr->isEnd = true;
+        curr->countW++;
+    }
+
+    int countWordsEqualTo(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int n = word.length();
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = word[i] - 'a';
+
+            if(curr->links[idx] == NULL) return 0;
+
+            curr = curr->links[idx];
+        }
+
+        return curr->countW;
+    }
+
+    int countWordsStartingWith(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int n = word.length();
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = word[i] - 'a';
+
+            if(curr->links[idx] == NULL) return 0;
+
+            curr = curr->links[idx];
+        }
+
+        return curr->countP;
+    }
+
+    void erase(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int n = word.length();
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = word[i] - 'a';
+            if (curr->links[idx] != NULL) {
+                curr = curr->links[idx];
+                curr->countP--;
+            } else return;
+        }
+        curr->isEnd = false;
+        curr->countW--;
+    }
+};
