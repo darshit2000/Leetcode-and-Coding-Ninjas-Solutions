@@ -1,0 +1,191 @@
+https://leetcode.com/problems/accounts-merge/description/
+
+
+
+class DisjointSet {
+    public:
+        vector<int> parent, size;
+        int components;
+
+        DisjointSet(int n){
+            components = n;
+            size.resize(n, 1);
+            parent.resize(n);
+
+            for(int i = 0 ; i < n ; i++) parent[i] = i;
+        }
+
+        int find(int u) {
+            if(u == parent[u]) return u;
+
+            return parent[u] = find(parent[u]);
+        }
+
+        void merge(int u, int v) {
+            int parent_u = find(u);
+            int parent_v = find(v);
+
+            if(parent_u == parent_v) return;
+
+            if(size[parent_u] < size[parent_v]) {
+                parent[parent_u] = parent_v;
+                size[parent_v] += size[parent_u];
+            } else {
+                parent[parent_v] = parent_u;
+                size[parent_u] += size[parent_v];
+            }
+
+            components--;
+        }
+
+        int totalComponents() {
+            return components;
+        }
+};
+
+
+
+// striver
+
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        int n = accounts.size();
+        DisjointSet ds(n);
+        vector<vector<string>> ans;
+        vector<vector<string>> adj(n);
+        unordered_map<string, int> mailMap;
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 1 ; j < accounts[i].size() ; j++) {
+                string mail = accounts[i][j];
+
+                if(mailMap.find(mail) == mailMap.end()) {
+                    mailMap[mail] = i;
+                } else {
+                    ds.merge(i, mailMap[mail]);
+                }
+            }
+        }
+
+        vector<vector<string>> v(n);
+        for(auto item : mailMap) {
+            string mail = item.first;
+            int parentIndex = ds.find(item.second);
+
+            v[parentIndex].push_back(mail);
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            if(v[i].size() == 0) continue;
+
+            sort(v[i].begin(), v[i].end());
+
+            vector<string> temp = {accounts[i][0]};
+            temp.insert(temp.end(), v[i].begin(), v[i].end());
+            ans.push_back(temp);
+        }
+
+        return ans;
+    }
+};
+
+
+
+
+// some mofification after ds.merge()
+
+// class Solution {
+// public:
+//     vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+//         int n = accounts.size();
+//         DisjointSet ds(n);
+//         vector<vector<string>> ans;
+//         vector<vector<string>> adj(n);
+//         unordered_map<string, int> mailMap;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 1 ; j < accounts[i].size() ; j++) {
+//                 string mail = accounts[i][j];
+
+//                 if(mailMap.find(mail) == mailMap.end()) {
+//                     mailMap[mail] = i;
+//                 } else {
+//                     ds.merge(i, mailMap[mail]);
+//                 }
+//             }
+//         }
+
+//         // enumerate all the components
+//         unordered_map<int, set<string>> mpp;
+//         for(int i = 0 ; i < n ; i++) {
+//             int ultimateParent = ds.find(i);
+
+//             for(int j = 1 ; j < accounts[i].size() ; j++) {
+//                 mpp[ultimateParent].insert(accounts[i][j]);
+//             }
+//         }
+
+//         for(auto item : mpp) {
+//             int idx = item.first;
+//             set<string> st = item.second;
+//             vector<string> temp;
+//             temp.push_back(accounts[idx][0]);
+//             temp.insert(temp.end(), st.begin(), st.end());
+//             ans.push_back(temp);
+//         }
+
+//         return ans;
+//     }
+// };
+
+
+
+// first try
+
+// class Solution {
+// public:
+//     vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+//         int n = accounts.size();
+//         DisjointSet ds(n);
+//         vector<vector<string>> ans;
+//         vector<vector<string>> adj(n);
+//         unordered_map<string, int> mailMap;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 1 ; j < accounts[i].size() ; j++) {
+//                 string mail = accounts[i][j];
+
+//                 if(mailMap.find(mail) == mailMap.end()) {
+//                     mailMap[mail] = i;
+//                 } else {
+//                     ds.merge(i, mailMap[mail]);
+//                 }
+//             }
+//         }
+
+//         unordered_map<int, vector<int>> mpp;
+//         for(int i = 0 ; i < n ; i++) {
+//             mpp[ds.find(i)].push_back(i);
+//         }
+
+//         for(auto it : mpp) {
+//             set<string> st;
+
+//             int idx = it.first;
+//             vector<int> idxV = it.second;
+
+//             for(int index : idxV) {
+//                 for(int i = 1 ; i < accounts[index].size() ; i++) {
+//                     st.insert(accounts[index][i]);
+//                 }
+//             }
+            
+//             vector<string> temp;
+//             temp.push_back(accounts[idx][0]);
+//             temp.insert(temp.end(), st.begin(), st.end());
+//             ans.push_back(temp);
+//         }
+//         return ans;
+//     }
+// };
