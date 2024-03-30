@@ -1,0 +1,38 @@
+https://leetcode.com/problems/swim-in-rising-water/description/
+
+
+
+class Solution {
+public:
+    int swimInWater(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
+        priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq;
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        dist[0][0] = grid[0][0];
+        pq.push({grid[0][0], {0,0}});
+
+        while(!pq.empty()) {
+            int row = pq.top().second.first;
+            int col = pq.top().second.second;
+            int elevation = pq.top().first;
+
+            pq.pop();
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+                
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n) {
+                    int nelevation = max(elevation, grid[nrow][ncol]);
+                    if(dist[nrow][ncol] > nelevation) {
+                        dist[nrow][ncol] = nelevation;
+                        pq.push({dist[nrow][ncol], {nrow, ncol}});
+                    }
+                }
+            }
+        }
+        return dist[n-1][n-1];
+    }
+};
