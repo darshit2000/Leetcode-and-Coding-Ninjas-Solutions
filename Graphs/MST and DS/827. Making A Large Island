@@ -1,0 +1,108 @@
+https://leetcode.com/problems/making-a-large-island/description/
+
+
+
+class DisjointSet    {
+public:
+    vector<int> parent, size;
+    int components;
+    
+    // Create an empty union find data structure with N isolated sets.
+    DisjointSet(int n)   {
+        components = n;
+        parent.resize(n);
+        size.resize(n, 1);
+        for(int i = 0; i < n ; i++)	{
+            parent[i] = i;
+        }
+    }
+
+    // Return the parent of component corresponding to object p.
+    int find(int u)	{
+        if (u == parent[u]) return u;
+        return parent[u] = find(parent[u]);
+    }
+
+    // Replace sets containing x and y with their union.
+    void merge(int x, int y)	{
+        int root_of_x = find(x);
+        int root_of_y = find(y);
+
+        if (root_of_x == root_of_y) return;
+		
+		// make smaller root point to larger one
+        if (size[root_of_x] < size[root_of_y])	{ 
+            parent[root_of_x] = root_of_y; 
+            size[root_of_y] += size[root_of_x]; 
+        } else	{ 
+            parent[root_of_y] = root_of_x; 
+            size[root_of_x] += size[root_of_y]; 
+        }
+        components--;
+    }
+
+    // Are objects x and y in the same set?
+    bool connected(int x, int y)    {
+        return find(x) == find(y);
+    }
+    
+    // Return the number of disjoint sets.
+    int totalComponents() {
+        return components;
+    }
+
+    // Is the graph connected?
+    bool isConnected() {
+        return size[find(0)] == size.size();
+    }
+};
+
+class Solution {
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n = grid.size();
+        DisjointSet ds(n*n);
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(grid[i][j] == 1) {
+                    for(auto& d : dir) {
+                        int nrow = i + d[0];
+                        int ncol = j + d[1];
+
+                        if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n && grid[nrow][ncol] == 1) {
+                            ds.merge(nrow*n + ncol, i*n + j);
+                        }
+                    }
+                }
+            }
+        }
+
+        int mx = 0;
+        
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(grid[i][j] == 0) {
+                    set<int> st;
+                    int count = 1;
+                    for(auto& d : dir) {
+                        int nrow = i + d[0];
+                        int ncol = j + d[1];
+
+                        if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n && grid[nrow][ncol] == 1) {
+                            int par = ds.find(nrow * n + ncol);
+                            if(st.count(par) == 0) {
+                                count += ds.size[par];
+                                st.insert(par);
+                            }
+                        }
+                    }
+                    mx = max(mx, count);
+                }
+            }
+        }
+
+        return mx != 0 ? mx : n*n;
+    }
+};
