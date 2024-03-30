@@ -1,0 +1,30 @@
+https://leetcode.com/problems/minimum-levels-to-gain-more-points/description/
+
+
+
+class Solution {
+public:
+    int minimumLevels(vector<int>& possible) {
+        int n = possible.size();
+        int maxBob = 0;
+        int maxDc = 0;
+        
+        for(int i : possible) {
+            if(i == 1) maxBob++;
+            else maxBob--;
+        }
+        
+        for(int i = 0 ; i < n-1 ; i++) {
+            if(possible[i] == 1) {
+                maxDc++;
+                maxBob--;
+            }
+            else {
+                maxDc--;
+                maxBob++;
+            }
+            if(maxDc > maxBob) return i+1;
+        }
+        return -1;
+    }
+};
