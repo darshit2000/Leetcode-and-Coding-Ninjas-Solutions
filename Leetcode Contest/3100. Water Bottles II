@@ -1,0 +1,23 @@
+https://leetcode.com/problems/water-bottles-ii/description/
+
+
+class Solution {
+public:
+    int maxBottlesDrunk(int numBottles, int numExchange) {
+        int total = 0;
+        int empty = 0;
+        int full = numBottles;
+        
+        while(full > 0) {
+            empty += full;
+            total += full;
+            full = 0;
+            while(empty >= numExchange) {
+                empty -= numExchange;
+                full += 1;
+                numExchange++;
+            }
+        }
+        return total;
+    }
+};
