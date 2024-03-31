@@ -1,0 +1,71 @@
+https://leetcode.com/problems/minimize-manhattan-distances/description/
+https://www.geeksforgeeks.org/maximum-manhattan-distance-between-a-distinct-pair-from-n-coordinates/
+
+
+class Solution {
+public:
+    int minimumDistance(vector<vector<int>>& points) {
+        int n = points.size();
+        int mn = INT_MAX;
+        
+        multiset<int> sum, diff;
+
+        for(int i = 0 ; i < n ; i++) {
+            sum.insert(points[i][0] + points[i][1]);
+            diff.insert(points[i][0] - points[i][1]);
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            int currPoint_x = points[i][0];
+            int currPoint_y = points[i][1];
+
+            sum.erase(sum.find(currPoint_x + currPoint_y));
+            diff.erase(diff.find(currPoint_x - currPoint_y));
+
+            int maxDist = max(*sum.rbegin() - *sum.begin(), *diff.rbegin() - *diff.begin());
+            mn = min(mn, maxDist);
+
+            sum.insert(currPoint_x + currPoint_y);
+            diff.insert(currPoint_x - currPoint_y);
+        }
+        return mn;
+    }
+};
+
+
+
+
+
+
+
+
+// brute force
+
+// class Solution {
+// public:
+//     int minimumDistance(vector<vector<int>>& points) {
+//         int n = points.size();
+//         int mn = INT_MAX;
+        
+//         vector<vector<int>> dist(n, vector<int>(n, INT_MIN));
+//         for(int i = 0 ; i < n ; i++) dist[i][i] = 0;
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 dist[i][j] = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1]);
+//             }
+//         }
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             int mx = INT_MIN;
+//             for(int j = 0 ; j < n ; j++) {
+//                 for(int k = 0 ; k < n ; k++) {
+//                     if(j == i || k == i) continue;
+//                     mx = max(mx, dist[j][k]);
+//                 }
+//             }
+//             mn = min(mx, mn);
+//         }
+//         return mn;
+//     }
+// };
