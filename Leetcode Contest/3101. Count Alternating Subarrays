@@ -1,0 +1,76 @@
+https://leetcode.com/problems/count-alternating-subarrays/
+
+
+
+// Method 1
+// https://leetcode.com/problems/count-alternating-subarrays/solutions/4949503/simple-counting
+
+class Solution {
+public:
+    long long countAlternatingSubarrays(vector<int>& nums) {
+        int n = nums.size();
+        long long count = 1, size = 1;
+
+        for(int i = 1 ; i < n ; i++) {
+            if(nums[i] != nums[i-1]) {
+                size++;
+            } else {
+                size = 1;
+            }
+
+            count += size;
+        }
+        return count;
+    }
+};
+
+
+
+
+// Method 2
+
+// class Solution {
+// public:
+//     long long countAlternatingSubarrays(vector<int>& nums) {
+//         int n = nums.size();
+//         long long count = 0;
+//         long long left = 0, right = 0;
+        
+//         while(right < n) {
+//             while(right < n-1 && nums[right] != nums[right+1]) right++;
+            
+//             long long x = (long long)right - (long long)left + 1;
+//             count += ((long long)x*(x+1))/2;
+//             left = right + 1;
+//             right++;
+//         }
+//         return count;
+//     }
+// };
+
+
+
+// Method 3
+
+// class Solution {
+// public:
+//     long long countAlternatingSubarrays(vector<int>& nums) {
+//         int n = nums.size();
+//         long long count = 0;
+//         int i = 0;
+//         long long streak = 1;
+
+//         while(i < n) {
+//             if(i < n-1 && nums[i] != nums[i+1]) {
+//                 streak++;
+//                 i++;
+//                 continue;
+//             } else {
+//                 count += (streak*(streak+1)/2);
+//                 streak = 1;
+//                 i++;
+//             } 
+//         }
+//         return count;
+//     }
+// };
