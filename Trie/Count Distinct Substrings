@@ -1,0 +1,79 @@
+https://www.naukri.com/code360/problems/count-distinct-substrings_985292?leftPanelTabValue=PROBLEM
+
+
+
+// trie   O(n^2) time   Less space than sets
+
+class Node {
+    public:
+        vector<Node*> links;
+        Node() {
+            links.resize(26);
+            for(int i = 0 ; i < 26 ; i++) links[i] = NULL;
+        }
+};
+
+class Trie {
+    public:
+        Node* root;
+        int count;
+        Trie() {
+            root = new Node();   
+            count = 0;
+        }
+
+        void insert(string s) {
+            int n = s.length();
+            Node* curr = root;
+
+            for(int i = 0 ; i < n ; i++) {
+                int idx = s[i] - 'a';
+
+                if(curr->links[idx] == NULL) {
+                    count++;
+                    curr->links[idx] = new Node();
+                }
+
+                curr = curr->links[idx];
+            }
+        }
+
+        int getTotal() {
+            return count;
+        }
+};
+int countDistinctSubstrings(string &s)
+{
+    //    Write your code here.
+    int n = s.length();
+    Trie* trie = new Trie();
+    for(int i = 0 ; i < n ; i++) {
+        string str = "";
+        for(int j = i ; j < n ; j++) {
+            str += s[j];
+            trie->insert(str);
+        }
+    }
+    return trie->getTotal() + 1; 
+}
+
+
+
+
+// brute force    O(n^2 logn) time       O(n^3) space  (atmost n^2 unique substrings and each substring is of avg length n/2)
+// #include <unordered_set>
+
+// int countDistinctSubstrings(string &s)
+// {
+//     //    Write your code here.
+//     unordered_set<string> st;
+//     int n = s.length();
+//     for(int i = 0 ; i < n ; i++) {
+//         string str = "";
+//         for(int j = i ; j < n ; j++) {
+//             str += s[j];
+//             st.insert(str);
+//         }
+//     }
+//     return st.size() + 1;
+// }
