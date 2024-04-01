@@ -1,0 +1,74 @@
+https://leetcode.com/problems/find-the-safest-path-in-a-grid/description/
+
+
+
+class Solution {
+public:
+    int maximumSafenessFactor(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<vector<int>> distToThives(n, vector<int>(n, INT_MAX));
+        vector<vector<int>> vis(n, vector<int>(n, 0));
+        queue<pair<pair<int,int>, int>> q;
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(grid[i][j] == 1) {
+                    q.push({{i,j}, 0});
+                    distToThives[i][j] = 0;
+                    vis[i][j] = 1;
+                }
+            }
+        }
+        
+        while(!q.empty()) {
+            int row = q.front().first.first;
+            int col = q.front().first.second;
+            int dist = q.front().second;
+
+            q.pop();
+
+            if(grid[row][col] == 0) {
+                distToThives[row][col] = min(distToThives[row][col], dist);
+            }
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n && vis[nrow][ncol] == 0) {
+                    vis[nrow][ncol] = 1;
+                    q.push({{nrow, ncol}, dist + 1});
+                }
+            }
+        }
+
+        priority_queue<pair<int, pair<int,int>>> pq;
+        vector<vector<int>> safeness(n, vector<int>(n, INT_MIN));
+        pq.push({distToThives[0][0], {0,0}});
+        safeness[0][0] = distToThives[0][0];
+
+        while(!pq.empty()) {
+            int s = pq.top().first;
+            int row = pq.top().second.first;
+            int col = pq.top().second.second;
+
+            pq.pop();
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n) {
+                    int newSafeness = min(s, distToThives[nrow][ncol]);
+
+                    if(newSafeness > safeness[nrow][ncol]) {
+                        safeness[nrow][ncol] = newSafeness;
+                        pq.push({newSafeness, {nrow, ncol}});
+                    }
+                }
+            }
+        }
+        return safeness[n-1][n-1];
+    }
+};
