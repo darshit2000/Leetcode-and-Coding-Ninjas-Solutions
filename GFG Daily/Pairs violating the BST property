@@ -1,6 +1,8 @@
 https://www.geeksforgeeks.org/problems/pairs-violating-bst-property--212515/1
 
 
+// Mehtod 1
+
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
@@ -34,5 +36,80 @@ class Solution {
             oms.insert(io[i]);
         }
         return count;
+     }
+};
+
+
+
+
+
+
+// Method 2
+
+class Solution {
+  public:
+    int merge(vector<int> &inorder, int low, int mid, int high) {
+        int left = low;
+        int right = mid + 1;
+        int count = 0;
+        vector<int> temp;
+        
+        while(left <= mid && right <= high) {
+            if(inorder[left] <= inorder[right]) {
+                temp.push_back(inorder[left]);
+                left++;
+            } else {
+                count += (mid - left + 1);
+                temp.push_back(inorder[right]);
+                right++;
+            }
+        }
+        
+        while(left <= mid) {
+            temp.push_back(inorder[left]);
+            left++;
+        }
+        
+        while(right <= high) {
+            temp.push_back(inorder[right]);
+            right++;
+        }
+        
+        for(int i = low ; i <= high ; i++) {
+            inorder[i] = temp[i - low];
+        }
+        
+        return count;
+    }
+  
+    int mergeSort(vector<int> &inorder, int low, int high) {
+        int count = 0;
+        if(low >= high) return 0;
+        
+        int mid = (low + high)/2;
+        
+        count += mergeSort(inorder, low, mid);
+        count += mergeSort(inorder, mid + 1, high);
+        count += merge(inorder, low, mid, high);
+        
+        return count;
+    }
+    
+    /*You are required to complete below function */
+    int pairsViolatingBST(int n, Node *root) {
+        // your code goes here
+        vector<int> io;
+        
+        auto inorder = [&] (auto& inorder, Node* node) -> void {
+            if(!node) return;
+            
+            inorder(inorder, node->left);
+            io.push_back(node-> data);
+            inorder(inorder, node->right);
+        };
+        
+        inorder(inorder, root);
+        
+        return mergeSort(io, 0, n-1);
      }
 };
