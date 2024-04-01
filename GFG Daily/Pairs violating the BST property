@@ -1,0 +1,38 @@
+https://www.geeksforgeeks.org/problems/pairs-violating-bst-property--212515/1
+
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+
+template<class T>
+using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+class Solution {
+  public:
+
+    /*You are required to complete below function */
+    int pairsViolatingBST(int n, Node *root) {
+        // your code goes here
+        vector<int> io;
+        
+        auto inorder = [&] (auto& inorder, Node* node) -> void {
+            if(!node) return;
+            
+            inorder(inorder, node->left);
+            io.push_back(node-> data);
+            inorder(inorder, node->right);
+        };
+        
+        inorder(inorder, root);
+        
+        ordered_multiset<int> oms;
+        int count = 0;
+        
+        for(int i = n-1 ; i >= 0 ; i--) {
+            count += (oms.order_of_key(io[i]));
+            oms.insert(io[i]);
+        }
+        return count;
+     }
+};
