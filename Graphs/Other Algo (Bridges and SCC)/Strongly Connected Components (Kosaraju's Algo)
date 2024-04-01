@@ -1,0 +1,68 @@
+https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1
+
+
+
+class Solution
+{
+	public:
+	//Function to find number of strongly connected components in the graph.
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        //code here
+        vector<int> vis(V, 0);
+        stack<int> stk;
+        
+        auto dfs = [&] (auto& dfs, int node) -> void {
+            vis[node] = 1;
+            
+            for(auto& child : adj[node]) {
+                if(!vis[child]) {
+                    dfs(dfs, child);
+                }
+            }
+            
+            stk.push(node);
+        };
+        
+        // Find topological ordering, and in this ordering, apply the dfs second time
+        for(int i = 0 ; i < V ; i++) {
+            if(!vis[i]) {
+                dfs(dfs, i);
+            }
+        }
+        
+        vector<vector<int>> adjT(V);
+        
+        // Reverse the edges
+        for(int i = 0 ; i < V ; i++) {
+            vis[i] = 0;
+            for(auto& child : adj[i]) {
+                adjT[child].push_back(i);
+            }
+        }
+        
+        auto dfs2 = [&] (auto& dfs2, int node) -> void {
+            vis[node] = 1;
+            
+            for(auto& child : adjT[node]) {
+                if(!vis[child]) {
+                    dfs2(dfs2, child);
+                }
+            }
+        };
+        
+        // Apply dfs again and find which components are there in diff SCC
+        int count = 0;
+        while(!stk.empty()) {
+            int node = stk.top();
+            stk.pop();
+            
+            if(!vis[node]) {
+                count++;
+                dfs2(dfs2, node);
+            }
+        }
+        
+        return count;
+    }
+};
