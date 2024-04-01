@@ -1,0 +1,43 @@
+https://leetcode.com/problems/find-the-sum-of-the-power-of-all-subsequences/description/
+
+
+class Solution {
+public:
+    int sumOfPower(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<vector<vector<int>>> cache(101, vector<vector<int>>(101, vector<int>(101, -1)));
+        long long MOD = 1000000007;
+
+        auto power = [&] (int a, int b) -> int {
+            int ans = 1;
+            while(b) {
+                if(b & 1) {
+                    ans = (ans * 1LL * a) % MOD;
+                }
+                a = (a * 1LL * a) % MOD;
+                b = b >> 1;
+            }
+            return ans;
+        };
+
+        auto dp = [&] (auto& dp, int idx, int count, long long sum) -> int {
+            if(sum == k) {
+                return power(2, n - count);
+            }
+            if(idx >= n) return 0;
+
+            if(cache[idx][count][sum] != -1) return cache[idx][count][sum];
+
+            long long take = 0;
+            if(sum + nums[idx] <= k) {
+                take = dp(dp, idx + 1, count + 1, sum + nums[idx]);
+            }
+
+            long long notTake = dp(dp, idx + 1, count, sum);
+
+            return cache[idx][count][sum] = ((take % MOD) + (notTake % MOD)) % MOD;
+        };
+
+        return dp(dp, 0, 0, 0) % MOD;
+    }
+};
