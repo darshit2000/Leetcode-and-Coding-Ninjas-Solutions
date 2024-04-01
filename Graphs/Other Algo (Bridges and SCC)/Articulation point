@@ -1,0 +1,71 @@
+https://www.naukri.com/code360/problems/articulation-point_840708?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    
+    // write your code here
+    int t;
+    cin >> t;
+
+    while(t--) {
+        int n, m;
+        cin >> n;
+        cin >> m;
+        vector<vector<int>> adj(n+1);
+        vector<int> vis(n+1, 0), tin(n+1, 0), low(n+1, 0), mark(n+1, 0);
+        int timer = 1;
+
+        for(int i = 0 ; i < m ; i++) {
+            int u, v;
+            cin >> u;
+            cin >> v;
+
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        auto dfs = [&] (auto& dfs, int node, int parent) -> void {
+            vis[node] = 1;
+            tin[node] = timer;
+            low[node] = timer;
+            timer++;
+            int totalChild = 0;
+
+            for(auto& child : adj[node]) {
+                if(child == parent) continue;
+
+                if(!vis[child]) {
+                    dfs(dfs, child, node);
+                    low[node] = min(low[node], low[child]);
+
+                    if(low[child] >= tin[node] && parent != -1) {
+                       mark[node] = 1;
+                    }
+
+                    totalChild++;
+                } else {
+                    low[node] = min(low[node], tin[child]);
+                }
+            }
+
+            if(parent == -1 && totalChild > 1) {
+                mark[node] = 1;
+            }
+        };
+
+        for(int i = 1 ; i <= n ; i++) {
+            if(!vis[i]) {
+                dfs(dfs, i, -1);
+            }
+        }
+
+        for(int i = 1 ; i <= n ; i++) {
+            if(mark[i] == 1) cout << i << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
