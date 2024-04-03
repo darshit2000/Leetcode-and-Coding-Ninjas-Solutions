@@ -1,0 +1,91 @@
+https://leetcode.com/problems/find-the-sum-of-subsequence-powers/description/
+
+
+
+#define ll long long
+
+// class Solution {
+// public:
+//     int sumOfPowers(vector<int>& nums, int k) {
+//         int n = nums.size();
+//         int MOD = 1e9 + 7;
+//         // cache[index][last_index][min_diff][length]
+//         unordered_map<ll,ll> cache[n+2][51][51];
+
+//         sort(nums.begin(), nums.end());
+
+//         auto dp = [&] (auto& dp, int i, int last_index, ll min_diff, int k) -> int {
+//             if(k == 0 && min_diff != LONG_MAX) {
+//                 return min_diff % MOD;
+//             }
+//             if(i >= n) return 0;
+
+//             if(cache[i][k][last_index + 1].count(min_diff)) {
+//                 return cache[i][k][last_index + 1][min_diff];
+//             }
+
+//             int take;
+//             int not_take = not_take = dp(dp, i + 1, last_index, min_diff, k) % MOD;;
+
+//             if(last_index != -1) {
+//                 take = dp(dp, i + 1, i, min(min_diff, 1LL*nums[i] - nums[last_index]), k - 1) % MOD;
+//             } else {
+//                 take = dp(dp, i + 1, i, min_diff, k - 1) % MOD;
+//             }
+
+//             return cache[i][k][last_index + 1][min_diff] = (0LL + take + not_take) % MOD;
+//         };
+
+//         return dp(dp, 0, -1, LONG_MAX, k) % MOD;
+//     }
+// };
+
+
+
+
+
+
+// #define ll long long
+
+class Solution {
+public:
+    int sumOfPowers(vector<int>& nums, int k) {
+        int n = nums.size();
+        int MOD = 1e9 + 7;
+
+        // TLE
+        // cache[index][last_index][min_diff][length]
+        // unordered_map<ll, unordered_map<ll, unordered_map<ll, unordered_map<ll, ll>>>> cache;
+
+        vector<vector<vector<map<ll, ll>>>> cache(n+1, vector<vector<map<ll, ll>>>(n+1, vector<map<ll,ll>>(n+2)));
+
+        sort(nums.begin(), nums.end());
+
+        auto dp = [&] (auto& dp, int i, int last_index, ll min_diff, int length) -> int {
+            if(length == k) {
+                return min_diff % MOD;
+            }
+            if(i >= n) return 0;
+
+            if(cache[i][length][last_index + 1].count(min_diff)) {
+                return cache[i][length][last_index + 1][min_diff];
+            }
+
+            int take, not_take;
+
+            if(last_index != -1) {
+                take = dp(dp, i + 1, i, min(min_diff, 1LL*nums[i] - nums[last_index]), length + 1) % MOD;
+                not_take = dp(dp, i + 1, last_index, min_diff, length) % MOD;
+            } else {
+                take = dp(dp, i + 1, i, min_diff, length + 1) % MOD;
+                not_take = dp(dp, i + 1, last_index, min_diff, length) % MOD;
+            }
+
+            return cache[i][length][last_index + 1][min_diff] = (take + not_take) % MOD;
+        };
+
+        return dp(dp, 0, -1, LONG_MAX, 0) % MOD;
+    }
+};
+
+
