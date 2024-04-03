@@ -1,0 +1,20 @@
+https://www.naukri.com/code360/problems/bitwise-basic-operations_8382552?leftPanelTabValue=PROBLEM
+
+
+
+int getXOR(int a, int b) {
+    // Write Your Code Here
+    return a^b;
+}
+
+int getBit(int c, int d) {
+    // Write Your Code Here
+    if((d & (1<<c)) != 0) return 1;
+    return 0;
+}
+
+int setBit(int e, int f) {
+    // Write Your Code Here
+    f = (f | (1 << e));
+    return f;
+}
