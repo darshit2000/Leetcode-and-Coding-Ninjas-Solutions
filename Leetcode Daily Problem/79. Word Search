@@ -1,0 +1,39 @@
+https://leetcode.com/problems/word-search/description/?envType=daily-question&envId=2024-04-03
+
+
+
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();
+        int n = board[0].size();
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        vector<vector<int>> vis(m, vector<int>(n, 0));
+
+        auto dfs = [&] (auto& dfs, int row, int col, int idx) -> bool {
+            if(idx >= word.length()) return true;
+            vis[row][col] = 1;
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < m && ncol >= 0 && ncol < n && vis[nrow][ncol] == 0 && board[nrow][ncol] == word[idx]) {
+                    if(dfs(dfs, nrow, ncol, idx + 1)) return true;
+                }
+            }
+
+            vis[row][col] = 0;
+            return false;
+        };
+
+        for(int i = 0 ; i < m ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(board[i][j] == word[0]) {
+                    if(dfs(dfs, i, j, 1)) return true;
+                }
+            }
+        }
+        return false;
+    }
+};
