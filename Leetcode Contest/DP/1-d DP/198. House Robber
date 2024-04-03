@@ -1,0 +1,52 @@
+https://leetcode.com/problems/house-robber/description/
+
+
+
+// O(n)
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 1) return nums[0];
+        vector<int> cache(n);
+
+        cache[0] = nums[0];
+        cache[1] = max(nums[1], nums[0]);
+
+        for(int i = 2 ; i < n ; i++) {
+            cache[i] = max(cache[i-1], cache[i-2] + nums[i]);
+        }
+
+        return cache[n-1];
+    }
+};
+
+
+
+
+
+
+// O(n^2)
+
+// class Solution {
+// public:
+//     int rob(vector<int>& nums) {
+//         int n = nums.size();
+//         if(n == 1) return nums[0];
+//         vector<int> cache(n);
+
+//         cache[0] = nums[0];
+//         cache[1] = nums[1];
+
+//         for(int i = 2 ; i < n ; i++) {
+//             int mx = INT_MIN;
+//             for(int j = i-2 ; j >= 0 ; j--){
+//                 mx = max(mx, cache[j] + nums[i]);
+//             }
+//             cache[i] = mx;
+//         }
+
+//         return max(cache[n-1], cache[n-2]);
+//     }
+// };
