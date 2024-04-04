@@ -1,0 +1,84 @@
+https://leetcode.com/problems/maximum-xor-with-an-element-from-array/description/
+
+
+
+class Node {
+public:
+    Node *links[2];
+};
+
+class Trie {
+public:
+    Node* root;
+    Trie() {
+        root = new Node();
+    }
+
+    void insert(int num) {
+        Node* curr = root;
+
+        for(int i = 31 ; i >= 0 ; i--) {
+            int bit = 0;
+            if((num & (1 << i)) != 0) bit = 1;
+
+            if(curr->links[bit] == NULL) {
+                curr->links[bit] = new Node();
+            }
+
+            curr = curr->links[bit];
+        }
+    }
+
+    int getMax(int num) {
+        Node* curr = root;
+        int ans = 0;
+
+        for(int i = 31 ; i >= 0 ; i--) {
+            int bit = 0;
+            if((num & (1 << i)) != 0) bit = 1;
+
+            if(curr->links[1 - bit] != NULL) {
+                ans = (ans | (1 << i));
+                curr = curr->links[1 - bit];
+            } else {
+                curr = curr->links[bit];
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        int n = nums.size(), q = queries.size();
+        vector<int> ans(q, -1);
+        Trie* trie = new Trie();
+        vector<vector<int>> newQueries;
+
+        for(int i = 0 ; i < q ; i++) {
+            newQueries.push_back({queries[i][1], queries[i][0], i});
+        }
+
+        sort(nums.begin(), nums.end());
+        sort(newQueries.begin(), newQueries.end());
+
+        int idx = 0;
+        for(int i = 0 ; i < q ; i++) {
+            int currQ = newQueries[i][1];
+            int limit = newQueries[i][0];
+            int qIndex = newQueries[i][2];
+
+            while(idx < n && nums[idx] <= limit) {
+                trie->insert(nums[idx]);
+                idx++;
+            }
+
+            if(idx > 0) {
+                ans[qIndex] = trie->getMax(currQ);
+            }
+        }
+
+        return ans;
+    }
+};
