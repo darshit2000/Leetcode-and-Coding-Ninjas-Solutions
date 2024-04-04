@@ -1,0 +1,69 @@
+https://leetcode.com/problems/design-add-and-search-words-data-structure/description/
+
+
+
+class Node {
+public:
+    Node* links[26] = {NULL};
+    bool isEnd;
+    int child;
+
+    Node() {
+        isEnd = false;
+        child = 0;
+    }
+};
+
+class WordDictionary {
+public:
+    Node* root;
+    WordDictionary() { 
+        root = new Node(); 
+    }
+
+    void addWord(string word) {
+        int n = word.length();
+        Node* curr = root;
+
+        for (int i = 0; i < n; i++) {
+            int index = word[i] - 'a';
+
+            if (curr->links[index] == NULL) {
+                curr->links[index] = new Node();
+            }
+
+            curr->child++;
+            curr = curr->links[index];
+        }
+        curr->isEnd = true;
+    }
+
+    bool searchWord(string word, int idx, Node* curr) {   
+        if(idx >= word.length()) return curr->isEnd;
+        
+        char ch = word[idx];
+
+        if(ch == '.') {
+            for(int j = 0 ; j < 26 ; j++) {
+                if(curr->links[j] != NULL) {
+                    if(searchWord(word, idx + 1, curr->links[j])) return true;
+                }
+            }
+        } else {
+            if(curr->links[ch - 'a'] == NULL) return false;
+            return searchWord(word, idx + 1, curr->links[ch - 'a']);
+        }
+        return false;
+    }
+
+    bool search(string word) {
+        return searchWord(word, 0, root);
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
