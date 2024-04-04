@@ -20,7 +20,7 @@ public:
                 start = i + 1; 
             }
         }
-        // agar last ma je positive currNet che, ae agar je negative ma khoottu hatu, aena thi motu hase, toh circle complete thai jase
+        // agar last ma je positive currNet che, ae agar je negative ma khoottu hatu, aena thi motu hoi, toh circle complete thai jase
         return (currNet + kitnaKhoota >= 0) ? start : -1;
     }
 };
