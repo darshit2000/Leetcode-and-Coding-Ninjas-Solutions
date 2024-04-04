@@ -20,14 +20,14 @@ public:
         Node* curr = root;
 
         for(int i = 31 ; i >= 0 ; i--) {
-            int idx = 0;
-            if((num & (1 << i)) != 0) idx = 1;
+            int bit = 0;
+            if((num & (1 << i)) != 0) bit = 1;
 
-            if(curr->links[idx] == NULL) {
-                curr->links[idx] = new Node();
+            if(curr->links[bit] == NULL) {
+                curr->links[bit] = new Node();
             }
 
-            curr = curr->links[idx];
+            curr = curr->links[bit];
         }
     }
 
@@ -36,14 +36,14 @@ public:
         int x = 0;
 
         for(int i = 31 ; i >= 0 ; i--) {
-            int idx = 0;
-            if((num & (1 << i)) != 0) idx = 1;
+            int bit = 0;
+            if((num & (1 << i)) != 0) bit = 1;
 
-            if(curr->links[1 - idx] != NULL) {
+            if(curr->links[1 - bit] != NULL) {
                 x = (x | (1 << i));
-                curr = curr->links[1-idx];
+                curr = curr->links[1-bit];
             } else {
-                curr = curr->links[idx];
+                curr = curr->links[bit];
             }
         }
         return x;
