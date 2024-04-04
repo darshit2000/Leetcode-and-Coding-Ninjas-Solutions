@@ -1,0 +1,70 @@
+https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/description/
+
+
+
+class Node {
+public:
+    // dont use vector, otherwise more time, use array
+    Node *links[2];
+};
+
+class Trie {
+public:
+    Node* root;
+
+    Trie() {
+        root = new Node();
+    }
+
+    void insert(int num) {
+        Node* curr = root;
+
+        for(int i = 31 ; i >= 0 ; i--) {
+            int idx = 0;
+            if((num & (1 << i)) != 0) idx = 1;
+
+            if(curr->links[idx] == NULL) {
+                curr->links[idx] = new Node();
+            }
+
+            curr = curr->links[idx];
+        }
+    }
+
+    int getMax(int num) {
+        Node* curr = root;
+        int x = 0;
+
+        for(int i = 31 ; i >= 0 ; i--) {
+            int idx = 0;
+            if((num & (1 << i)) != 0) idx = 1;
+
+            if(curr->links[1 - idx] != NULL) {
+                x = (x | (1 << i));
+                curr = curr->links[1-idx];
+            } else {
+                curr = curr->links[idx];
+            }
+        }
+        return x;
+    }
+};
+
+class Solution {
+public:
+    int findMaximumXOR(vector<int>& nums) {
+        int n = nums.size();
+        Trie* trie = new Trie();
+        int mx = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            trie->insert(nums[i]);
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            mx = max(mx, trie->getMax(nums[i]));
+        }
+
+        return mx;
+    }
+};
