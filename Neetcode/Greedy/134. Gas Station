@@ -1,0 +1,87 @@
+https://leetcode.com/problems/gas-station/
+
+
+
+// Love babber  O(n)
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n = gas.size();
+        int start = 0, currNet = 0, kitnaKhoota = 0;
+        
+        for(int i = 0 ; i < n ; i++) {
+            currNet += (gas[i] - cost[i]);
+
+            if(currNet < 0) {
+                // kitnaKhoota contains negative value 
+                kitnaKhoota += currNet;
+                currNet = 0;
+                start = i + 1; 
+            }
+        }
+        // agar last ma je positive currNet che, ae agar je negative ma khoottu hatu, aena thi motu hase, toh circle complete thai jase
+        return (currNet + kitnaKhoota >= 0) ? start : -1;
+    }
+};
+
+
+
+
+// Love babber O(2*n)   (Append the array on the back of the same array -> circular)
+
+// class Solution {
+// public:
+//     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+//         int n = gas.size();
+//         gas.insert(gas.end(), gas.begin(), gas.end());
+//         cost.insert(cost.end(), cost.begin(), cost.end());
+
+//         int net = 0;
+//         int start = 0;
+
+//         for(int i = 0 ; i < 2*n ; i++) {
+//             if(i == n + start) return start;
+
+//             net += (gas[i] - cost[i]);
+
+//             if(net < 0) {
+//                 net = 0;
+//                 start = i + 1;
+//             }
+//         }
+//         return start >= n ? -1 : start;
+//     }
+// };
+
+
+
+
+
+
+// O(n) time
+
+// class Solution {
+// public:
+//     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+//         int n = gas.size();
+//         int total_gas = 0, total_cost = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             total_gas += gas[i];
+//             total_cost += cost[i];
+//         }
+//         if(total_gas < total_cost) return -1;
+
+//         int currNet = 0;
+//         int start = 0;
+//         for(int i = 0 ; i < n ; i++) {
+//             currNet += (gas[i] - cost[i]);
+//             if(currNet < 0) {
+//                 currNet = 0;
+//                 start = i + 1; 
+//             }
+//         }
+//         return start;
+//     }
+// };
