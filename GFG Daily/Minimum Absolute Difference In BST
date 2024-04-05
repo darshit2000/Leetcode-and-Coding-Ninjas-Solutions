@@ -1,0 +1,30 @@
+https://www.geeksforgeeks.org/problems/minimum-absolute-difference-in-bst-1665139652/1
+
+
+
+// Do computation in the inorder method itself 
+
+class Solution
+{
+    public:
+    int absolute_diff(Node *root)
+    {
+        //Your code here
+        Node* prev = NULL;
+        int mn = INT_MAX;
+        
+        auto inorder = [&] (auto& inorder, Node* root) -> void {
+            if(!root) return;
+            
+            inorder(inorder, root->left);
+            if(prev) {
+                mn = min(mn, abs(prev->data - root->data));
+            }
+            prev = root;
+            inorder(inorder, root->right);
+        };
+        
+        inorder(inorder, root);
+        return mn;
+    }
+};
