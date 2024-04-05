@@ -1,0 +1,68 @@
+https://www.geeksforgeeks.org/problems/kth-common-ancestor-in-bst/1
+
+
+
+class Solution
+{
+    public:
+    Node* getLCA(Node* root, Node* xnode, Node* ynode) {
+        if(!root) return NULL;
+        
+        if(root->data == xnode->data || root->data == ynode->data) return root;
+        
+        Node* left = getLCA(root->left, xnode, ynode);
+        Node* right = getLCA(root->right, xnode, ynode);
+        
+        if(left && right) return root;
+        else if(left) return left;
+        else if(right ) return right;
+        else return NULL;
+    }
+    
+    /*You are required to complete below function */
+    int kthCommonAncestor(Node *root, int k,int x, int y)
+    {
+        // your code goes here
+        unordered_map<Node*, Node*> parent;
+        
+        Node* xnode = NULL, *ynode = NULL;
+        
+        Node* curr = root;
+        while(curr) {
+            if(curr->data == x) {
+                xnode = curr;
+                break;
+            } else if(curr->data < x) {
+                parent[curr->right] = curr;
+                curr = curr->right;
+            } else if(x < curr->data) {
+                parent[curr->left] = curr;
+                curr = curr->left;
+            }
+        }
+        
+        curr = root;
+        while(curr) {
+            if(curr->data == y) {
+                ynode = curr;
+                break;
+            } else if(curr->data < y) {
+                parent[curr->right] = curr;
+                curr = curr->right;
+            } else if(y < curr->data) {
+                parent[curr->left] = curr;
+                curr = curr->left;
+            }
+        }
+
+        Node* lca = getLCA(root, xnode, ynode);
+        k--;
+        
+        while(k) {
+            if(lca == root && k != 0) return -1;
+            lca = parent[lca];
+            k--;
+        }
+        return lca->data;
+    }
+};
