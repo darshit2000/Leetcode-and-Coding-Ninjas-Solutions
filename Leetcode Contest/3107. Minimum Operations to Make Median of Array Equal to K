@@ -1,0 +1,28 @@
+https://leetcode.com/problems/minimum-operations-to-make-median-of-array-equal-to-k/description/
+
+
+
+class Solution {
+public:
+    long long minOperationsToMakeMedianK(vector<int>& nums, int k) {
+        long long ans = 0;
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        
+        int mid = n/2;
+        if(k <= nums[mid]) {
+            int idx = mid;
+            while(idx >= 0 && nums[idx] > k) {
+                ans += abs(k - nums[idx]);
+                idx--;
+            }
+        } else if(k >= mid) {
+            int idx = mid;
+            while(idx < n && nums[idx] < k) {
+                ans += abs(k - nums[idx]);
+                idx++;
+            }
+        }
+        return ans;
+    }
+};
