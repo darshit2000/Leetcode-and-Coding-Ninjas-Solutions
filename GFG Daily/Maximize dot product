@@ -10,7 +10,7 @@ class Solution {
 		vector<vector<int>> dp(n+1, vector<int>(m+1, -1));
 		
 		auto f = [&] (auto& f, int i, int j) -> int {
-		    if(i < 0 || j < 0 || i - j < 0) return 0;
+		    if(i < 0 || j < 0 || i < j) return 0;
 		    
 		    if(dp[i][j] != -1) return dp[i][j];
 		    
