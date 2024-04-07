@@ -1,0 +1,30 @@
+https://leetcode.com/problems/lexicographically-smallest-string-after-operations-with-constraint/
+
+
+
+class Solution {
+public:
+    int distC(char c1, char c2) {
+        int x1 = c1 - 'a';
+        int x2 = c2 - 'a';
+        int x = abs(x1 - x2);
+        if(x > 13) return (13 - (x % 13));
+        else return x;
+    }
+    string getSmallestString(string s, int k) {
+        int n = s.length();
+        int idx = 0;
+        
+        while(k > 0 && idx < n) {
+            for(char ch = 'a' ; ch <= 'z' ; ch++) {
+                if(distC(s[idx], ch) <= k) {
+                    k -= distC(s[idx], ch);
+                    s[idx] = ch;
+                    idx++;
+                    break;
+                }
+            }
+        }
+        return s;
+    }
+};
