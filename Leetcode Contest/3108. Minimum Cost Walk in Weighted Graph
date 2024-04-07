@@ -1,0 +1,67 @@
+https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/description/
+
+
+
+class DisjointSet {
+public:
+    vector<int> parent, size, dist;
+    
+    DisjointSet(int n) {
+        size.resize(n, 1);
+        dist.resize(n, 131071);
+        parent.resize(n);
+        for(int i = 0 ; i < n ; i++) parent[i] = i;
+    }
+
+    int find(int u) {
+        if(parent[u] == u) return u;
+        return parent[u] = find(parent[u]);
+    }
+
+    void merge(int u, int v, int wt) {
+        int parent_u = find(u);
+        int parent_v = find(v);
+        dist[parent_v] = dist[parent_u] = dist[parent_v] & dist[parent_u] & wt;
+
+        if(parent_u == parent_v) return;
+
+        if(size[parent_u] < size[parent_v]) {
+            parent[parent_u] = parent_v;
+            size[parent_v] += size[parent_u];
+        } else {
+            parent[parent_v] = parent_u;
+            size[parent_u] += size[parent_v];
+        }
+    }
+
+    int minWt(int u, int v) {
+        if(u == v) return 0;
+        else if(find(u) != find(v)) return -1;
+        else return dist[find(u)];
+    }
+};
+
+class Solution {
+public:
+    vector<int> minimumCost(int n, vector<vector<int>>& edges, vector<vector<int>>& query) {
+        vector<vector<pair<int,int>>> adj(n);
+        int q = query.size();
+        DisjointSet ds(n);
+        vector<int> ans;
+        
+        for(auto& e : edges) {
+            int u = e[0];
+            int v = e[1];
+            int wt = e[2];
+            ds.merge(u, v, wt);
+        }
+
+        
+        for(int i = 0 ; i < q ; i++) {
+            int src = query[i][0];
+            int dest = query[i][1];
+            ans.push_back(ds.minWt(src, dest));
+        }
+        return ans;
+    }
+};
