@@ -1,0 +1,25 @@
+https://www.geeksforgeeks.org/problems/maximize-dot-product2649/1
+
+
+
+class Solution {
+	public:
+	int maxDotProduct(int n, int m, int a[], int b[]) 
+	{ 
+		// Your code goes here
+		vector<vector<int>> dp(n+1, vector<int>(m+1, -1));
+		
+		auto f = [&] (auto& f, int i, int j) -> int {
+		    if(i < 0 || j < 0 || i - j < 0) return 0;
+		    
+		    if(dp[i][j] != -1) return dp[i][j];
+		    
+		    int c1 = a[i]*b[j] + f(f, i-1, j-1);
+		    int c2 = 0 + f(f, i-1, j);
+		    
+		    return dp[i][j] = max(c1, c2);
+		};
+		
+		return f(f, n-1, m-1);
+	} 
+};
