@@ -2,24 +2,58 @@ https://www.geeksforgeeks.org/problems/maximize-dot-product2649/1
 
 
 
-class Solution {
+// bottom up
+
+class Solution{
+		
 	public:
 	int maxDotProduct(int n, int m, int a[], int b[]) 
 	{ 
 		// Your code goes here
-		vector<vector<int>> dp(n+1, vector<int>(m+1, -1));
+		vector<vector<int>> dp(n, vector<int>(m, 0));
 		
-		auto f = [&] (auto& f, int i, int j) -> int {
-		    if(i < 0 || j < 0 || i < j) return 0;
-		    
-		    if(dp[i][j] != -1) return dp[i][j];
-		    
-		    int c1 = a[i]*b[j] + f(f, i-1, j-1);
-		    int c2 = 0 + f(f, i-1, j);
-		    
-		    return dp[i][j] = max(c1, c2);
-		};
+		int mx = INT_MIN;
+		for(int i = 0 ; i < n ; i++) {
+		    mx = max(mx, a[i]);
+		    dp[i][0] = mx * b[0];
+		}
 		
-		return f(f, n-1, m-1);
+		for(int i = 1 ; i < n ; i++) {
+		    for(int j = 1 ; j < m ; j++) {
+		        if(i < j)  continue;
+		        
+		        int c1 = a[i]*b[j] + dp[i-1][j-1];
+    		    int c2 = 0 + dp[i-1][j];
+    		    
+    		    dp[i][j] = max(c1, c2);
+		    }
+		}
+		
+		return dp[n-1][m-1];
 	} 
 };
+
+
+// top down
+// class Solution{
+		
+// 	public:
+// 	int maxDotProduct(int n, int m, int a[], int b[]) 
+// 	{ 
+// 		// Your code goes here
+// 		vector<vector<int>> dp(n+1, vector<int>(m+1, -1));
+		
+// 		auto f = [&] (auto& f, int i, int j) -> int {
+// 		    if(i < 0 || j < 0 || i < j) return 0;
+		    
+// 		    if(dp[i][j] != -1) return dp[i][j];
+		    
+// 		    int c1 = a[i]*b[j] + f(f, i-1, j-1);
+// 		    int c2 = 0 + f(f, i-1, j);
+		    
+// 		    return dp[i][j] = max(c1, c2);
+// 		};
+		
+// 		return f(f, n-1, m-1);
+// 	} 
+// };
