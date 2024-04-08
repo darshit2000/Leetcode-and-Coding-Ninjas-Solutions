@@ -14,6 +14,7 @@ class Solution{
             if(dp[start][end] != -1) return dp[start][end];
             
             // min() because Bob will make sure that I get the worst, so minimum
+            // https://www.youtube.com/watch?v=ww4V7vRIzSk
             // we are doing max() below in return statement
             long long left = (long long)arr[start] + min(solve(solve, start + 2, end), solve(solve, start + 1, end - 1));
             long long right = (long long)arr[end] + min(solve(solve, start + 1, end - 1), solve(solve, start, end - 2));
