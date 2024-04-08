@@ -1,0 +1,113 @@
+https://leetcode.com/problems/partition-equal-subset-sum/description/
+
+
+
+// top down
+
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        int totalSum = accumulate(nums.begin(), nums.end(), 0);
+        if(totalSum & 1) return false;
+        vector<vector<int>> dp(n, vector<int>(totalSum/2 + 1, -1));
+
+        auto solve = [&] (auto& solve, int i, int sum) -> bool {
+            if(i >= n) {
+                if(totalSum - sum == sum) return true;
+                return false;
+            }
+            if(sum > totalSum/2) return false;
+
+            if(dp[i][sum] != -1) return dp[i][sum];
+
+            if(solve(solve, i+1, sum)) {
+                dp[i][sum] = 1;
+                return true;
+            }
+            if(solve(solve, i+1, sum + nums[i])) {
+                dp[i][sum] = 1;
+                return true;
+            }
+            dp[i][sum] = 0;
+            return false;
+        };
+
+        return solve(solve, 0, 0);
+    }
+};
+
+
+
+
+
+
+// bottom up
+
+// class Solution {
+// public:
+//     bool canPartition(vector<int>& nums) {
+//         int n = nums.size();
+//         int totalSum = accumulate(nums.begin(), nums.end(), 0);
+//         if(totalSum & 1) return false;
+
+//         vector<vector<bool>> dp(n, vector<bool>(totalSum/2 + 1, false));
+
+//         for(int i = 0 ; i < n ; i++) dp[i][0] = true;
+        
+//         if(nums[0] <= totalSum/2) dp[0][nums[0]] = true;
+
+//         for(int i = 1 ; i < n ; i++) {
+//             for(int s = 1 ; s <= totalSum/2 ; s++) {
+//                 bool notTake = dp[i-1][s];
+//                 bool take = false;
+
+//                 if(nums[i] <= s) {
+//                     take = dp[i-1][s - nums[i]];
+//                 }
+
+//                 dp[i][s] = take | notTake;
+//             }
+//         } 
+//         return dp[n-1][totalSum/2];
+//     }
+// };
+
+
+
+
+
+
+// bottom up with space optimization
+
+// class Solution {
+// public:
+//     bool canPartition(vector<int>& nums) {
+//         int n = nums.size();
+//         int totalSum = accumulate(nums.begin(), nums.end(), 0);
+//         if(totalSum & 1) return false;
+
+//         vector<bool> dp(totalSum/2 + 1, false);
+
+//         dp[0] = true;
+        
+//         if(nums[0] <= totalSum/2) dp[nums[0]] = true;
+
+//         for(int i = 1 ; i < n ; i++) {
+//             vector<bool> temp(totalSum/2 + 1, false);
+//             temp[0] = true;
+//             for(int s = 1 ; s <= totalSum/2 ; s++) {
+//                 bool notTake = dp[s];
+//                 bool take = false;
+
+//                 if(nums[i] <= s) {
+//                     take = dp[s - nums[i]];
+//                 }
+
+//                 temp[s] = take | notTake;
+//             }
+//             dp = temp;
+//         } 
+//         return dp[totalSum/2];
+//     }
+// };
