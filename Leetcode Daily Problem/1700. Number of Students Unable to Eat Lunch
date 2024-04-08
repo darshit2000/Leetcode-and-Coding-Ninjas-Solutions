@@ -1,0 +1,49 @@
+https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/description/?envType=daily-question&envId=2024-04-08
+
+
+
+class Solution {
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        int n = students.size();
+        int nz1 = 0, no1 = 0, nz2 = 0, no2 = 0;
+        deque<int> d1, d2;
+
+        for(int i = 0 ; i < n ; i++) {
+            d1.push_back(students[i]);
+            if(students[i] == 0) nz1++;
+            else no1++;
+        }
+        for(int i = 0 ; i < n ; i++) {
+            d2.push_back(sandwiches[i]);
+            if(sandwiches[i] == 0) nz2++;
+            else no2++;
+        }
+
+        while(!d1.empty() && !d2.empty()) {
+            if(nz1 == 0 && d2.front() == 0) {
+                return d1.size();
+            } else if(no1 == 0 && d2.front() == 1) {
+                return d1.size();
+            }
+
+            if(d1.front() == d2.front()) {
+                if(d1.front() == 0) {
+                    nz1--;
+                    nz2--;
+                } else {
+                    no1--;
+                    no2--;
+                }
+                d1.pop_front();
+                d2.pop_front();
+            } else {
+                int temp = d1.front();
+                d1.pop_front();
+                d1.push_back(temp);
+            }
+        }
+
+        return d1.size() | d2.size();
+    }
+};
