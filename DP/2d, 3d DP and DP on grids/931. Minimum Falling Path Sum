@@ -1,0 +1,145 @@
+https://leetcode.com/problems/minimum-falling-path-sum/description/
+
+
+
+// bottom up with space optimization
+
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int mn = INT_MAX;
+        vector<int> dp(n, 0); 
+
+        for(int i = 0 ; i < n ; i++) {
+            dp[i] = matrix[n-1][i];
+        }
+
+        for(int i = n-2 ; i >= 0 ; i--) {
+            vector<int> temp(n, 0);
+            for(int j = 0 ; j < n ; j++) {
+                int p1 = j-1 >= 0 ? dp[j-1] : INT_MAX;
+                int p2 = dp[j];
+                int p3 = j+1 < n ? dp[j+1] : INT_MAX;
+                
+                temp[j] = matrix[i][j] + min(p1, min(p2,p3));
+            }
+            dp = temp;
+        }
+
+        return *min_element(dp.begin(), dp.end());
+    }
+};
+
+
+
+
+// bottom up
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& matrix) {
+//         int n = matrix.size();
+//         int mn = INT_MAX;
+//         vector<vector<int>> dp(n, vector<int>(n, 0)); 
+
+//         for(int i = 0 ; i < n ; i++) {
+//             dp[n-1][i] = matrix[n-1][i];
+//         }
+
+//         for(int i = n-2 ; i >= 0 ; i--) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 int p1 = j-1 >= 0 ? dp[i+1][j-1] : INT_MAX;
+//                 int p2 = dp[i+1][j];
+//                 int p3 = j+1 < n ? dp[i+1][j+1] : INT_MAX;
+
+//                 dp[i][j] = matrix[i][j] + min(p1, min(p2,p3));
+//             }
+//         }
+
+//         return *min_element(dp[0].begin(), dp[0].end());
+//     }
+// };
+
+
+
+
+
+// top down (TLE)
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& matrix) {
+//         int n = matrix.size();
+//         int mn = INT_MAX;
+//         vector<vector<int>> dp(n, vector<int>(n, -1)); 
+          
+//         auto solve = [&] (auto& solve, int row, int col) -> int {
+//             if(row >= n || col >= n || col < 0 || row < 0) return INT_MAX;
+//             if(row == n-1) return matrix[n-1][col];
+
+//             if(dp[row][col] != -1) return dp[row][col];
+
+//             int p1 = solve(solve, row + 1, col - 1);
+//             int p2 = solve(solve, row + 1, col);
+//             int p3 = solve(solve, row + 1, col + 1);
+
+//             return dp[row][col] = matrix[row][col] + min(p1, min(p2, p3));
+//         };
+
+//         for(int i = 0 ; i < n ; i++) {
+//             mn = min(mn, solve(solve, 0, i));
+//         }
+//         return mn;
+//     }
+// };
+
+
+
+
+
+// dijkstra   (TLE)
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& matrix) {
+//         int n = matrix.size();
+//         using pii = pair<int, pair<int,int>>;
+//         int mn = INT_MAX;
+//         vector<vector<int>> dir = {{1,-1}, {1,0}, {1,1}};
+//         priority_queue<pii, vector<pii>, greater<pii>> pq;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
+//             pq.push({matrix[0][i], {0,i}});
+//             dist[0][i] = matrix[0][i];
+
+//             while(!pq.empty()) {
+//                 int s = pq.top().first;
+//                 int row = pq.top().second.first;
+//                 int col = pq.top().second.second;
+//                 pq.pop();
+
+//                 if(row == n-1) {
+//                     mn = min(mn, s);
+//                     continue;
+//                 }
+
+//                 for(auto& d : dir) {
+//                     int nrow = row + d[0];
+//                     int ncol = col + d[1];
+
+//                     if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n) {
+//                         int ns = s + matrix[nrow][ncol];
+                        
+//                         if(dist[nrow][ncol] > ns) {
+//                             dist[nrow][ncol] = ns;
+//                             pq.push({ns, {nrow, ncol}});
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         return mn;
+//     }
+// };
