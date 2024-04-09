@@ -1,0 +1,61 @@
+https://leetcode.com/problems/time-needed-to-buy-tickets/description/?envType=daily-question&envId=2024-04-09
+
+
+
+// optimal
+
+class Solution {
+public:
+    int timeRequiredToBuy(vector<int>& tickets, int k) {
+        int n = tickets.size();
+        int t = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            if(i < k) {
+                t += min(tickets[i], tickets[k]);
+            } else if(i == k) {
+                t += tickets[i];
+            } else {
+                if(tickets[i] < tickets[k]) {
+                    t += tickets[i];
+                } else {
+                    t += (tickets[k] - 1);
+                }
+            }
+        }
+
+        return t;        
+    }
+};
+
+
+
+
+/*
+// brute force
+
+class Solution {
+public:
+    int timeRequiredToBuy(vector<int>& tickets, int k) {
+        deque<pair<int,int>> q;
+        int n = tickets.size();
+
+        for(int i = 0 ; i < n ; i++) {
+            q.push_back({i, tickets[i]});
+        }
+
+        int t = 0;
+        while(!q.empty()) {
+            t++;
+            int idx = q.front().first;
+            int curr = q.front().second;
+            q.pop_front();
+
+            if(idx == k && curr-1 == 0) return t;
+
+            if(curr-1 > 0) q.push_back({idx, curr-1});
+        }
+        return t;        
+    }
+};
+*/
