@@ -23,7 +23,7 @@ public:
             int idxOfNgr = ngr[i];
             int endPoint = i;
 
-            int ub = lower_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), idxOfNgr) - mpp[nums[i]].begin();
+            int ub = upper_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), idxOfNgr) - mpp[nums[i]].begin();
             int lb = lower_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), endPoint) - mpp[nums[i]].begin();
             
             count += (ub - lb);
