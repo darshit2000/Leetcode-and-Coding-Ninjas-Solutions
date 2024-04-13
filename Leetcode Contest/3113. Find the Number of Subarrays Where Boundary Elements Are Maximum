@@ -1,0 +1,66 @@
+https://leetcode.com/problems/find-the-number-of-subarrays-where-boundary-elements-are-maximum/description/
+
+
+
+class Solution {
+public:
+    long long numberOfSubarrays(vector<int>& nums) {
+        int n = nums.size();
+        stack<int> stk;
+        vector<int> ngr(n, n);
+        unordered_map<int, vector<int>> mpp;
+        long long count = 0;
+
+        for(int i = n-1 ; i >= 0 ; i--) {
+            while(!stk.empty() && nums[stk.top()] <= nums[i]) stk.pop();
+            if(!stk.empty()) ngr[i] = stk.top();
+            stk.push(i);
+        }
+
+        for(int i = 0 ; i < n ; i++) mpp[nums[i]].push_back(i);
+
+        for(int i = 0 ; i < n ; i++) {
+            int idxOfNgr = ngr[i];
+            int endPoint = i;
+
+            int ub = lower_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), idxOfNgr) - mpp[nums[i]].begin();
+            int lb = lower_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), endPoint) - mpp[nums[i]].begin();
+            
+            count += (ub - lb);
+        }
+        
+        return count;
+    }
+};
+
+
+
+// class Solution {
+// public:
+//     long long numberOfSubarrays(vector<int>& nums) {
+//         int n = nums.size();
+//         stack<int> stk;
+//         vector<int> ngl(n, -1);
+//         unordered_map<int, vector<int>> mpp;
+//         long long count = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             while(!stk.empty() && nums[stk.top()] <= nums[i]) stk.pop();
+//             if(!stk.empty()) ngl[i] = stk.top();
+//             stk.push(i);
+//             mpp[nums[i]].push_back(i);
+//         }
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             int idxOfNgl = ngl[i];
+//             int endPoint = i;
+
+//             int ub = upper_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), idxOfNgl) - mpp[nums[i]].begin();
+//             int lb = lower_bound(mpp[nums[i]].begin(), mpp[nums[i]].end(), endPoint) - mpp[nums[i]].begin();
+            
+//             count += (lb - ub + 1);
+//         }
+        
+//         return count;
+//     }
+// };
