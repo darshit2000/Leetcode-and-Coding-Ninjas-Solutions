@@ -1,0 +1,23 @@
+https://leetcode.com/problems/minimum-rectangles-to-cover-points/description/
+
+
+
+class Solution {
+public:
+    int minRectanglesToCoverPoints(vector<vector<int>>& points, int w) {
+        int n = points.size();
+        
+        sort(points.begin(), points.end());
+        int total = 1;
+        int start = points[0][0];
+        
+        for(int i = 0 ; i < n ; i++) {
+            if(points[i][0] - start <= w)  continue;
+            else {
+                total++;
+                start = points[i][0];
+            }
+        }
+        return total;
+    }
+};
