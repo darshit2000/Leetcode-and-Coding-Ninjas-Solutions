@@ -1,0 +1,103 @@
+https://leetcode.com/problems/minimum-time-to-visit-disappearing-nodes/description/
+
+
+
+
+class Solution {
+public:
+    vector<int> minimumTime(int n, vector<vector<int>>& edges, vector<int>& disappear) {
+        vector<int> dist(n, INT_MAX);
+        vector<pair<int,int>> adj[n];   
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        vector<bool> vis(n, false);
+        
+        for(vector<int> &e : edges) {
+            int u = e[0];
+            int v = e[1];
+            int wt = e[2];
+            adj[u].push_back({v, wt});
+            adj[v].push_back({u, wt});
+        }
+        
+        pq.push({0, 0});
+        dist[0] = 0;
+
+        while(size(pq)) {
+            auto [time, node] = pq.top();
+            pq.pop();
+
+            // if(time > dist[node]) continue;
+
+            if(vis[node]) continue;
+            vis[node] = true;
+
+            for(auto &[child, timeToReachChild] : adj[node]) {    
+                int newTime = timeToReachChild + time;
+
+                if(newTime < disappear[child] && newTime < dist[child]) {
+                    dist[child] = newTime;
+                    pq.push({newTime, child});
+                }
+            }
+        }
+        
+        for(int &i : dist) {
+            if(i == INT_MAX) i = -1;
+        }
+
+        return dist;
+    }
+};
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<int> minimumTime(int n, vector<vector<int>>& edges, vector<int>& disappear) {
+//         vector<int> dist(n, INT_MAX);
+//         using pii = pair<int,int>;
+        
+//         vector<vector<pii>> adj(n);
+//         set<pii> st;
+
+//         for(vector<int> &e : edges) {
+//             int u = e[0];
+//             int v = e[1];
+//             int wt = e[2];
+//             adj[u].push_back({v, wt});
+//             adj[v].push_back({u, wt});
+//         }
+        
+//         dist[0] = 0;
+//         st.insert({0,0});
+
+//         while(st.size() > 0) {
+//             int node = st.begin()->second;
+//             int time = st.begin()->first;
+            
+//             st.erase(st.begin());
+            
+//             for(pair<int,int> &p : adj[node]) {
+//                 int child = p.first;
+//                 int w = p.second;
+                                
+//                 if(time + w < disappear[child] && time + w < dist[child]) {
+//                     if(dist[child] != INT_MAX) {
+//                         st.erase({dist[child], child});
+//                     }
+//                     dist[child] = time + w;
+//                     st.insert({dist[child], child});
+//                 }
+//             }
+//         }
+
+//         for(int &i : dist) {
+//             if(i == INT_MAX) i = -1;
+//         }
+        
+//         return dist;
+//     }
+// };
