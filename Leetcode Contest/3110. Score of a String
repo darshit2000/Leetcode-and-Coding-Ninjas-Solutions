@@ -1,0 +1,18 @@
+https://leetcode.com/contest/biweekly-contest-128/problems/score-of-a-string/
+
+
+
+class Solution {
+public:
+    int scoreOfString(string s) {
+        int n = s.length();
+        int score = 0;
+        
+        for(int i = 0 ; i < n-1 ; i++) {
+            int c1 = s[i] - 'a';
+            int c2 = s[i+1] - 'a';
+            score += abs(c1 - c2);
+        }
+        return score;
+    }
+};
