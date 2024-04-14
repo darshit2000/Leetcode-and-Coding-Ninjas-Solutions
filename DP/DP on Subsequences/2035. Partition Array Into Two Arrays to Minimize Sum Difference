@@ -1,0 +1,132 @@
+https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/description/
+
+
+
+#define ll long long
+
+// Meet in the middle
+
+class Solution {
+public:
+    int minimumDifference(vector<int>& nums) {
+        int N = nums.size();
+        int n = N/2;
+        ll sum = accumulate(nums.begin(), nums.end(), 0LL);
+        vector<vector<int>> left(n+1), right(n+1);
+
+        for(int bit = 0 ; bit <= ((1<<n)-1) ; bit++) {
+            int leftSum = 0, rightSum = 0, leftSize = 0, rightSize = 0;
+
+            // Getting subsets sums of left N/2 elements    
+            for(int i = 0 ; i < n ; i++) {
+                if(bit & (1<<i)) {
+                    leftSum += nums[i];
+                    leftSize++;
+                }
+            }
+            left[leftSize].push_back(leftSum);
+
+            // Getting subsets sums of right N/2 elements
+            for(int i = 0 ; i < n ; i++) {
+                if(bit & (1<<i)) {
+                    rightSum += nums[i+n];
+                    rightSize++;
+                }
+            }
+            right[rightSize].push_back(rightSum);
+        }
+
+        for(int i = 0 ; i <= n; i++) {
+            sort(right[i].begin(), right[i].end());
+        }
+
+        ll minDiff = INT_MAX;
+        for(int leftSize = 0 ; leftSize <= n ; leftSize++) {
+
+            for(int& a : left[leftSize]) {
+                // we want sum - 2*(part_1_sum) tend to 0 => sum - 2*(a+b) -> 0 => b = sum/2 - a
+                int desired_b = sum/2 - a;
+                int rightSize = n - leftSize;
+                
+                auto itr = lower_bound(right[rightSize].begin(), right[rightSize].end(), desired_b);
+
+                if(itr != right[rightSize].end()) {
+                    int b = *itr;
+                    minDiff = min(minDiff, abs(sum - 2*(a + b)));
+                }
+
+                if(itr != right[rightSize].begin()) {
+                    --itr;
+                    int b = *itr;
+                    minDiff = min(minDiff, abs(sum - 2*(a + b)));
+                }
+            }
+        }
+
+        return minDiff;
+    }
+};
+
+
+
+
+// top down 3d DP (TLE)
+
+// class Solution {
+// public:
+//     int minimumDifference(vector<int>& nums) {
+//         int n = nums.size();
+//         ll s = accumulate(nums.begin(), nums.end(), 0LL);
+//         vector<vector<unordered_map<int,int>>> dp(n, vector<unordered_map<int,int>>(n));
+
+//         auto getMinDiff = [&] (auto& getMinDiff, int i, int sz, int sum) -> int {
+//             if(i == n) {
+//                 if(sz == n/2) return abs(s - 2*sum);
+//                 else return INT_MAX;
+//             }
+
+//             if(dp[i][sz].count(sum)) return dp[i][sz][sum];
+
+//             int notTake = getMinDiff(getMinDiff, i+1, sz, sum);
+//             int take = getMinDiff(getMinDiff, i+1, sz+1, sum + nums[i]);
+
+//             return dp[i][sz][sum] = min(notTake, take);
+//         };
+
+//         return getMinDiff(getMinDiff, 0, 0, 0);
+//     }
+// };
+
+
+
+
+// top down 5d DP (TLE)
+
+// class Solution {
+// public:
+//     int minimumDifference(vector<int>& nums) {
+//         int n = nums.size();
+//         ll s = accumulate(nums.begin(), nums.end(), 0LL);
+
+//         vector<vector<vector<unordered_map<int,unordered_map<int,int>>>>> dp(n, vector<vector<unordered_map<int,unordered_map<int,int>>>>(n, vector<unordered_map<int,unordered_map<int,int>>>(n)));
+//         // unordered_map<int, unordered_map<int, unordered_map<int, unordered_map<int,unordered_map<int, int>>>>> dp;
+
+//         auto solve = [&] (auto& solve, int i, ll s1, ll s2, int sz1, int sz2) -> int {
+//             if(i >= n) {
+//                 if(sz1 == sz2) return abs(s1 - s2);
+//                 else return INT_MAX;
+//             }
+
+//             if(dp[i][sz1][sz2].count(s1) > 0 && dp[i][sz1][sz2][s1].count(s2) > 0) return dp[i][sz1][sz2][s1][s2];
+
+//             // if(dp.count(i) && dp[i].count(sz1) && dp[i][sz1].count(sz2) && dp[i][sz1][sz2].count(s1) && dp[i][sz1][sz2][s1].count(s2)) return dp[i][sz1][sz2][s1][s2];
+
+//             int takeInFirst = solve(solve, i+1, s1 + 1LL*nums[i], s2, sz1 + 1, sz2);
+//             int takeInSecond = solve(solve, i+1, s1, s2 + nums[i], sz1, sz2 + 1);
+
+//             return dp[i][sz1][sz2][s1][s2] = min(takeInFirst, takeInSecond);
+//         };
+
+//         return solve(solve, 0, 0LL, 0LL, 0, 0);
+//     }
+// };
