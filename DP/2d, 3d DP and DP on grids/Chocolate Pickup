@@ -1,0 +1,82 @@
+https://www.naukri.com/code360/problems/chocolate-pickup_3125885?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+
+#include <bits/stdc++.h> 
+
+// bottom up
+
+int maximumChocolates(int r, int c, vector<vector<int>> &grid) {
+    // Write your code here.
+    vector<vector<vector<int>>> dp(r, vector<vector<int>>(c, vector<int>(c, 0)));
+
+    for(int colA = 0 ; colA < c ; colA++) {
+          for(int colB = 0 ; colB < c ; colB++) {
+              if(colA == colB) {
+                  dp[r-1][colA][colB] = grid[r-1][colA];
+              } else {
+                  dp[r-1][colA][colB] = grid[r-1][colA] + grid[r-1][colB];
+              }
+        }
+    }
+
+    for(int i = r-2 ; i >= 0 ; i--) {
+        for(int j = 0 ; j < c ; j++) {
+            for(int k = 0 ; k < c ; k++) {
+                int maxChocolates = INT_MIN;
+
+                for(int da = -1; da <= 1 ; da++) {
+                    for(int db = -1; db <= 1 ; db++) {
+                        int curr = (j == k) ? grid[i][j] : grid[i][j] + grid[i][k];
+
+                        if(j + da >= 0 && j + da < c && k + db >= 0 && k + db < c) {
+                            curr += dp[i + 1][j + da][k + db];
+                        }
+                        
+                        maxChocolates = max(maxChocolates, curr);
+                    }
+                }
+                dp[i][j][k] = maxChocolates;
+            }
+        }
+    }
+    return dp[0][0][c-1];
+}
+
+
+
+
+// top down
+
+// int maximumChocolates(int r, int c, vector<vector<int>> &grid) {
+//     // Write your code here.
+//     vector<vector<vector<int>>> dp(r, vector<vector<int>>(c, vector<int>(c, -1)));
+
+//     auto getMaxChocolate = [&] (auto& getMaxChocolate, int row, int colA, int colB) -> int {
+//         if(colA < 0 || colA >= c || colB < 0 || colB >= c) return -1e9;
+        
+//         if(row == r-1) {
+//             if(colA == colB) {
+//                 return grid[r-1][colA];
+//             } else {
+//                 return grid[r-1][colA] + grid[r-1][colB];
+//             }
+//         }
+
+//         if(dp[row][colA][colB] != -1) return dp[row][colA][colB];
+
+//         int maxChocolates = INT_MIN;
+
+//         for(int da = -1; da <= 1 ; da++) {
+//             for(int db = -1; db <= 1 ; db++) {
+//                 int curr = (colA == colB) ? grid[row][colA] : grid[row][colA] + grid[row][colB];
+//                 curr += getMaxChocolate(getMaxChocolate, row + 1, colA + da, colB + db);
+                
+//                 maxChocolates = max(maxChocolates, curr);
+//             }
+//         }
+//         return dp[row][colA][colB] = maxChocolates;
+//     };
+
+//     return getMaxChocolate(getMaxChocolate, 0, 0, c-1);
+// }
