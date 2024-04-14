@@ -1,0 +1,65 @@
+https://www.geeksforgeeks.org/problems/minimum-sum-partition3317/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+
+
+
+class Solution{
+
+  public:
+    int minDifference(int arr[], int n)  { 
+	    // Your code goes here
+	   int s = 0;
+	   for(int i = 0 ; i < n ; i++) s += arr[i];
+	   
+	   vector<vector<bool>> dp(n, vector<bool>(s+1, false));
+	   
+	   for(int i = 0 ; i < n ; i++) dp[i][0] = true;
+	   dp[0][arr[0]] = true;
+	   
+	   for(int i = 1 ; i < n ; i++) {
+	       for(int target = 1 ; target <= s ; target++) {
+	           bool notTake = dp[i-1][target];
+	           bool take = false;
+	           if(arr[i] <= target) {
+	               take = dp[i-1][target - arr[i]];
+	           }
+	           
+	           dp[i][target] = take | notTake;
+	       }
+	   }
+	   
+	   int mn = INT_MAX;
+	   for(int i = 1 ; i <= s ; i++) {
+	       if(dp[n-1][i]) {
+	           int s1 = i;
+	           int s2 = s - i;
+	           mn = min(mn, abs(s1 - s2));
+	       }
+	   }
+	   return mn;
+	} 
+};
+
+
+// top down
+
+// class Solution{
+
+//   public:
+//     int getMinDiff(int i, int s1, int s2, int arr[], int n, vector<unordered_map<int, unordered_map<int,int>>> &dp) {
+//         if(i == n) {
+//             return abs(s1-s2);
+//         }
+//         if(dp[i].count(s1) && dp[i][s1].count(s2)) return dp[i][s1][s2];
+        
+//         int takeInFirst = getMinDiff(i+1, s1 + arr[i], s2, arr, n, dp);
+//         int takeInSecond = getMinDiff(i+1, s1, s2 + arr[i], arr, n, dp);
+        
+//         return dp[i][s1][s2] = min(takeInFirst, takeInSecond);
+        
+//     }
+// 	int minDifference(int arr[], int n)  { 
+// 	    // Your code goes here
+// 	   vector<unordered_map<int, unordered_map<int,int>>> dp(n);
+// 	   return getMinDiff(0, 0, 0, arr, n, dp);
+// 	} 
+// };
