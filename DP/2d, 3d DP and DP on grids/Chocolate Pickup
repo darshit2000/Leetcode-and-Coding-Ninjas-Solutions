@@ -31,6 +31,8 @@ int maximumChocolates(int r, int c, vector<vector<int>> &grid) {
 
                         if(j + da >= 0 && j + da < c && k + db >= 0 && k + db < c) {
                             curr += dp[i + 1][j + da][k + db];
+                        } else {
+                            curr = INT_MIN;
                         }
                         
                         maxChocolates = max(maxChocolates, curr);
