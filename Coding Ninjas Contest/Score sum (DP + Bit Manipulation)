@@ -27,33 +27,33 @@ https://www.naukri.com/code360/contests/weekly-contest-122/12659448/problems/310
 
 // Memoization
 
-long long scoreSum (int n, vector <int> &a) {
-    // Write your code here.
-    vector<int> dp(n, INT_MAX);
-    ll sum = 0LL;
+// long long scoreSum (int n, vector <int> &a) {
+//     // Write your code here.
+//     vector<int> dp(n, INT_MAX);
+//     ll sum = 0LL;
 
-    for(int i = 0 ; i < n ; i++) {
+//     for(int i = 0 ; i < n ; i++) {
 
-        auto getMin = [&] (auto& getMin, int idx) -> int {
-            if(idx == 0) return a[0];
+//         auto getMin = [&] (auto& getMin, int idx) -> int {
+//             if(idx == 0) return a[0];
 
-            if(dp[idx] != INT_MAX) return dp[idx];
+//             if(dp[idx] != INT_MAX) return dp[idx];
 
-            int mn = a[idx];
-            for(int bit = 0 ; bit < 20 ; bit++) {
-                if((idx >> bit) & 1) {
-                    int toggled = (i ^ (1<<bit));
-                    mn = min(mn, getMin(getMin, toggled));
-                }
-            }
-            return dp[idx] = mn;
-        };
+//             int mn = a[idx];
+//             for(int bit = 0 ; bit < 20 ; bit++) {
+//                 if((idx >> bit) & 1) {
+//                     int toggled = (i ^ (1<<bit));
+//                     mn = min(mn, getMin(getMin, toggled));
+//                 }
+//             }
+//             return dp[idx] = mn;
+//         };
 
-        sum += (1LL * a[i] * 1LL * getMin(getMin, i));
-    }
+//         sum += (1LL * a[i] * 1LL * getMin(getMin, i));
+//     }
 
-    return sum;
-}
+//     return sum;
+// }
 
 
 
@@ -61,35 +61,33 @@ long long scoreSum (int n, vector <int> &a) {
 
 // Backtracking / Recursion
 
-// void getAllJ(int i, vector<int>& indices) {
-//     if(i == 0) return;
+void getAllJ(int i, int &mn, vector<int> &a) {
+    if(i == 0) return;
     
-//     indices.push_back(i);
-//     int n = (int)log2(i) + 1;
-//     for(int bit = 0 ; bit < n ; bit++) {
-//         if((i & (1<<bit)) != 0) {
-//             // unset the "bit"th bit in i
-//             i = (i & ~(1<<bit));
-//             getAllJ(i, indices);
-//             // set the "bit"th bit in i
-//             i = (i | (1<<bit));
-//         }
-//     }
-// }
+    int n = (int)log2(i) + 1;
+    for(int bit = 0 ; bit < n ; bit++) {
+        if((i & (1<<bit)) != 0) {
+            // unset the "bit"th bit in i
+            i = (i & ~(1<<bit));
+            mn = min(mn, a[i]);
+            getAllJ(i, mn, a);
+            // set the "bit"th bit in i
+            i = (i | (1<<bit));
+        }
+    }
+}
 
-// long long scoreSum (int n, vector <int> &a) {
-//     // Write your code here.
-//     vector<ll> score(n, INT_MAX);
+long long scoreSum (int n, vector <int> &a) {
+    // Write your code here.
+    vector<ll> score(n, INT_MAX);
+    ll sum = 0LL;
 
-//     for(int i = 0 ; i < n ; i++) {
-//         vector<int> indices;
-//         indices.push_back(0);
-//         indices.push_back(i);
-//         getAllJ(i, indices);
-//         for(int x : indices) {
-//             score[i] = min(score[i], 1LL*a[i]*a[x]);
-//         }
-//     }
+    for(int i = 0 ; i < n ; i++) {
+        int mn = a[i];
+        getAllJ(i, mn, a);
+        
+        sum += (1LL * a[i] * 1LL * mn);
+    }
 
-//     return accumulate(score.begin(), score.end(), 0LL);
-// }
+    return sum;
+}
