@@ -1,0 +1,81 @@
+https://www.naukri.com/code360/problems/0-1-knapsack_920542?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+
+#include <bits/stdc++.h> 
+
+// bottom up
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+{
+	// Write your code here
+	vector<vector<int>> dp(n, vector<int>(maxWeight+1, 0));
+
+	for(int w = 0 ; w <= maxWeight ; w++)  {
+		if(weight[0] <= w) dp[0][w] = value[0];
+	}
+
+	for(int i = 1 ; i < n ; i++) {
+		for(int w = 0 ; w <= maxWeight ; w++) {
+			int notTake = dp[i-1][w];
+			int take = 0;
+			if(weight[i] <= w) take = value[i] + dp[i-1][w - weight[i]];
+
+			dp[i][w] = max(take, notTake);
+		}
+	}
+	return dp[n-1][maxWeight];
+}
+
+
+// top down
+
+// int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+// {
+// 	// Write your code here
+// 	vector<vector<int>> dp(n, vector<int>(maxWeight+1, -1));
+
+// 	auto f = [&] (auto& f, int i, int w) -> int {
+// 		if(i == 0) {
+// 			if(weight[0] <= w) return value[0];
+// 			else return 0;
+// 		}
+
+// 		if(dp[i][w] != -1) return dp[i][w];
+		
+// 		int notTake = f(f, i-1, w);
+// 		int take = 0;
+// 		if(weight[i] <= w) take = value[i] + f(f, i-1, w-weight[i]);
+
+// 		return dp[i][w] = max(take, notTake);
+// 	};
+
+// 	return f(f, n-1, maxWeight);
+// }
+
+
+
+// bottom up with space optimization
+
+// int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+// {
+// 	// Write your code here
+// 	vector<int> dp(maxWeight+1, 0);
+
+// 	for(int w = 0 ; w <= maxWeight ; w++)  {
+// 		if(weight[0] <= w) dp[w] = value[0];
+// 	}
+
+// 	for(int i = 1 ; i < n ; i++) {
+// 		vector<int> temp(maxWeight + 1, 0);
+// 		for(int w = 0 ; w <= maxWeight ; w++) {
+// 			int notTake = dp[w];
+// 			int take = 0;
+// 			if(weight[i] <= w) take = value[i] + dp[w - weight[i]];
+
+// 			temp[w] = max(take, notTake);
+// 		}
+// 		dp = temp;
+// 	}
+// 	return dp[maxWeight];
+// }
