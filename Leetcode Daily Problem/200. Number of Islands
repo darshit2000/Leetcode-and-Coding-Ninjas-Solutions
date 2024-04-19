@@ -1,0 +1,75 @@
+https://leetcode.com/problems/number-of-islands/description/?envType=daily-question&envId=2024-04-19
+
+
+
+// modifying the grid itself
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        int total = 0;
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        auto dfs = [&] (auto& dfs, int row, int col) -> void {
+            grid[row][col] = '2';
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < m && ncol >= 0 && ncol < n && grid[nrow][ncol] == '1') {
+                    dfs(dfs, nrow, ncol);
+                }
+            }
+        };
+
+        for(int i = 0 ; i < m ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(grid[i][j] == '1') {
+                    dfs(dfs, i, j);
+                    total++;
+                }  
+            }
+        }
+        return total;
+    }
+};
+
+
+// visited array
+
+// class Solution {
+// public:
+//     int numIslands(vector<vector<char>>& grid) {
+//         int m = grid.size();
+//         int n = grid[0].size();
+//         int total = 0;
+//         vector<vector<int>> vis(m, vector<int>(n,0));
+//         vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+//         auto dfs = [&] (auto& dfs, int row, int col) -> void {
+//             vis[row][col] = 1;
+
+//             for(auto& d : dir) {
+//                 int nrow = row + d[0];
+//                 int ncol = col + d[1];
+
+//                 if(nrow >= 0 && nrow < m && ncol >= 0 && ncol < n && vis[nrow][ncol] == 0 && grid[nrow][ncol] == '1') {
+//                     dfs(dfs, nrow, ncol);
+//                 }
+//             }
+//         };
+
+//         for(int i = 0 ; i < m ; i++) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(grid[i][j] == '1' && vis[i][j] == 0) {
+//                     dfs(dfs, i, j);
+//                     total++;
+//                 }  
+//             }
+//         }
+//         return total;
+//     }
+// };
