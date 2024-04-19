@@ -55,7 +55,32 @@ int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight)
 
 
 
-// bottom up with space optimization
+// bottom up with space optimization 1
+
+// int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+// {
+// 	// Write your code here
+// 	vector<int> dp(maxWeight+1, 0);
+
+// 	for(int w = 0 ; w <= maxWeight ; w++)  {
+// 		if(weight[0] <= w) dp[w] = value[0];
+// 	}
+
+// 	for(int i = 1 ; i < n ; i++) {
+// 		for(int w = maxWeight ; w >= 0 ; w--) {
+// 			int notTake = dp[w];
+// 			int take = 0;
+// 			if(weight[i] <= w) take = value[i] + dp[w - weight[i]];
+
+// 			dp[w] = max(take, notTake);
+// 		}
+// 	}
+// 	return dp[maxWeight];
+// }
+
+
+
+// bottom up with space optimization 2
 
 // int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
 // {
