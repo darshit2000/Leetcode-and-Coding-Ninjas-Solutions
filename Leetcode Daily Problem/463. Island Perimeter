@@ -1,0 +1,73 @@
+https://leetcode.com/problems/island-perimeter/description/?envType=daily-question&envId=2024-04-18
+
+
+
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        int p = 0;
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < m ; j++) {
+                if(grid[i][j] == 1) {
+                    for(auto& d : dir) {
+                        int nrow = i + d[0];
+                        int ncol = j + d[1];
+
+                        if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && grid[nrow][ncol] == 0) p++;
+                        else if(nrow < 0 || nrow >= n || ncol < 0 || ncol >= m) p++;
+                    }
+                }
+            }
+        }
+        return p;
+    }
+};
+
+
+
+
+
+// dfs
+
+// class Solution {
+// public:
+//     int islandPerimeter(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         int m = grid[0].size();
+//         int p = 0;
+//         vector<vector<int>> vis(n, vector<int>(m, 0));
+//         vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+//         auto dfs = [&] (auto& dfs, int row, int col) -> void {
+//             vis[row][col] = 1;
+
+//             for(auto& d : dir) {
+//                 int nrow = row + d[0];
+//                 int ncol = col + d[1];
+
+//                 if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m) {
+//                     if(vis[nrow][ncol] == 0) {
+//                         if(grid[nrow][ncol] == 0) p++;
+//                         else dfs(dfs, nrow, ncol);
+//                     }
+//                 } else {
+//                     p++;
+//                 }
+//             }
+//         };
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < m ; j++) {
+//                 if(grid[i][j] == 1) {
+//                     dfs(dfs, i, j);
+//                     return p;
+//                 }
+//             }
+//         }
+//         return 0;
+//     }
+// };
