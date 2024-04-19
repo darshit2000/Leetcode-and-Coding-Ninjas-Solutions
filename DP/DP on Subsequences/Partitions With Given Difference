@@ -1,0 +1,62 @@
+https://www.naukri.com/code360/problems/partitions-with-given-difference_3751628?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+
+#include <bits/stdc++.h> 
+
+// bottom up
+
+int countPartitions(int n, int d, vector<int> &arr) {
+    // Write your code here.
+    const int MOD = 1e9 + 7;
+    long long totSum = accumulate(arr.begin(), arr.end(), 0LL);
+    int target = (totSum - d)/2;
+    if(target < 0 || ((totSum - d) & 1)) return 0;
+    // if(target < 0 || (totSum - d) % 2 == 1) return 0;
+
+    vector<vector<int>> dp(n, vector<int>(target+1, 0));
+
+    for(int i = 0 ; i < n ; i++) dp[i][0] = 1;
+    dp[0][arr[0]] += 1;
+
+    for(int i = 1 ; i < n ; i++) {
+        for(int s = 0 ; s <= target ; s++) {
+                int t1 = 0, t2 = 0;
+
+                t1 = dp[i-1][s];
+                if(s >= arr[i]) t2 = dp[i-1][s - arr[i]];
+
+                dp[i][s] = (t1 + t2) % MOD;
+        }
+    }
+    
+    return dp[n-1][target];
+}
+
+
+
+// top down
+
+// int countPartitions(int n, int d, vector<int> &arr) {
+//     // Write your code here.
+//     const int MOD = 1e9 + 7;
+//     vector<unordered_map<int, unordered_map<int,int>>> dp(n);
+
+//     auto solve = [&] (auto& solve, int idx, int s1, int s2) -> int {
+//         if(idx >= n) {
+//             if(s1 - s2 == d) return 1;
+//             else return 0;
+//         }
+
+//         if(dp[idx].count(s1) && dp[idx][s1].count(s2)) return dp[idx][s1][s2];
+
+//         long long takeInFirst = solve(solve, idx + 1, s1 + arr[idx], s2);
+//         long long takeInSecond = solve(solve, idx + 1, s1, s2 + arr[idx]);
+
+//         return dp[idx][s1][s2] = (takeInFirst + takeInSecond) % MOD;
+//     };
+
+//     return solve(solve, 0, 0, 0);
+// }
+
+
