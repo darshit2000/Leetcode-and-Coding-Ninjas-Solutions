@@ -1,0 +1,58 @@
+https://www.naukri.com/code360/problems/unbounded-knapsack_1215029?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+
+
+#include <bits/stdc++.h>
+
+// bottom up
+
+int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight){
+    // Write Your Code Here.
+    vector<vector<int>> dp(n, vector<int>(w+1, 0));
+
+    for(int wt = 0 ; wt <= w ; wt++) {
+        dp[0][wt] = (wt/weight[0])*profit[0];
+    }
+
+    for(int i = 1 ; i < n ; i++) {
+        for(int wt = 0 ; wt <= w ; wt++) {
+            int take = 0;
+            if(wt - weight[i] >= 0) take = profit[i] + dp[i][wt - weight[i]];
+            int notTake = dp[i-1][wt];
+
+            dp[i][wt] = max(take, notTake);
+        }
+    }
+
+    return dp[n-1][w];
+}
+
+
+
+// top down
+
+// int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight){
+//     // Write Your Code Here.
+//     vector<vector<int>> dp(n, vector<int>(w+1, -1));
+
+//     auto f = [&] (auto& f, int i, int wt) -> int {
+//         if(i == 0) {
+//             int tot = 0;
+//             while(wt - weight[0] >= 0) {
+//                 tot += profit[0];
+//                 wt -= weight[0];
+//             }
+//             return tot;
+//         }
+
+//         if(dp[i][wt] != -1) return dp[i][wt];
+
+//         int take = 0;
+//         if(wt - weight[i] >= 0) take = profit[i] + f(f, i, wt - weight[i]);
+//         int notTake = f(f, i-1, wt);
+
+//         return dp[i][wt] = max(take, notTake);
+//     };
+
+//     return f(f, n-1, w);
+// }
