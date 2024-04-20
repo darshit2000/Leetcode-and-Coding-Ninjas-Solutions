@@ -1,0 +1,94 @@
+https://leetcode.com/problems/longest-palindromic-subsequence/description/
+
+
+
+// bottom up
+
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        int n = s.length();
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+
+        for(int i = n-1 ; i >= 0 ; i--) {
+            for(int j = 0 ; j < n ; j++) {
+                if(i < j) {
+                    int v1 = 0, v2 = 0, v3 = 0;
+
+                    v1 = dp[i+1][j];
+
+                    v2 = dp[i][j-1];
+
+                    if(s[i] == s[j]) v3 = 2 + dp[i+1][j-1];
+                    
+                    dp[i][j] = max(v1, max(v2, v3));
+
+                } else if(i == j) {
+                    dp[i][j] = 1;
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+};
+
+
+
+// top down (very high complexity)
+
+// class Solution {
+// public:
+//     int longestPalindromeSubseq(string s) {
+//         int n = s.length();
+//         vector<vector<int>> dp(n, vector<int>(n, -1));
+
+//         auto f = [&] (auto& f, int i, int j) -> int {
+//             if(i > j) return 0;
+//             if(i == j) return 1;
+
+//             if(dp[i][j] != -1) return dp[i][j];
+
+//             int v1 = 0;
+//             if(s[i] == s[j]) {
+//                 v1 = 2 + f(f, i+1, j-1);
+//             }
+
+//             int v2 = f(f, i+1, j);
+//             int v3 = f(f, i, j-1);
+
+//             return dp[i][j] = max(v1, max(v2, v3)) ;
+//         };
+//         return f(f, 0, n-1);
+//     }
+// };
+
+
+
+
+// top down -> (index, string)  MLE
+
+// class Solution {
+// public:
+//     int longestPalindromeSubseq(string s) {
+//         int n = s.length();
+//         unordered_map<int, unordered_map<string, int>> dp;
+
+//         auto f = [&] (auto& f, int i, string t) -> int {
+//             if(i == n) {
+//                 string rev = string(t.rbegin(), t.rend());
+//                 if(rev == t) return t.length();
+//                 else return 0;
+//             }
+
+//             if(dp.count(i) && dp[i].count(t)) return dp[i][t];
+
+//             t += s[i];
+//             int v1 = f(f, i+1, t);
+//             t.pop_back();
+//             int v2 = f(f, i+1, t);
+
+//             return dp[i][t] = max(v1, v2) ;
+//         };
+//         return f(f, 0, "");
+//     }
+// };
