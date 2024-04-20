@@ -13,10 +13,8 @@ int cutRod(vector<int> &price, int n)
 
 	for(int len = 1 ; len <= n ; len++) {
 		int mx = 0;
-		for(int i = 1 ; i <= n ; i++) {
-			if(len - i >= 0) {
-				mx = max(mx, price[i-1] + dp[len - i]);
-			}
+		for(int i = 1 ; i <= len ; i++) {
+			mx = max(mx, price[i-1] + dp[len - i]);
 		}
 		dp[len] = mx;
 	}
@@ -39,13 +37,12 @@ int cutRod(vector<int> &price, int n)
 // 		if(dp[len] != -1) return dp[len];
 
 // 		int mx = 0;
-// 		for(int i = 1 ; i <= n ; i++) {
-// 			if(len - i >= 0) {
-// 				mx = max(mx, f(f, len - i) + price[i-1]);
-// 			}
+// 		for(int i = 1 ; i <= len ; i++) {
+// 			mx = max(mx, f(f, len - i) + price[i-1]);
 // 		}
 // 		return dp[len] = mx;
 // 	};
 
 // 	return f(f, n);
 // }
+
