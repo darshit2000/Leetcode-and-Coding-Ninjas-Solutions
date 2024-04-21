@@ -1,0 +1,109 @@
+https://leetcode.com/problems/minimum-number-of-operations-to-satisfy-conditions/description/
+
+
+
+// bottom up with space optimization
+
+// class Solution {
+// public:
+//     int minimumOperations(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         int m = grid[0].size();
+//         vector<int> dp(11, 0), temp(11, 0);
+//         vector<vector<int>> diff(m, vector<int>(10, 0));
+
+//         for(int col = 0 ; col < m ; col++) {
+//             for(int row = 0 ; row < n ; row++) {
+//                 diff[col][grid[row][col]]++;
+//             }
+//         }
+
+//         for(int col = m-1 ; col >= 0 ; col--) {
+//             for(int prevRowNumber = 0 ; prevRowNumber <= 10 ; prevRowNumber++) {
+//                 int mn = INT_MAX;
+
+//                 for(int possibleNumber = 0 ; possibleNumber <= 9 ; possibleNumber++) {
+//                     if(possibleNumber == prevRowNumber) continue;
+
+//                     int c = n - diff[col][possibleNumber];
+
+//                     mn = min(mn, c + dp[possibleNumber]);
+//                 }
+//                 temp[prevRowNumber] = mn;
+//             }
+//             dp = temp;
+//         }
+//         return dp[10];
+//     }
+// };
+
+
+
+// bottom up
+
+class Solution {
+public:
+    int minimumOperations(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<int> v(10, 0);
+        int total = 0;
+        vector<vector<int>> dp(m+1, vector<int>(11, 0));
+        vector<vector<int>> diff(m, vector<int>(10, 0));
+
+        for(int col = 0 ; col < m ; col++) {
+            for(int row = 0 ; row < n ; row++) {
+                diff[col][grid[row][col]]++;
+            }
+        }
+
+        for(int col = m-1 ; col >= 0 ; col--) {
+            for(int prevRowNumber = 0 ; prevRowNumber <= 10 ; prevRowNumber++) {
+                int mn = INT_MAX;
+
+                for(int possibleNumber = 0 ; possibleNumber <= 9 ; possibleNumber++) {
+                    if(possibleNumber == prevRowNumber) continue;
+
+                    int c = n - diff[col][possibleNumber];
+
+                    mn = min(mn, c + dp[col+1][possibleNumber]);
+                }
+                dp[col][prevRowNumber] = mn;
+            }
+        }
+        return dp[0][10];
+    }
+};
+
+
+// top down
+
+// class Solution {
+// public:
+//     int minimumOperations(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         int m = grid[0].size();
+//         vector<int> v(10, 0);
+//         int total = 0;
+//         vector<vector<int>> dp(m, vector<int>(11, -1));
+        
+//         auto f = [&] (auto& f, int col, int prevRowNumber) -> int {
+//             if(col == m) return 0;
+
+//             if(dp[col][prevRowNumber] != -1) return dp[col][prevRowNumber];
+
+//             int mn = INT_MAX;
+//             for(int possibleNumber = 0 ; possibleNumber <= 9 ; possibleNumber++) {
+//                 if(possibleNumber == prevRowNumber) continue;
+
+//                 int c = 0;
+//                 for(int row = 0 ; row < n ; row++) {
+//                     if(grid[row][col] != possibleNumber) c++;
+//                 }
+//                 mn = min(mn, c + f(f, col+1, possibleNumber));
+//             }
+//             return dp[col][prevRowNumber] = mn;
+//         };
+//         return f(f, 0, 10);
+//     }
+// };
