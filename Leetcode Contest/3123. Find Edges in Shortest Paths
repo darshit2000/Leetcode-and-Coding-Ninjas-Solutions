@@ -2,80 +2,157 @@ https://leetcode.com/problems/find-edges-in-shortest-paths/description/
 
 
 
-// Dijkstra + backtracking
+// applying dijkstra from source and destination
 
 class Solution {
 public:
     vector<bool> findAnswer(int n, vector<vector<int>>& edges) {
+        using pi = pair<int,int>;
         int totalEdges = edges.size();
         vector<bool> ans(totalEdges, false);
-        using pii = pair<int, pair<int, int>>;
-        using piii = pair<int, pair<int, pair<int,int>>>;
-        priority_queue<pii, vector<pii>, greater<pii>> pq;
-        vector<vector<pii>> adj(n);
-        vector<int> dist(n, INT_MAX);
-        vector<vector<pair<int,int>>> parent(n);
-        vector<vector<pair<int,int>>> paths;
-        vector<pair<int,int>> p;
+        priority_queue<pi, vector<pi>, greater<pi>> pq1 ,pq2;
+        vector<vector<pi>> adj(n);
+        vector<int> dist1(n, INT_MAX), dist2(n, INT_MAX);
         
         for(int i = 0 ; i < totalEdges ; i++) {
             int u = edges[i][0];
             int v = edges[i][1];
             int wt = edges[i][2];
-            adj[u].push_back({i, {v, wt}});
-            adj[v].push_back({i, {u, wt}});
+            adj[u].push_back({v, wt});
+            adj[v].push_back({u, wt});
         }
         
-        pq.push({0, {0, -1}});
-        dist[0] = 0;
-        parent[0] = {{-1, -1}};
+        pq1.push({0, 0});
+        dist1[0] = 0;
         
-        while(!pq.empty()) {
-            int w = pq.top().first;
-            int node = pq.top().second.first;
-            int idx = pq.top().second.second;
-            pq.pop();
+        while(!pq1.empty()) {
+            int w = pq1.top().first;
+            int node = pq1.top().second;
+            pq1.pop();
+
+            if(w > dist1[node]) continue;
             
-            for(auto& p : adj[node]) {
-                int child = p.second.first;
-                int cwt = p.second.second;
-                int cidx = p.first;
-                
-                if(dist[child] > w + cwt) {
-                    dist[child] = w + cwt;
-                    pq.push({dist[child], {child, cidx}});
-                    parent[child] = {{node, cidx}};
+            for(auto& [child, cwt] : adj[node]) {
+
+                if(dist1[child] > w + cwt) {
+                    dist1[child] = w + cwt;
+                    pq1.push({dist1[child], child});
                 } 
-                else if(dist[child] == w + cwt) {
-                    parent[child].push_back({node, cidx});
-                }
             }
         }
-        
-        auto findP = [&] (auto& findP, vector<pair<int,int>> &p, int currNode) -> void {
-            if(currNode == -1) {
-                paths.push_back(p);
-                return;
-            }
-            for (auto &[parentOfCurrNode, edgeIndex] : parent[currNode]) {
-                p.push_back({currNode, edgeIndex});
 
-                findP(findP, p, parentOfCurrNode);
+        pq2.push({0, n-1});
+        dist2[n-1] = 0;
+        
+        while(!pq2.empty()) {
+            int w = pq2.top().first;
+            int node = pq2.top().second;
+            pq2.pop();
 
-                p.pop_back();
+            if(w > dist2[node]) continue;
+            
+            for(auto& [child, cwt] : adj[node]) {
+                
+                if(dist2[child] > w + cwt) {
+                    dist2[child] = w + cwt;
+                    pq2.push({dist2[child], child});
+                } 
             }
-        };
-        
-        findP(findP, p, n-1);
-        
-        for(vector<pair<int,int>> &v : paths) {
-            for(auto &[node, edgeIndex] : v) {
-                // cout << node << ":" << edgeIndex << ",";
-                if(edgeIndex != -1) ans[edgeIndex] = true;
-            }
-            // cout << endl;
         }
-        
+
+        for(int i = 0 ; i < totalEdges ; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            int wt = edges[i][2];
+
+            if(dist1[u] != INT_MAX && dist2[v] != INT_MAX && dist1[u] + wt + dist2[v] == dist1[n-1]) {
+                ans[i] = true;
+            }
+            if(dist1[v] != INT_MAX && dist2[u] != INT_MAX && dist1[v] + wt + dist2[u] == dist1[n-1]) {
+                ans[i] = true;
+            }
+        }
+         
         return ans;
     }
 };
+
+
+
+// Dijkstra + backtracking
+
+// class Solution {
+// public:
+//     vector<bool> findAnswer(int n, vector<vector<int>>& edges) {
+//         int totalEdges = edges.size();
+//         vector<bool> ans(totalEdges, false);
+//         using pii = pair<int, pair<int, int>>;
+//         using piii = pair<int, pair<int, pair<int,int>>>;
+//         priority_queue<pii, vector<pii>, greater<pii>> pq;
+//         vector<vector<pii>> adj(n);
+//         vector<int> dist(n, INT_MAX);
+//         vector<vector<pair<int,int>>> parent(n);
+//         vector<vector<pair<int,int>>> paths;
+//         vector<pair<int,int>> p;
+        
+//         for(int i = 0 ; i < totalEdges ; i++) {
+//             int u = edges[i][0];
+//             int v = edges[i][1];
+//             int wt = edges[i][2];
+//             adj[u].push_back({i, {v, wt}});
+//             adj[v].push_back({i, {u, wt}});
+//         }
+        
+//         pq.push({0, {0, -1}});
+//         dist[0] = 0;
+//         parent[0] = {{-1, -1}};
+        
+//         while(!pq.empty()) {
+//             int w = pq.top().first;
+//             int node = pq.top().second.first;
+//             int idx = pq.top().second.second;
+//             pq.pop();
+            
+//             for(auto& p : adj[node]) {
+//                 int child = p.second.first;
+//                 int cwt = p.second.second;
+//                 int cidx = p.first;
+                
+//                 if(dist[child] > w + cwt) {
+//                     dist[child] = w + cwt;
+//                     pq.push({dist[child], {child, cidx}});
+//                     parent[child] = {{node, cidx}};
+//                 } 
+//                 else if(dist[child] == w + cwt) {
+//                     parent[child].push_back({node, cidx});
+//                 }
+//             }
+//         }
+        
+//         auto findP = [&] (auto& findP, vector<pair<int,int>> &p, int currNode) -> void {
+//             if(currNode == -1) {
+//                 paths.push_back(p);
+//                 return;
+//             }
+//             for (auto &[parentOfCurrNode, edgeIndex] : parent[currNode]) {
+//                 p.push_back({currNode, edgeIndex});
+
+//                 findP(findP, p, parentOfCurrNode);
+
+//                 p.pop_back();
+//             }
+//         };
+        
+//         findP(findP, p, n-1);
+        
+//         for(vector<pair<int,int>> &v : paths) {
+//             for(auto &[node, edgeIndex] : v) {
+//                 // cout << node << ":" << edgeIndex << ",";
+//                 if(edgeIndex != -1) ans[edgeIndex] = true;
+//             }
+//             // cout << endl;
+//         }
+        
+//         return ans;
+//     }
+// };
