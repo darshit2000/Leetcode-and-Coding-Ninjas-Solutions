@@ -1,0 +1,115 @@
+https://leetcode.com/problems/coin-change/description/
+
+
+
+// 2-d bottom up with space optimization
+
+// class Solution {
+// public:
+//     int coinChange(vector<int>& coins, int amount) {
+//         int n = coins.size();
+//         vector<int> dp(amount+1, 1e9), temp(amount+1, 1e9);
+
+//         for(int a = 0 ; a <= amount ; a++) {
+//             if(a % coins[0] == 0) dp[a] = a/coins[0];
+//         }
+
+//         for(int i = 1 ; i < n ; i++) {
+//             for(int a = 0 ; a <= amount ; a++) {
+//                 int notTake = dp[a];
+//                 int take = 1e9;
+//                 if(a - coins[i] >= 0) take = 1 + temp[a - coins[i]];
+
+//                 temp[a] = min(take, notTake);
+//             }
+//             dp = temp;
+//         }
+
+//         return dp[amount] == 1e9 ? -1 : dp[amount];
+//     }
+// };
+
+
+
+// 2-d bottom up
+
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<vector<int>> dp(n, vector<int>(amount+1, 1e9));
+
+        for(int a = 0 ; a <= amount ; a++) {
+            if(a % coins[0] == 0) dp[0][a] = a/coins[0];
+        }
+
+        for(int i = 1 ; i < n ; i++) {
+            for(int a = 0 ; a <= amount ; a++) {
+                int notTake = dp[i-1][a];
+                int take = 1e9;
+                if(a - coins[i] >= 0) take = 1 + dp[i][a - coins[i]];
+
+                dp[i][a] = min(take, notTake);
+            }
+        }
+
+        return dp[n-1][amount] == 1e9 ? -1 : dp[n-1][amount];
+    }
+};
+
+
+
+// top down
+
+// class Solution {
+// public:
+//     int coinChange(vector<int>& coins, int amount) {
+//         int n = coins.size();
+//         vector<vector<int>> dp(n, vector<int>(amount+1, -1));
+
+//         auto f = [&] (auto& f, int i, int remaining) -> int {
+//             if(remaining < 0) return 1e9;
+//             if(i == 0) {
+//                 if(remaining % coins[0] != 0) return 1e9;
+//                 else return remaining/coins[0];
+//             }
+
+//             if(dp[i][remaining] != -1) return dp[i][remaining];
+
+//             int take = 1 + f(f, i, remaining - coins[i]);
+//             int dontTake = f(f, i-1, remaining);
+
+//             return dp[i][remaining] = min(take, dontTake);
+//         };
+
+//         int ans = f(f, n-1, amount);
+//         if(ans != 1e9) return ans;
+//         else return -1;
+//     }
+// };
+
+
+
+
+// greedy fails here 
+
+// class Solution {
+// public:
+//     int coinChange(vector<int>& coins, int amount) {
+//         int ans = 0;
+//         int n = coins.size();
+//         sort(coins.begin(), coins.end());
+
+//         int i = n-1;
+//         while(i >= 0) {
+//             while(amount >= coins[i]) {
+//                 amount -= coins[i];
+//                 ans++;
+//             }
+//             i--;
+//         }
+
+//         if(amount != 0) return -1;
+//         return ans;
+//     }
+// };
