@@ -1,0 +1,21 @@
+https://leetcode.com/problems/count-the-number-of-special-characters-i/description/
+
+
+
+class Solution {
+public:
+    int numberOfSpecialChars(string word) {
+        int n = word.length();
+        unordered_set<int> st;
+        int count = 0;
+        
+        for(int i = 0 ; i < n ; i++) {
+            if(st.find(word[i] - 'A') != st.end()) continue;
+            if(st.find((word[i] - 'A') - 32) != st.end() || st.find((word[i] - 'A') + 32) != st.end()) {
+                count++;
+            }
+            st.insert(word[i] - 'A'); 
+        }
+        return count;
+    }
+};
