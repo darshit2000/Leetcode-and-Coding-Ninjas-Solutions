@@ -1,0 +1,214 @@
+https://leetcode.com/problems/target-sum/description/
+
+
+
+// https://www.naukri.com/code360/problems/partitions-with-given-difference_3751628?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+// bottom up    (best complexity)
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int n = nums.size();
+        int totalSum = accumulate(nums.begin(), nums.end(), 0);
+        int newTarget = (totalSum - target)/2;
+
+        if((totalSum - target) % 2 == 1 || (totalSum - target) < 0) return 0;
+        vector<vector<int>> dp(n, vector<int>(newTarget + 1, 0));
+
+        for(int i = 0 ; i < n ; i++) {
+            dp[i][0] = 1;
+        }
+        if(nums[0] <= newTarget) dp[0][nums[0]] += 1;
+
+        for(int i = 1 ; i < n ; i++) {
+            for(int s = 0 ; s <= newTarget ; s++) {
+                int notTake = dp[i-1][s];
+                int take = 0;
+                if(s - nums[i] >= 0) take = dp[i-1][s - nums[i]];
+
+                dp[i][s] = take + notTake;
+            }
+        }
+        return dp[n-1][newTarget];
+    }
+};
+
+
+
+// top down 1 (going from 0 to n-1)
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int n = nums.size();
+//         int totalSum = accumulate(nums.begin(), nums.end(), 0);
+//         int newTarget = (totalSum - target)/2;
+
+//         if((totalSum - target) % 2 == 1 || (totalSum - target) < 0) return 0;
+//         vector<vector<int>> dp(n, vector<int>(newTarget+1, -1));
+
+//         auto f = [&] (auto& f, int i, int s) -> int {
+//             if(i == n) {
+//                 if(s == newTarget) return 1;
+//                 return 0;
+//             }
+
+//             if(dp[i][s] != -1) dp[i][s];
+
+//             int notTake = f(f, i+1, s);
+//             int take = 0;
+//             if(s + nums[i] <= newTarget) take = f(f, i+1, s + nums[i]);
+
+//             return dp[i][s] = take + notTake;
+//         };
+
+//         return f(f, 0, 0);
+//     }
+// };
+
+
+
+// top down 2 (going from n-1 to 0)
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int n = nums.size();
+//         int totalSum = accumulate(nums.begin(), nums.end(), 0);
+//         int newTarget = (totalSum - target)/2;
+
+//         if((totalSum - target) % 2 == 1 || (totalSum - target) < 0) return 0;
+//         vector<vector<int>> dp(n, vector<int>(newTarget+1, -1));
+
+//         auto f = [&] (auto& f, int i, int s) -> int {
+//             if(i == 0) {
+//                 if(s == 0 && nums[0] == 0) return 2;
+//                 if(s == 0 || s == nums[0]) return 1;
+//                 return 0;
+//             }
+
+//             if(dp[i][s] != -1) dp[i][s];
+
+//             int notTake = f(f, i-1, s);
+//             int take = 0;
+//             if(s - nums[i] >= 0) take = f(f, i-1, s - nums[i]);
+
+//             return dp[i][s] = take + notTake;
+//         };
+
+//         return f(f, n-1, newTarget);
+//     }
+// };
+
+
+
+// #########################################################################
+
+
+// bottom up, but very bad time complexity
+
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int n = nums.size();
+//         int k = accumulate(nums.begin(), nums.end(), 0);
+
+//         map<pair<int,int>, int> dp;
+
+//         dp[{n, target}] = 1;
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int s = (-1)*k ; s <= k ; s++) {
+//                 int sum = 0, diff = 0;
+
+//                 if(dp.find({i+1, s+nums[i]}) != dp.end()) sum = dp[{i+1, s + nums[i]}];
+//                 if(dp.find({i+1, s-nums[i]}) != dp.end()) diff = dp[{i+1, s - nums[i]}];
+
+//                 dp[{i,s}] = sum + diff;
+//             }
+//         }
+
+//         return dp[{0,0}];
+//     }
+// };
+
+
+
+
+// top-down
+
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int n = nums.size();
+//         int k = accumulate(nums.begin(), nums.end(), 0);
+
+//         vector<vector<int>> dp(n, vector<int>(k+1+k+1, -1));
+
+//         auto f = [&] (auto& f, int i, int value) -> int {
+//             if(i == n) {
+//                 if(value == target) return 1;
+//                 return 0;
+//             }
+
+//             if(dp[i][value+k] != -1) return dp[i][value+k];
+
+//             int s = f(f, i+1, value + nums[i]);
+//             int d = f(f, i+1, value - nums[i]);
+
+//             return dp[i][value+k] = s + d;
+//         };
+
+//         return f(f, 0, 0);
+//     }
+// };
+
+
+
+
+// recursion, but return type is int
+
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int n = nums.size();
+
+//         auto f = [&] (auto& f, int i, int value) -> int {
+//             if(i == n) {
+//                 if(value == target) return 1;
+//                 return 0;
+//             }
+
+//             int s = f(f, i+1, value + nums[i]);
+//             int d = f(f, i+1, value - nums[i]);
+
+//             return s + d;
+//         };
+
+//         return f(f, 0, 0);
+//     }
+// };
+
+
+
+
+// recursion, but return type is void
+
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int n = nums.size();
+//         int count = 0;
+
+//         auto f = [&] (auto& f, int i, int value) -> void {
+//             if(i == n) {
+//                 if(value == target) count++;
+//                 return;
+//             }
+
+//             f(f, i+1, value + nums[i]);
+//             f(f, i+1, value - nums[i]);
+//         };
+
+//         f(f, 0, 0);
+//         return count;
+//     }
+// };
