@@ -1,0 +1,56 @@
+https://leetcode.com/problems/open-the-lock/description/?envType=daily-question&envId=2024-04-22
+
+
+
+// bfs
+// dfs will not work because we need to find the shortest path and dfs will not gurantee shortest path
+
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> dl, vis;
+        int n = deadends.size();
+        queue<pair<string, int>> q;
+
+        for(int i = 0 ; i < n ; i++) dl.insert(deadends[i]);
+        vis.insert("0000");
+        q.push({"0000", 0});
+
+        while(!q.empty()) {
+            string s = q.front().first;
+            int steps = q.front().second;
+            q.pop();
+
+            if(dl.find(s) != dl.end()) continue;
+
+            if(s == target) {
+                return steps;
+            }
+
+            for(int idx = 0 ; idx < 4 ; idx++) {
+                char ch = s[idx];
+
+                int num = ch - '0';
+                num = (num + 1) % 10;
+                s[idx] = num + '0';
+                if(vis.find(s) == vis.end()) {
+                    vis.insert(s);
+                    q.push({s, steps + 1});
+                }
+
+                num = ch - '0';
+                num--;
+                if(num == -1) num = 9;
+                s[idx] = num + '0';
+                if(vis.find(s) == vis.end()) {
+                    vis.insert(s);
+                    q.push({s, steps + 1});
+                }
+
+                s[idx] = ch;
+            }   
+        }
+        return -1;
+    }
+};
+
