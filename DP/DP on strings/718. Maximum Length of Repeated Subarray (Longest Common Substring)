@@ -1,0 +1,108 @@
+https://leetcode.com/problems/maximum-length-of-repeated-subarray/description/
+
+
+
+// dp[i][j] : length of the longest subarray ending at nums1[i] & nums2[j] and including both nums1[i] & nums2[j]
+
+// Bottom Up
+
+class Solution {
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int m = nums2.size();
+        int mx = max(m, n);
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+        int ans = 0;
+
+        for(int i = 1 ; i <= n ; i++) {
+            for(int j = 1 ; j <= m ; j++) {
+                if(nums1[i-1] == nums2[j-1]) {
+                    int count = 1 + dp[i-1][j-1];
+                    ans = max(ans, count);
+                    dp[i][j] = count;
+                }
+                else {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+
+// dp[i][j] : length of the longest subarray ending at nums1[i] & nums2[j] and including both nums1[i] & nums2[j]
+
+// Top Down 1
+
+// class Solution {
+// public:
+//     int findLength(vector<int>& nums1, vector<int>& nums2) {
+//         int n = nums1.size();
+//         int m = nums2.size();
+//         int mx = max(m, n);
+//         vector<vector<int>> dp(n, vector<int>(m, -1));
+//         int ans = 0;
+
+//         auto f = [&] (auto& f, int i, int j) -> int {
+//             if(i < 0 || j < 0) return 0;
+
+//             if(dp[i][j] != -1) return dp[i][j];
+
+//             // Just exploring this possibilities, but not including this in our answer
+//             f(f, i-1, j);
+//             f(f, i, j-1);
+
+//             if(nums1[i] == nums2[j]) {
+//                 int count = 1 + f(f, i-1, j-1);
+//                 ans = max(ans, count);
+//                 return dp[i][j] = count;
+//             }
+//             else {
+//                 return dp[i][j] = 0;
+//             }
+//         };
+
+//         f(f, n-1, m-1);
+//         return ans;
+//     }
+// };
+
+
+
+// Top Down 2
+
+// class Solution {
+// public:
+//     int findLength(vector<int>& nums1, vector<int>& nums2) {
+//         int n = nums1.size();
+//         int m = nums2.size();
+//         int mx = max(m, n);
+//         vector<vector<int>> dp(n, vector<int>(m, -1));
+//         int ans = 0;
+
+//         auto f = [&] (auto& f, int i, int j) -> int {
+//             if(i < 0 || j < 0) return 0;
+
+//             if(dp[i][j] != -1) return dp[i][j];
+
+//             int count = 0;
+//             if(nums1[i] == nums2[j]) {
+//                 count = 1 + f(f, i-1, j-1);
+//             }
+//             ans = max(ans, count);
+
+//             // Just exploring this possibilities, but not including this in our answer
+//             f(f, i-1, j);
+//             f(f, i, j-1);
+            
+//             return dp[i][j] = count;
+//         };
+
+//         f(f, n-1, m-1);
+//         return ans;
+//     }
+// };
