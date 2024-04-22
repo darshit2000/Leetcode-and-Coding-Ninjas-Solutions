@@ -1,0 +1,83 @@
+https://www.naukri.com/code360/problems/longest-common-substring_1235207?leftPanelTabValue=PROBLEM
+
+
+
+// lcs with modification
+
+int lcs(string &str1, string &str2){
+    // Write your code here.
+    int n = str1.length();
+    int m = str2.length();
+    vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+    int mx = 0;
+
+    for(int i = 1 ; i <= n ; i++) {
+        for(int j = 1 ; j <= m ; j++) {
+            if(str1[i-1] == str2[j-1]) {
+                dp[i][j] = 1 + dp[i-1][j-1];
+                mx = max(mx, dp[i][j]);
+            } else {
+                dp[i][j] = 0;
+            }
+        }
+    }
+    return mx;
+}
+
+
+
+// recursion (TLE)
+
+// int lcs(string &str1, string &str2){
+//     // Write your code here.
+//     int n = str1.length();
+//     int m = str2.length();
+    
+//     auto f = [&] (auto& f, int i, int j, int count) -> int {
+//         if(i < 0 || j < 0) return count;
+
+//         if(str1[i] == str2[j]) {
+//             count = max(count, f(f, i-1, j-1, count + 1));
+//         } 
+//         count = max(count, f(f, i, j-1, 0));
+//         count = max(count, f(f, i-1, j, 0));
+        
+//         return count;
+//     };
+    
+//     return f(f, n-1, m-1, 0);
+// }
+
+
+
+
+
+// not working
+
+// int lcs(string &str1, string &str2){
+//     // Write your code here.
+//     int n = str1.length();
+//     int m = str2.length();
+//     int mx = 0;
+//     int count = 0;
+
+//     for(int i = 0 ; i < n ; i++) {
+//         int j = 0;
+
+//         while(j < m) {
+//             if(str1[i] == str2[j]) {
+//                 int idx = i;
+//                 count = 0;
+
+//                 while(idx < n && j < m && str1[idx] == str2[j]) {
+//                     count++;
+//                     idx++;
+//                     j++;
+//                 }
+//                 mx = max(mx, count);
+//             } 
+//            else  j++;
+//         }
+//     }
+//     return mx;
+// }
