@@ -1,0 +1,90 @@
+https://leetcode.com/problems/distinct-subsequences/description/
+
+
+
+// bottom up
+
+// class Solution {
+// public:
+//     int numDistinct(string s, string t) {
+//         int n = s.length();
+//         int m = t.length();
+//         vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+
+//         for(int i = 0 ; i <= n ; i++) dp[i][m] = 1;
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int j = m-1 ; j >= 0 ; j--) {
+//                 if(s[i] == t[j]) {
+//                     long long v1 = dp[i+1][j+1];
+//                     long long v2 = dp[i+1][j];
+//                     dp[i][j] = v1 + v2;
+//                 } else {
+//                     dp[i][j] = dp[i+1][j];
+//                 }
+//             }
+//         }
+//         return dp[0][0];
+//     }
+// };
+
+
+
+// top down (working fine)
+
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int n = s.length();
+        int m = t.length();
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+
+        auto f = [&] (auto& f, int i, int j) -> int {
+            if(j == m) return 1;
+            if(i == n && j < m) return 0;
+
+            if(dp[i][j] != -1) return dp[i][j];
+
+            if(s[i] == t[j]) {
+                int v1 = f(f, i+1, j+1);
+                int v2 = f(f, i+1, j);
+                return dp[i][j] = v1 + v2;
+            } else {
+                return dp[i][j] = f(f, i+1, j);
+            }
+        };
+
+        return f(f, 0, 0);
+    }
+};
+
+
+
+// top down 1 (MLE)
+
+// class Solution {
+// public:
+//     int numDistinct(string s, string t) {
+//         int n = s.length();
+//         int m = t.length();
+//         vector<unordered_map<string, int>> dp(n);
+
+//         auto f = [&] (auto& f, int i, string str) -> int {
+//             if(i == n) {
+//                 if(str == t) return 1;
+//                 return 0;
+//             }
+
+//             if(dp[i].count(str)) return dp[i][str];
+
+//             int notTake = f(f, i+1, str);
+//             str += s[i];
+//             int take = f(f, i+1, str);
+//             str.pop_back();
+
+//             return dp[i][str] = take + notTake;
+//         };
+
+//         return f(f, 0, "");
+//     }
+// };
