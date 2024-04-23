@@ -1,0 +1,38 @@
+https://www.geeksforgeeks.org/problems/minimize-the-difference/1
+
+
+
+class Solution {
+  public:
+    int minimizeDifference(int n, int k, vector<int> &arr) {
+        // code here
+        int ans = INT_MAX;
+        vector<int> leftMin(n, INT_MAX), leftMax(n, INT_MIN), rightMin(n, INT_MAX), rightMax(n, INT_MIN);
+        leftMin[0] = arr[0], leftMax[0] = arr[0];
+        rightMin[n-1] = arr[n-1], rightMax[n-1] = arr[n-1];
+        
+        for(int i = 1 ; i < n ; i++) {
+            leftMin[i] = min(arr[i], leftMin[i-1]);
+            leftMax[i] = max(arr[i], leftMax[i-1]);
+        }
+        
+        for(int i = n-2 ; i >= 0 ; i--) {
+            rightMin[i] = min(arr[i], rightMin[i+1]);
+            rightMax[i] = max(arr[i], rightMax[i+1]);
+        }
+        
+        int mn = INT_MAX;
+        for(int i = 0 ; i < n ; i++) {
+            int mn1 = INT_MAX, mn2 = INT_MAX, mx1 = INT_MIN, mx2 = INT_MIN;
+            if(i > 0) mn1 = leftMin[i-1];
+            if(i > 0) mx1 = leftMax[i-1];
+            if(i+k < n) mn2 = rightMin[i+k];
+            if(i+k < n) mx2 = rightMax[i+k];
+            
+            int umax = max(mx1, mx2);
+            int umin = min(mn1, mn2);
+            mn = min(mn, umax - umin);
+        }
+        return mn;
+    }
+};
