@@ -2,6 +2,21 @@ https://leetcode.com/problems/minimum-height-trees/description/?envType=daily-qu
 
 
 
+/* 
+The intuition is to trim down all the leaf nodes iteratively. At the end we will get the nodes which are part of answer. The root of the minimum height tree (MHT), also known as the "center of gravity," can consist of more than two nodes, depending on the tree's structure and the diameter. 
+
+Case I :
+Odd Diameter:
+-> If the diameter of the tree is odd, the center of gravity will be a single node.
+-> This single node is the deepest node along the longest path in the tree.
+
+Case II :
+Even Diameter:
+-> If the diameter of the tree is even, the center of gravity will consist of two adjacent nodes.
+-> These two nodes are the midpoints of the longest path(s) in the tree.
+-> In this case, the center of gravity represents the midpoint(s) of the longest path(s).
+*/
+
 class Solution {
 public:
     vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
@@ -12,7 +27,7 @@ public:
         vector<int> deg(n, 0);
         vector<int> valid(n, 1);
         int steps = 0, mn = INT_MAX;
-        queue<int> q;
+        queue<int> leaves;
 
         for(auto& e : edges) {
             int u = e[0], v = e[1];
@@ -22,35 +37,38 @@ public:
             deg[v]++;
         }
 
+        // Initialize leaves with nodes having only 1 adjacent node
         for(int i = 0 ; i < n ; i++) {
             if(deg[i] == 1) {
-                q.push(i);
+                leaves.push(i);
             }
         }
 
         int remaining = n;
+        // answer can consist of max. 2 nodes
         while(remaining > 2) {
-            int sz = q.size();
+            int sz = leaves.size();
             remaining -= sz;
 
             while(sz--) {
-                int node = q.front();
-                q.pop();
+                int node = leaves.front();
+                leaves.pop();
                 valid[node] = 0;
 
                 for(int child : adj[node]) {
                     deg[child]--;
-                    if(deg[child] == 1) q.push(child);
+                    // if the adjacent node becomes a leaf node after removal, add it to the queue.
+                    if(deg[child] == 1) leaves.push(child);
                 }
             }
         }
-        // for(int i = 0 ; i < n ; i++) {
-        //     if(valid[i] == 1) ans.push_back(i);
-        // }
-        while(!q.empty()) {
-            ans.push_back(q.front());
-            q.pop();
+        for(int i = 0 ; i < n ; i++) {
+            if(valid[i] == 1) ans.push_back(i);
         }
+        // while(!leaves.empty()) {
+        //     ans.push_back(leaves.front());
+        //     leaves.pop();
+        // }
         return ans;
     }
 };
