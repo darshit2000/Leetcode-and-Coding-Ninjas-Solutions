@@ -1,0 +1,69 @@
+https://leetcode.com/problems/delete-operation-for-two-strings/description/
+
+
+
+// bottom up
+
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int n = word1.length();
+        int m = word2.length();
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+
+        for(int i = 0 ; i < n ; i++) {
+            if(i < n) dp[i][m] = n-i;
+        }
+        for(int j = 0 ; j < m ; j++) {
+            if(j < m) dp[n][j] = m-j;
+        }
+
+        for(int i = n-1 ; i >= 0 ; i--) {
+            for(int j = m-1; j >= 0 ; j--) {
+                int v1 = 1e9, v2 = 1e9, v3 = 1e9;
+                if(word1[i] == word2[j]) {
+                    v1 = dp[i+1][j+1];
+                } else {
+                    v2 = 1 + dp[i+1][j];
+                    v3 = 1 + dp[i][j+1];
+                }
+                dp[i][j] = min(v1, min(v2, v3));
+            }
+        }
+        return dp[0][0];
+    }
+};
+
+
+
+
+// top down
+
+// class Solution {
+// public:
+//     int minDistance(string word1, string word2) {
+//         int n = word1.length();
+//         int m = word2.length();
+//         vector<vector<int>> dp(n, vector<int>(m, -1));
+
+//         auto f = [&] (auto& f, int i, int j) -> int {
+//             if(i == n || j == m) {
+//                 if(i < n) return n-i;
+//                 else return m-j;
+//             }
+
+//             if(dp[i][j] != -1) return dp[i][j];
+
+//             int v1 = 1e9, v2 = 1e9, v3 = 1e9;
+//             if(word1[i] == word2[j]) {
+//                 v1 = f(f, i+1, j+1);
+//             } else {
+//                 v2 = 1 + f(f, i+1, j);
+//                 v3 = 1 + f(f, i, j+1);
+//             }
+//             return dp[i][j] = min(v1, min(v2, v3));
+//         };
+
+//         return f(f, 0, 0);
+//     }
+// };
