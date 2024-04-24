@@ -2,39 +2,70 @@ https://leetcode.com/problems/longest-palindromic-subsequence/description/
 
 
 
-// bottom up
+// striver
+// The subsequence common in the string s and its reverse is PALINDROME. 
+// So we are finding LCS in the string and its reverse. 
+// The palindrome can be printed in the same way as Printing LCS.
 
 class Solution {
 public:
-    int longestPalindromeSubseq(string s) {
-        int n = s.length();
-        vector<vector<int>> dp(n, vector<int>(n, 0));
+    int LCSLength(string s1, string s2) {
+        int n = s1.length();
+        int m = s2.length();
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
 
-        for(int i = n-1 ; i >= 0 ; i--) {
-            for(int j = 0 ; j < n ; j++) {
-                if(i < j) {
-                    int v1 = 0, v2 = 0, v3 = 0;
-
-                    v1 = dp[i+1][j];
-
-                    v2 = dp[i][j-1];
-
-                    if(s[i] == s[j]) v3 = 2 + dp[i+1][j-1];
-                    
-                    dp[i][j] = max(v1, max(v2, v3));
-
-                } else if(i == j) {
-                    dp[i][j] = 1;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                if(s1[i-1] == s2[j-1]) {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                } else {
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
                 }
             }
         }
-        return dp[0][n-1];
+        return dp[n][m];
+    }
+    int longestPalindromeSubseq(string s) {
+        int n = s.length();
+        string t = s;
+        reverse(t.begin(), t.end());
+        
+        return LCSLength(s, t); 
     }
 };
 
 
 
-// top down (very high complexity)
+// bottom up
+
+// class Solution {
+// public:
+//     int longestPalindromeSubseq(string s) {
+//         int n = s.length();
+//         vector<vector<int>> dp(n, vector<int>(n, 0));
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(i < j) {
+//                     if(s[i] == s[j]) {
+//                         dp[i][j] = 2 + dp[i+1][j-1];
+//                     } else {
+//                         int v1 = dp[i+1][j];
+//                         int v2 = dp[i][j-1];
+//                         dp[i][j] = max(v1, v2);
+//                     }
+//                 } else if(i == j) {
+//                     dp[i][j] = 1;
+//                 }
+//             }
+//         }
+//         return dp[0][n-1];
+//     }
+// };
+
+
+
+// top down 
 
 // class Solution {
 // public:
@@ -51,12 +82,13 @@ public:
 //             int v1 = 0;
 //             if(s[i] == s[j]) {
 //                 v1 = 2 + f(f, i+1, j-1);
+//                 return dp[i][j] = v1;
 //             }
 
 //             int v2 = f(f, i+1, j);
 //             int v3 = f(f, i, j-1);
 
-//             return dp[i][j] = max(v1, max(v2, v3)) ;
+//             return dp[i][j] = max(v2, v3) ;
 //         };
 //         return f(f, 0, n-1);
 //     }
