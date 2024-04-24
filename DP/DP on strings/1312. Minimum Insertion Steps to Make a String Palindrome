@@ -2,31 +2,64 @@ https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrom
 
 
 
-// bottom up
+// striver
+// We keep the longest Palindromic subsequence as it is, 
+// and those who are not the part of LPS, we will do the insertion
+// Insertions = n - (len of LPS(str)) = n - len of LCS(str, reverse(str))
 
 class Solution {
 public:
-    int minInsertions(string s) {
+    int LCSLength(string s, string t) {
         int n = s.length();
-        vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+        int m = t.length();
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
 
-        for(int i = n ; i >= 1 ; i--) {
-            for(int j = 1; j <= n ; j++) {
-                if(i < j) {
-                    int v1 = 1e9, v2 = 1e9, v3 = 1e9;
-                    if(s[i-1] == s[j-1]) {
-                        v1 = dp[i+1][j-1];
-                    } else {
-                        v2 = 1 + dp[i+1][j];
-                        v3 = 1 + dp[i][j-1];
-                    }
-                    dp[i][j] = min(v1 ,min(v2, v3));
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                if(s[i-1] == t[j-1]) {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                } else {
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
                 }
             }
         }
-        return dp[1][n];
+        return dp[n][m];
+    }
+    int minInsertions(string s) {
+        int n = s.length();
+        string t = s;
+        reverse(t.begin(), t.end());
+        
+        return n - LCSLength(s, t);
     }
 };
+
+
+
+// bottom up
+
+// class Solution {
+// public:
+//     int minInsertions(string s) {
+//         int n = s.length();
+//         vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+
+//         for(int i = n ; i >= 1 ; i--) {
+//             for(int j = 1; j <= n ; j++) {
+//                 if(i < j) {
+//                     if(s[i-1] == s[j-1]) {
+//                         dp[i][j] = dp[i+1][j-1];
+//                     } else {
+//                         int v1 = 1 + dp[i+1][j];
+//                         int v2 = 1 + dp[i][j-1];
+//                         dp[i][j] = min(v1, v2);
+//                     }
+//                 }
+//             }
+//         }
+//         return dp[1][n];
+//     }
+// };
 
 
 
@@ -43,16 +76,14 @@ public:
 
 //             if(dp[i][j] != -1) return dp[i][j];
 
-//             int v1 = 1e9, v2 = 1e9, v3 = 1e9;
 //             if(s[i] == s[j]) {
-//                 v1 = f(f, i+1, j-1);
+//                 return dp[i][j] = f(f, i+1, j-1);
 //             } else {
-//                 v2 = 1 + f(f, i+1, j);
-//                 v3 = 1 + f(f, i, j-1);
+//                 int v2 = 1 + f(f, i+1, j);
+//                 int v3 = 1 + f(f, i, j-1);
+//                 return dp[i][j] = min(v2, v3);
 //             }
-//             return dp[i][j] = min(v1 ,min(v2, v3));
 //         };
-
 //         return f(f, 0, n-1);
 //     }
 // };
