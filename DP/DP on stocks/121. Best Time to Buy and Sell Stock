@@ -1,0 +1,77 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+
+
+
+// Find prefix-Min
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        int mx = 0;
+        int prevMin = prices[0];
+        for(int i = 1 ; i < n ; i++) {
+            prevMin = min(prevMin, prices[i]);
+            mx = max(mx, prices[i] - prevMin);
+        }
+        return mx;
+    }
+};
+
+
+
+// space optimized tabulation, still TLE
+
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+//         if(n == 1) return 0;
+//         vector<int> dp(n, 0);
+
+//         for(int j = 0 ; j < n ; j++) {
+//             if(prices[j] >= prices[0]) {
+//                 dp[j] = prices[j] - prices[0];
+//             }
+//         }
+
+//         for(int i = 1 ; i < n-1 ; i++) {
+//             for(int j = n-1 ; j > 0 ; j--) {
+//                 int v1 = prices[j] - prices[i];
+//                 int v2 = dp[j];
+//                 int v3 = dp[j-1];
+
+//                 dp[j] = max(v1, max(v2, v3));
+//             }
+//         }
+//         return dp[n-1];
+//     }
+// };
+
+
+// MLE
+
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+//         if(n == 1) return 0;
+//         vector<vector<int>> dp(n, vector<int>(n, -1));
+
+//         // i -> buy, j -> sell
+//         auto f = [&] (auto& f, int i, int j) -> int {
+//             if(i == 0) return prices[j] - prices[i];
+
+//             if(dp[i][j] != -1) return dp[i][j];
+
+//             int v1 = prices[j] - prices[i];
+//             int v2 = f(f, i-1, j);
+//             int v3 = f(f, i-1, j-1);
+
+//             return dp[i][j] = max(v1, max(v2, v3));
+//         };
+
+//         int ans = f(f, n-2, n-1);
+//         return ans >= 0 ? ans : 0;
+//     }
+// };
