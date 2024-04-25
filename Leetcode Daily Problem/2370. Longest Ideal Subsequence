@@ -1,0 +1,123 @@
+https://leetcode.com/problems/longest-ideal-subsequence/description/?envType=daily-question&envId=2024-04-25
+
+
+
+// optimal
+
+class Solution {
+public:
+    int longestIdealString(string s, int k) {
+        int n = s.length();
+        vector<int> dp(26, 0);
+        int ans = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            int idx = s[i] - 'a';
+
+            int start = max(0, idx - k);
+            int end = min(25, idx + k);
+
+            int longest = 0;
+            for(int j = start ; j <= end ; j++) {
+                longest = max(longest, dp[j]);
+            }  
+
+            dp[idx] = max(dp[idx], 1 + longest);
+            ans = max(ans, dp[idx]);       
+        }
+        return ans;        
+    }
+};
+
+
+
+
+
+// bottom up (high TC)
+
+// class Solution {
+// public:
+//     int longestIdealString(string s, int k) {
+//         int n = s.length();
+//         vector<vector<int>> dp(n+1, vector<int>(27, 0));
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int prevChar = 0 ; prevChar <= 26 ; prevChar++) {
+//                 int v1 = dp[i+1][prevChar];
+//                 int v2 = 0;
+
+//                 if(prevChar == 26 || abs(s[i]-'a' - prevChar) <= k) {
+//                     v2 = 1 + dp[i+1][s[i] - 'a'];
+//                 }
+
+//                 dp[i][prevChar] = max(v1, v2);
+//             }
+//         }
+//         return dp[0][26];
+//     }
+// };
+
+
+
+
+// top down (high TC)
+
+// class Solution {
+// public:
+//     int longestIdealString(string s, int k) {
+//         int n = s.length();
+//         vector<vector<int>> dp(n, vector<int>(27, -1));
+
+//         auto f = [&] (auto& f, int i, int prevChar) -> int {
+//             if(i >= n) return 0;
+
+//             if(dp[i][prevChar] != -1) return dp[i][prevChar];
+
+//             int v1 = f(f, i+1, prevChar);
+//             int v2 = 0;
+
+//             if(prevChar == 26 || abs(s[i]-'a' - prevChar) <= k) {
+//                 v2 = 1 + f(f, i+1, s[i] - 'a');
+//             }
+
+//             return dp[i][prevChar] = max(v1, v2);
+//         };
+
+//         return f(f, 0, 26);
+//     }
+// };
+
+
+
+
+// top down (TLE)
+
+// class Solution {
+// public:
+//     int longestIdealString(string s, int k) {
+//         int n = s.length();
+//         vector<vector<unordered_map<string, int>>> dp(n, vector<unordered_map<string, int>>(k+1));
+
+//         auto f = [&] (auto& f, int i, int diff, string t) -> int {
+//             if(i == n) {
+//                 if(diff <= k) {
+//                     return t.length();
+//                 }
+//                 return 0;
+//             }
+//             if(diff > k) return 0;
+
+//             if(dp[i][diff].count(t)) return dp[i][diff][t];
+
+//             int v1 = f(f, i+1, diff, t);
+//             int newDiff = t.length() == 0 ? diff : max(diff, abs(s[i] - t.back()));
+//             t.push_back(s[i]);
+//             int v2 = f(f, i+1, newDiff, t);
+//             t.pop_back();
+
+//             return dp[i][diff][t] = max(v1, v2);
+//         };
+
+//         return f(f, 0, 0, "");
+//     }
+// };
