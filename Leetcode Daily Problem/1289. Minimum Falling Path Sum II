@@ -1,0 +1,190 @@
+https://leetcode.com/problems/minimum-falling-path-sum-ii/description/?envType=daily-question&envId=2024-04-26
+
+
+
+// bottom up with space optimization and removing the 3rd for loop and 
+// keeping track only the TWO min values with 2 variables
+
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<int> dp(n, INT_MAX);
+        pair<int,int> p1 = {INT_MAX, -1}, p2 = {INT_MAX, -1};
+
+        for(int col = 0 ; col < n ; col++) {
+            if(grid[n-1][col] < p1.first) {
+                p2.first = p1.first;
+                p2.second = p1.second;
+                p1.first = grid[n-1][col];
+                p1.second = col;
+            } else if(grid[n-1][col] >= p1.first && grid[n-1][col] < p2.first) {
+                p2.first = grid[n-1][col];
+                p2.second = col;
+            }
+        }
+
+        for(int row = n-2 ; row >= 0 ; row--) {
+            for(int col = 0 ; col < n ; col++) {
+                if(p1.second == col) {
+                    int newMin = p2.first;
+                    dp[col] = min(dp[col], grid[row][col] + newMin);
+                } else {
+                    int newMin = p1.first;
+                    dp[col] = min(dp[col], grid[row][col] + newMin);
+                }    
+            }
+
+            p1 = {INT_MAX, -1}, p2 = {INT_MAX, -1};
+            for(int col = 0 ; col < n ; col++) {
+                if(dp[col] < p1.first) {
+                    p2.first = p1.first;
+                    p2.second = p1.second;
+                    p1.first = dp[col];
+                    p1.second = col;
+                    
+                } else if(dp[col] >= p1.first && dp[col] < p2.first) {
+                    p2.first = dp[col];
+                    p2.second = col;
+                }
+                dp[col] = INT_MAX;
+            }
+        }
+        return p1.first;
+    }
+};
+
+
+
+
+// bottom up with space optimization and removing the 3rd for loop and 
+// keeping track of the min value with the set
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         vector<int> dp(n, INT_MAX);
+//         set<pair<int,int>> st;
+
+//         for(int col = 0 ; col < n ; col++) {
+//             st.insert({grid[n-1][col], col});
+//         }
+
+//         for(int row = n-2 ; row >= 0 ; row--) {
+//             for(int col = 0 ; col < n ; col++) {
+//                 if(st.begin()->second == col) {
+//                     auto it = st.begin();
+//                     ++it;
+//                     int newMin = (*it).first;
+//                     dp[col] = min(dp[col], grid[row][col] + newMin);
+//                 } else {
+//                     int newMin = st.begin()->first;
+//                     dp[col] = min(dp[col], grid[row][col] + newMin);
+//                 }    
+//             }
+
+//             st.clear();
+//             for(int col = 0 ; col < n ; col++) {
+//                 st.insert({dp[col], col});
+//                 dp[col] = INT_MAX;
+//             }
+//         }
+//         return st.begin()->first;
+//     }
+// };
+
+
+
+// bottom up -> removing the 3rd for loop and 
+// keeping track of the min value with the set
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         vector<vector<int>> dp(n, vector<int>(n, INT_MAX));
+//         set<pair<int,int>> st;
+
+//         for(int col = 0 ; col < n ; col++) {
+//             dp[n-1][col] = grid[n-1][col];
+//             st.insert({grid[n-1][col], col});
+//         }
+
+//         for(int row = n-2 ; row >= 0 ; row--) {
+//             for(int col = 0 ; col < n ; col++) {
+//                 if(st.begin()->second == col) {
+//                     auto it = st.begin();
+//                     ++it;
+//                     int newMin = (*it).first;
+//                     dp[row][col] = min(dp[row][col], grid[row][col] + newMin);
+//                 } else {
+//                     int newMin = st.begin()->first;
+//                     dp[row][col] = min(dp[row][col], grid[row][col] + newMin);
+//                 }    
+//             }
+
+//             st.clear();
+//             for(int col = 0 ; col < n ; col++) st.insert({dp[row][col], col});
+//         }
+//         return *min_element(dp[0].begin(), dp[0].end());
+//     }
+// };
+
+
+
+// Bottom up (high complexity)
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         vector<vector<int>> dp(n, vector<int>(n, INT_MAX));
+
+//         for(int col = 0 ; col < n ; col++) {
+//             dp[n-1][col] = grid[n-1][col];
+//         }
+
+//         for(int row = n-2 ; row >= 0 ; row--) {
+//             for(int col = 0 ; col < n ; col++) {
+//                 for(int nextCol = 0 ; nextCol < n ; nextCol++) {
+//                     if(nextCol != col) {
+//                         dp[row][col] = min(dp[row][col], grid[row][col] + dp[row+1][nextCol]);
+//                     }
+//                 }
+//             }
+//         }
+//         return *min_element(dp[0].begin(), dp[0].end());
+//     }
+// };
+
+
+// Top down (high complexity)
+
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& grid) {
+//         int n = grid.size();
+//         vector<vector<int>> dp(n, vector<int>(n, -1));
+
+//         auto f = [&] (auto& f, int i, int prevCol) -> int {
+//             if(i == n) return 0;
+
+//             if(dp[i][prevCol] != -1) return dp[i][prevCol];
+
+//             int ans = INT_MAX;
+//             for(int jj = 0 ; jj < n ; jj++) {
+//                 if(prevCol != jj) {
+//                     ans = min(ans, grid[i][jj] + f(f, i+1, jj));
+//                 }
+//             }
+//             return dp[i][prevCol] = ans;
+//         };
+//         int mn = INT_MAX;
+//         for(int j = 0 ; j < n ; j++) {
+//             mn = min(mn, grid[0][j] + f(f, 1, j));
+//         }
+//         return mn;
+//     }
+// };
+
