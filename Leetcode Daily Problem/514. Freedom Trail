@@ -14,8 +14,6 @@ public:
 
             if(dp[i][j] != -1) return dp[i][j];
 
-            if(ring[i] == key[j]) return dp[i][j] = 1 + f(f, i, j+1);
-
             int cw = 0, ccw = 0;
             int cwI = i, ccwI = i;
             while(ring[cwI] != key[j]) {
@@ -28,7 +26,8 @@ public:
                 ccw++;
             }
 
-            return dp[i][j] = min(cw + f(f, cwI, j), ccw + f(f, ccwI, j));
+            return dp[i][j] = min(cw + 1 + f(f, cwI, j+1), 
+                                        ccw + 1 + f(f, ccwI, j+1));
         };
 
         return f(f, 0, 0);
