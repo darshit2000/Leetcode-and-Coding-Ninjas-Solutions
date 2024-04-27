@@ -1,0 +1,36 @@
+https://leetcode.com/problems/freedom-trail/description/?envType=daily-question&envId=2024-04-27
+
+
+
+class Solution {
+public:
+    int findRotateSteps(string ring, string key) {
+        int n = ring.length();
+        int m = key.length();
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+
+        auto f = [&] (auto& f, int i, int j) -> int {
+            if(j == m) return 0;
+
+            if(dp[i][j] != -1) return dp[i][j];
+
+            if(ring[i] == key[j]) return dp[i][j] = 1 + f(f, i, j+1);
+
+            int cw = 0, ccw = 0;
+            int cwI = i, ccwI = i;
+            while(ring[cwI] != key[j]) {
+                cwI = (cwI+1) % n;
+                cw++;
+            }
+            while(ring[ccwI] != key[j]) {
+                ccwI = ccwI - 1;
+                if(ccwI == -1) ccwI = n-1;
+                ccw++;
+            }
+
+            return dp[i][j] = min(cw + f(f, cwI, j), ccw + f(f, ccwI, j));
+        };
+
+        return f(f, 0, 0);
+    }
+};
