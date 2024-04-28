@@ -1,0 +1,151 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/
+
+
+
+// bottom up with MORE space optimization
+
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+//         vector<vector<int>> dp(2, vector<int>(3, 0)), curr(2, vector<int>(3, 0));
+//         int prev_0_2 = 0, prev_0_1 = 0, prev_1_1 = 0, prev_0_0 = 0, prev_1_0 = 0;
+//         int curr_0_2 = 0, curr_0_1 = 0, curr_1_1 = 0, curr_0_0 = 0, curr_1_0 = 0;
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             curr_1_1 = max(prev_0_2 + prices[i], prev_1_1);
+//             curr_1_0 = max(prev_0_1 + prices[i], prev_1_0);
+//             curr_0_1 = max(prev_1_1 - prices[i], prev_0_1);
+//             curr_0_0 = max(prev_1_0 - prices[i], prev_0_0);
+
+//             prev_1_1 = curr_1_1;
+//             prev_1_0 = curr_1_0;
+//             prev_0_1 = curr_0_1;
+//             prev_0_0 = curr_0_0;
+//         }
+//         return prev_0_0;
+//     }
+// };
+
+
+
+// bottom up with space optimization
+
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+//         vector<vector<int>> dp(2, vector<int>(3, 0)), curr(2, vector<int>(3, 0));
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int buy = 1 ; buy >= 0 ; buy--) {
+//                 for(int done = 1 ; done >= 0 ; done--) {
+//                     int v1 = 0, v2 = 0;
+//                     if(buy == 1) {
+//                         // sell
+//                         v1 = dp[0][done+1] + prices[i];
+
+//                         // not sell
+//                         v2 = dp[1][done];
+//                     } else {
+//                         // buy
+//                         v1 = dp[1][done] - prices[i];
+
+//                         // not buy
+//                         v2 = dp[0][done];
+//                     }
+//                     curr[buy][done] = max(v1, v2);
+//                 }
+//             }
+//             dp = curr;
+//         }
+//         return dp[0][0];
+//     }
+// };
+
+
+
+// bottom up
+
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+//         int dp[n+1][2][3];
+
+//         for(int i = 0 ; i <= n ; i++) {
+//             for(int j = 0 ; j <= 1 ; j++) {
+//                 for(int k = 0 ; k <= 2 ; k++) {
+//                     dp[i][j][k] = 0;
+//                 }
+//             }
+//         }
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int buy = 1 ; buy >= 0 ; buy--) {
+//                 for(int done = 1 ; done >= 0 ; done--) {
+//                     int v1 = 0, v2 = 0;
+//                     if(buy == 1) {
+//                         // sell
+//                         v1 = dp[i+1][0][done+1] + prices[i];
+
+//                         // not sell
+//                         v2 = dp[i+1][1][done];
+//                     } else {
+//                         // buy
+//                         v1 = dp[i+1][1][done] - prices[i];
+
+//                         // not buy
+//                         v2 = dp[i+1][0][done];
+//                     }
+//                     dp[i][buy][done] = max(v1, v2);
+//                 }
+//             }
+//         }
+//         return dp[0][0][0];
+//     }
+// };
+
+
+
+// top down 
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        int dp[n][2][2];
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j <= 1 ; j++) {
+                for(int k = 0 ; k < 2 ; k++) {
+                    dp[i][j][k] = -1;
+                }
+            }
+        }
+
+        auto f = [&] (auto& f, int i, int buy, int done) -> int {
+            if(i >= n || done >= 2) return 0;
+
+            if(dp[i][buy][done] != -1) return dp[i][buy][done];
+
+            int v1 = 0, v2 = 0;
+            if(buy == 1) {
+                // sell
+                v1 = f(f, i+1, 0, done+1) + prices[i];
+
+                // not sell
+                v2 = f(f, i+1, 1, done);
+            } else {
+                // buy
+                v1 = f(f, i+1, 1, done) - prices[i];
+
+                // not buy
+                v2 = f(f, i+1, 0, done);
+            }
+            return dp[i][buy][done] = max(v1, v2);
+        };
+        
+        return f(f, 0, 0, 0);
+    }
+};
