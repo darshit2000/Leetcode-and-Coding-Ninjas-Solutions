@@ -1,0 +1,97 @@
+https://leetcode.com/problems/sum-of-distances-in-tree/description/?envType=daily-question&envId=2024-04-28
+
+
+
+// Method 1  (Aryan mittal video)
+
+class Solution {
+public:
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> adj(n);
+        vector<int> count(n, 0), ans(n, 0);
+
+        for(auto& e : edges) {
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+
+        auto dfs = [&] (auto& dfs, int node, int parent) -> void {
+            count[node] = 1;
+            for(int child : adj[node]) {
+                if(child != parent) {
+                    dfs(dfs, child, node);
+                    count[node] += count[child];
+                    ans[node] += (ans[child] + count[child]);
+                }
+            }
+        };        
+        dfs(dfs, 0, -1);
+
+        auto dfs2 = [&] (auto& dfs2, int node, int parent) -> void {
+            for(int child : adj[node]) {
+                if(child != parent) {
+                    // because i am getting 1 step closer to my childen that the root node
+                    // and also i am getting 1 step farther from all other nodes,
+                    // which are not my children.
+                    ans[child] = ans[node] - count[child] + (n - count[child]);
+                    dfs2(dfs2, child, node);
+                }
+            }
+        };
+        dfs2(dfs2, 0, -1);
+
+        return ans;
+    }
+};
+
+
+
+
+// Method 2
+
+// class Solution {
+// public:
+//     vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+//         vector<vector<int>> adj(n);
+//         vector<int> count(n, 0), ans(n, 0);
+
+//         for(auto& e : edges) {
+//             adj[e[0]].push_back(e[1]);
+//             adj[e[1]].push_back(e[0]);
+//         }
+
+//         auto dfs = [&] (auto& dfs, int node, int parent) -> int {
+//             count[node] = 1;
+//             for(int child : adj[node]) {
+//                 if(child != parent) {
+//                     count[node] += dfs(dfs, child, node);
+//                     ans[0] += count[child];
+//                 }
+//             }
+//             return count[node];
+//         };        
+//         dfs(dfs, 0, -1);
+
+//         auto dfs2 = [&] (auto& dfs2, int node, int parent) -> void {
+//             for(int child : adj[node]) {
+//                 if(child != parent) {
+//                     // because i am getting 1 step closer to my childen that the root node
+//                     // and also i am getting 1 step farther from all other nodes,
+//                     // which are not my children.
+//                     ans[child] = ans[node] - 1*count[child] + 1*(n - count[child]);
+//                     dfs2(dfs2, child, node);
+//                 }
+//             }
+//         };
+//         dfs2(dfs2, 0, -1);
+
+//         return ans;
+//     }
+// };
+
+
+
+
+
+
+
