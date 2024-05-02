@@ -17,18 +17,39 @@ public:
             sum = nums[left] + nums[right];
 
             if(sum == 0) {
-                if(abs(nums[left]) > ans) ans = abs(nums[left]);
-                left++;
-                right--;
+                return nums[right];
             } else if(sum < 0) {
                 left++;
             } else if(sum > 0) {
                 right--;
             }
         }
-        return ans;
+        return -1;
     }
 };
+
+
+// using map
+
+// class Solution {
+// public:
+//     int findMaxK(vector<int>& nums) {
+//         unordered_map<int,int> mpp;
+//         int n = nums.size();
+//         int ans = INT_MIN;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             if(mpp[-nums[i]] > 0) {
+//                 if(abs(nums[i]) > ans) {
+//                     ans = abs(nums[i]);
+//                 }
+//             }
+//             mpp[nums[i]]++;
+//         }
+//         return ans != INT_MIN ? ans : -1;
+//     }
+// };
+
 
 
 // using set
