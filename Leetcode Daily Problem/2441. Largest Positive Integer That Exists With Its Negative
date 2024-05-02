@@ -1,0 +1,53 @@
+https://leetcode.com/problems/largest-positive-integer-that-exists-with-its-negative/?envType=daily-question&envId=2024-05-02
+
+
+
+// without using set
+// 2 pointers
+
+class Solution {
+public:
+    int findMaxK(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        int left = 0, right = n-1;
+        int sum = 0, ans = -1;
+
+        while(left < right) {
+            sum = nums[left] + nums[right];
+
+            if(sum == 0) {
+                if(abs(nums[left]) > ans) ans = abs(nums[left]);
+                left++;
+                right--;
+            } else if(sum < 0) {
+                left++;
+            } else if(sum > 0) {
+                right--;
+            }
+        }
+        return ans;
+    }
+};
+
+
+// using set
+
+// class Solution {
+// public:
+//     int findMaxK(vector<int>& nums) {
+//         unordered_set<int> st;
+//         int n = nums.size();
+//         int ans = INT_MIN;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             if(st.find(-nums[i]) != st.end()) {
+//                 if(abs(nums[i]) > ans) {
+//                     ans = abs(nums[i]);
+//                 }
+//             }
+//             st.insert(nums[i]);
+//         }
+//         return ans != INT_MIN ? ans : -1;
+//     }
+// };
