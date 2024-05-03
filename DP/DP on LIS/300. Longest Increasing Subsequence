@@ -1,0 +1,81 @@
+https://leetcode.com/problems/longest-increasing-subsequence/description/
+
+
+
+// top down
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+
+        vector<vector<int>> dp(n, vector<int>(n+1, -1));
+        
+        auto f = [&] (auto& f, int i, int prev) -> int {
+            if(i == n) return 0;
+
+            if(dp[i][prev] != -1) return dp[i][prev];
+
+            int take = 0, notTake = 0;
+            if(prev == n || nums[i] > nums[prev]) {
+                take = 1 + f(f, i+1, i);
+            } 
+
+            notTake = f(f, i+1, prev);
+            
+            return dp[i][prev] = max(take, notTake);
+        };
+
+        return f(f, 0, n);
+    }
+};
+
+
+
+// O(n^2)   bottom up
+
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+
+//         vector<int> dp(n, 1);
+//         int mx = 1;
+
+//         for(int i = 1 ; i < n ; i++) {
+//             for(int j = 0 ; j < i ; j++) {
+//                 if(nums[i] > nums[j]) {
+//                     dp[i] = max(dp[i], 1 + dp[j]);
+//                 }
+//             }
+//             mx = max(mx, dp[i]);
+//         }
+
+//         return mx;
+//     }
+// };
+
+
+
+
+// O(nlogn) binary search
+
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+
+//         vector<int> temp;
+//         temp.push_back(nums[0]);
+
+//         for(int i = 1 ; i < n ; i++) {
+//             if(nums[i] > temp.back()) {
+//                 temp.push_back(nums[i]);
+//             } else {
+//                 int index = lower_bound(temp.begin(), temp.end(), nums[i]) - temp.begin();
+//                 temp[index] = nums[i];
+//             }
+//         }
+//         return temp.size();
+//     }
+// };
