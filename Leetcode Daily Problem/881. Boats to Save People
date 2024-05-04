@@ -1,0 +1,94 @@
+https://leetcode.com/problems/boats-to-save-people/description/?envType=daily-question&envId=2024-05-04
+
+
+
+// greedy
+
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
+        int n = people.size();
+        sort(people.begin(), people.end());
+        int b = 0;
+        int i = 0, j = n-1;
+
+        while(i <= j) {
+            if(people[i] + people[j] <= limit) {
+                i++;
+                j--;
+                b++;
+            } else {
+                j--;
+                b++;
+            }
+        }
+
+        return b;
+    }
+};
+
+
+
+// bottom up (MLE)
+
+// class Solution {
+// public:
+//     int numRescueBoats(vector<int>& people, int limit) {
+//         int n = people.size();
+//         sort(people.begin(), people.end());
+//         vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int j = 1 ; j <= n ; j++) {
+//                 if(i <= j-1) {
+//                     if(people[i] + people[j-1] <= limit) {
+//                         int ans = 1 + dp[i+1][j-1];
+//                         dp[i][j] = ans;
+//                     } else {
+//                         int a1 = 1 + dp[i+1][j];
+//                         int a2 = 1 + dp[i][j-1];
+//                         dp[i][j] = min(a1, a2);
+//                     }
+//                 }
+//             }
+//         }
+//         return dp[0][n];
+//     }
+// };
+
+
+
+// top down (stack overflow)
+
+// class Solution {
+// public:
+//     int numRescueBoats(vector<int>& people, int limit) {
+//         int n = people.size();
+//         sort(people.begin(), people.end());
+
+//         // vector<vector<int>> dp(n, vector<int>(n, -1));
+//         int dp[n][n];
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < n ; j++) {
+//                 dp[i][j] = -1;
+//             }
+//         }
+
+//         auto f = [&] (auto& f, int i, int j) -> int {
+//             if(i > j) return 0;
+
+//             if(dp[i][j] != -1) return dp[i][j];
+
+//             if(people[i] + people[j] <= limit) {
+//                 int ans = 1 + f(f, i+1, j-1);
+//                 return dp[i][j] = ans;
+//             } else {
+//                 int a1 = 1 + f(f, i+1, j);
+//                 int a2 = 1 + f(f, i, j-1);
+//                 return dp[i][j] = min(a1, a2);
+//             }
+//         };
+
+//         return f(f, 0, n-1);
+//     }
+// };
