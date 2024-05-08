@@ -1,0 +1,45 @@
+https://leetcode.com/problems/longest-string-chain/description/
+
+
+
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        ios::sync_with_stdio(NULL);
+        cin.tie(NULL);
+        cout.tie(NULL);
+
+        int n = words.size();
+        vector<int> dp(n, 1);
+        int mx = 0;
+
+        sort(words.begin(), words.end(), [] (string &s1, string &s2) {
+            return s1.length() < s2.length();
+        });
+
+        auto isGood = [&] (string &s, string &t) -> bool {
+            if(s.length() != t.length() + 1) return false;
+
+            int i = 0, j = 0;
+            while(i < s.length()) {
+                if(s[i] == t[j]) {
+                    i++;
+                    j++;
+                } else i++;
+            }
+            if(j == t.length()) return true;
+            return false;
+        };
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < i ; j++) {
+                if(isGood(words[i], words[j])) {
+                // OR  if(words[j].length() + 1 == words[i].length() && isGood(words[i], words[j])) {
+                    dp[i] = max(dp[i], 1 + dp[j]);
+                }
+            }
+            mx = max(mx, dp[i]);
+        }
+        return mx;
+    }
+};
