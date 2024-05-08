@@ -1,0 +1,153 @@
+https://www.naukri.com/code360/problems/longest-bitonic-sequence_1062688?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
+
+
+
+// finding LIS from start and end (i.e. LIS and LDS) and then
+// for some i, we find the LIS ending at i from the start and 
+// LIS ending at i from the end and take the sum of both.  (striver)
+
+int longestBitonicSubsequence(vector<int>& arr, int n)
+{
+	// Write your code here.
+	ios::sync_with_stdio(NULL);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	vector<int> lis(n, 1), lds(n, 1);
+
+	for(int i = 0 ; i < n ; i++) {
+		for(int j = 0 ; j < i ; j++) {
+			if(arr[i] > arr[j]) {
+				lis[i] = max(lis[i], 1 + lis[j]);
+			}
+		}
+	}
+
+	for(int i = n-1 ; i >= 0 ; i--) {
+		for(int j = n-1 ; j > i ; j--) {
+			if(arr[i] > arr[j]) {
+				lds[i] = max(lds[i], 1 + lds[j]);
+			}
+		}
+	}
+
+	int mx = 0;
+	for(int i = 0 ; i < n ; i++) {
+		mx = max(mx, lis[i] + lds[i] - 1);
+	}
+	return mx;
+}
+
+
+
+
+
+// // top down
+
+// int f(int i, int prev, int flag, vector<int>& arr, int n, vector<vector<vector<int>>> &dp) {
+// 	if(i == n) return 0;
+
+// 	if(dp[i][prev][flag] != -1) return dp[i][prev][flag];
+
+// 	int v1 = 0, v2 = 0, v3 = 0, v4 = 0;
+	
+// 	v1 = f(i+1, prev, flag, arr, n, dp);
+
+// 	if(prev == n || (flag == 1 && arr[i] > arr[prev])) {
+// 		v2 = 1 + f(i+1, i, 1, arr, n, dp);
+// 	}
+// 	if(flag == 1 && arr[i] < arr[prev]) {
+// 		v4 = 1 + f(i+1, i, 0, arr, n, dp);
+// 	}
+// 	if(flag == 0 && arr[i] < arr[prev]) {
+// 		v3 = 1 + f(i+1, i, 0, arr, n, dp);
+// 	}
+	
+// 	return dp[i][prev][flag] = max(max(v1, v4), max(v2, v3));
+// }
+
+// // bottom up 
+
+// int longestBitonicSubsequence(vector<int>& arr, int n)
+// {
+// 	// Write your code here.
+// 	ios::sync_with_stdio(NULL);
+// 	cin.tie(NULL);
+// 	cout.tie(NULL);
+// 	// vector<vector<vector<int>>> dp(n, vector<vector<int>>(n+1, vector<int>(2, -1)));
+// 	int dp[n+1][n+1][2];
+
+// 	for(int i = 0 ; i <= n ; i++) {
+// 		for(int j = 0 ; j <= n ; j++) {
+// 			for(int k = 0 ; k <= 1 ; k++) {
+// 				dp[i][j][k] = 0;
+// 			}
+// 		}
+// 	}
+
+// 	for(int i = n-1 ; i >= 0 ; i--) {
+// 		for(int prev = 0 ; prev <= n ; prev++) {
+// 			for(int flag = 0 ; flag <= 1 ; flag++) {
+// 				int v1 = 0, v2 = 0, v3 = 0, v4 = 0;
+	
+// 				v1 = dp[i+1][prev][flag];
+
+// 				if(prev == n || (flag == 1 && arr[i] > arr[prev])) {
+// 					v2 = 1 + dp[i+1][i][1];
+// 				}
+// 				if(flag == 1 && arr[i] < arr[prev]) {
+// 					v4 = 1 +dp[i+1][i][0];
+// 				}
+// 				if(flag == 0 && arr[i] < arr[prev]) {
+// 					v3 = 1 + dp[i+1][i][0];
+// 				}
+				
+// 				dp[i][prev][flag] = max(max(v1, v4), max(v2, v3));
+// 			}
+// 		}
+// 	}
+
+// 	return dp[0][n][1];
+// }
+
+
+
+
+
+// this will not work because here bitonic subsequence is asked, not not subarray,
+// if subarray was asked then this problem will become similar to: 
+// https://leetcode.com/problems/longest-mountain-in-array/description/
+
+// int longestBitonicSubsequence(vector<int>& arr, int n)
+// {
+// 	// Write your code here.
+// 	ios::sync_with_stdio(NULL);
+// 	cin.tie(NULL);
+// 	cout.tie(NULL);
+// 	int mx = 0;
+
+// 	int i = 1, j = 0, leftCount = 0, rightCount = 0;
+
+// 	while(i < n-1) {
+// 		if(arr[i] > arr[i-1] && arr[i] > arr[i+1]) {
+// 			j = i;
+// 			leftCount = 0;
+// 			rightCount = 0;
+// 			while(j > 0 && arr[j-1] < arr[j]) {
+// 				leftCount++;
+// 				j--;
+// 			}
+
+// 			while(i < n-1 && arr[i] > arr[i-1]) {
+// 				rightCount++;
+// 				i++;
+// 			}
+// 			i++;
+// 			mx = max(mx, leftCount + rightCount + 1);
+// 		} else {
+// 			i++;
+// 		}
+// 	}
+
+// 	return mx;
+// }
+
