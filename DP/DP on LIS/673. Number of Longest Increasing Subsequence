@@ -1,0 +1,84 @@
+https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/
+
+
+
+// similar to https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/
+
+class Solution {
+public:
+    int findNumberOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, 1), count(n, 1);
+        int mx = 1;
+        int cnt = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < i ; j++) {
+                if(nums[j] < nums[i]) {
+                    if(dp[j] + 1 > dp[i]) {
+                        dp[i] = 1 + dp[j];
+                        count[i] = count[j];
+                    } else if(dp[j] + 1 == dp[i]) {
+                        count[i] += count[j];
+                    }
+                }
+            }
+            mx = max(mx, dp[i]);
+        }
+
+        for(int i = 0 ; i < n ; i++) {
+            if(dp[i] == mx) {
+                cnt += count[i];
+            }
+        }
+        return cnt;
+    }
+};
+
+
+
+// backtracking (TLE)
+
+// class Solution {
+// public:
+//     int findNumberOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> dp(n, 1);
+//         int mx = 1;
+//         vector<unordered_map<int, vector<int>>> v(n);
+//         vector<int> idxV;
+//         int cnt = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             v[i][1].push_back(-1);
+//             for(int j = 0 ; j < i ; j++) {
+//                 if(nums[j] < nums[i]) {
+//                     dp[i] = max(dp[i], 1 + dp[j]);
+//                     v[i][dp[j] + 1].push_back(j);
+//                 }
+//             }
+//             if(mx < dp[i]) {
+//                 idxV = {i};
+//                 mx = dp[i];
+//             } else if(mx == dp[i]) {
+//                 idxV.push_back(i);
+//             }
+//         }
+
+//         auto backTrack = [&] (auto& backTrack, int idx, int mx) -> void {
+//             if(idx == -1) {
+//                 cnt++;
+//                 return;
+//             }
+
+//             for(int prev : v[idx][mx]) {
+//                 backTrack(backTrack, prev, mx-1);
+//             }
+//         };
+
+//         for(int idx : idxV) {
+//             backTrack(backTrack, idx, mx);
+//         }
+//         return cnt;
+//     }
+// };
