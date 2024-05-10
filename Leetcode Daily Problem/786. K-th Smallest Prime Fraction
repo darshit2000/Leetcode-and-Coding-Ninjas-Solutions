@@ -1,0 +1,31 @@
+https://leetcode.com/problems/k-th-smallest-prime-fraction/description/?envType=daily-question&envId=2024-05-10
+
+
+
+class Solution {
+public:
+    vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
+        ios::sync_with_stdio(NULL);
+        cin.tie(NULL);
+        cout.tie(NULL);
+        int n = arr.size();
+        using pii = pair<float, pair<int, int>>;
+        priority_queue<pii, vector<pii>, greater<pii>> pq;
+        vector<int> ans;
+
+        for(int i = 0 ; i < n-1 ; i++) {
+            pq.push({1.0*arr[i]/arr[n-1], {i, n-1}});
+        }
+
+        while(k > 0) {
+            pair<int, pair<int,int>> p = pq.top();
+            int i1 = p.second.first;
+            int i2 = p.second.second;
+            ans = {arr[i1], arr[i2]};
+            pq.pop();
+            pq.push({1.0*arr[i1]/arr[i2-1], {i1, i2-1}});   
+            k--;
+        }
+        return ans;
+    }
+};
