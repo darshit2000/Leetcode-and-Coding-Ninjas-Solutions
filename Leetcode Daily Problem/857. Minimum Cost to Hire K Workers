@@ -1,0 +1,126 @@
+https://leetcode.com/problems/minimum-cost-to-hire-k-workers/description/?envType=daily-question&envId=2024-05-11
+
+
+
+// optimal 
+
+class Solution {
+public:
+    double mincostToHireWorkers(vector<int>& quality, vector<int>& wage, int k) {
+        ios::sync_with_stdio(NULL);
+        cin.tie(NULL);
+        cout.tie(NULL);
+
+        int n = wage.size();
+        double mn = DBL_MAX;
+        // {ratio, {quality, wage}}
+        vector<pair<double,pair<int,int>>> workerRatio(n);
+        priority_queue<double> pq;
+
+        for(int i = 0 ; i < n ; i++) {
+            workerRatio[i] = {1.0*wage[i]/quality[i], {quality[i], wage[i]}};
+        }
+        sort(workerRatio.begin(), workerRatio.end());
+        
+        double currQualitySum = 0;
+        for(int i = 0 ; i < k-1 ; i++) {
+            currQualitySum += workerRatio[i].second.first;
+            pq.push(workerRatio[i].second.first);
+        }
+
+        for(int manager = k-1 ; manager < n ; manager++) {
+            double managerRatio = workerRatio[manager].first;
+            
+            while(pq.size() > k-1) {
+                currQualitySum -= pq.top();
+                pq.pop();
+            }
+            currQualitySum += workerRatio[manager].second.first;
+            mn = min(mn, currQualitySum * managerRatio);
+
+            pq.push(workerRatio[manager].second.first);
+        }
+        return mn;
+    }
+};
+
+
+
+// better brute force
+
+// class Solution {
+// public:
+//     double mincostToHireWorkers(vector<int>& quality, vector<int>& wage, int k) {
+//         ios::sync_with_stdio(NULL);
+//         cin.tie(NULL);
+//         cout.tie(NULL);
+
+//         int n = wage.size();
+//         double mn = DBL_MAX;
+//         vector<pair<double,pair<int,int>>> workerRatio(n);
+//         priority_queue<double> pq;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             workerRatio[i] = {1.0*wage[i]/quality[i], {quality[i], wage[i]}};
+//         }
+//         sort(workerRatio.begin(), workerRatio.end());
+        
+//         for(int manager = k-1 ; manager < n ; manager++) {
+//             double managerRatio = workerRatio[manager].first;
+//             for(int worker = 0 ; worker < manager ; worker++) {
+//                 double workerWage = managerRatio * workerRatio[worker].second.first;
+//                 pq.push(workerWage);
+//                 if(pq.size() > k-1) pq.pop();
+//             }
+//             double temp = workerRatio[manager].second.second;
+//             while(!pq.empty()) {
+//                 temp += pq.top();
+//                 pq.pop();
+//             }
+//             mn = min(temp, mn);
+//         }
+//         return mn;
+//     }
+// };
+
+
+
+// brute force
+
+// class Solution {
+// public:
+//     double mincostToHireWorkers(vector<int>& quality, vector<int>& wage, int k) {
+//         ios::sync_with_stdio(NULL);
+//         cin.tie(NULL);
+//         cout.tie(NULL);
+//         int n = wage.size();
+
+//         double mn = INT_MAX;
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             priority_queue<double, vector<double>, greater<double>> pq;
+
+//             for(int j = 0 ; j < n ; j++) {
+//                 if(i != j) {
+//                     double res = (1.0*quality[j]/quality[i]) * wage[i];
+//                     if(res >= wage[j]) {
+//                         pq.push(res);
+//                     }   
+//                 }
+//             }
+
+//             if(pq.size() < k-1) continue;
+
+//             double temp = 0;
+//             int cnt = k-1;
+//             while(cnt > 0) {
+//                 temp += pq.top();
+//                 pq.pop();
+//                 cnt--;
+//             }
+//             temp += wage[i];
+//             mn = min(temp, mn);
+//         }
+//         return mn;
+//     }
+// };
