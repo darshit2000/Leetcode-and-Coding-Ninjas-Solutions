@@ -1,0 +1,37 @@
+https://leetcode.com/problems/path-with-maximum-gold/description/?envType=daily-question&envId=2024-05-14
+
+
+
+class Solution {
+public:
+    int dfs(int i, int j, vector<vector<int>> &grid, vector<vector<int>>& dir, int m, int n) {
+        int initial = grid[i][j], mx = grid[i][j];
+        grid[i][j] = 0;
+
+        for(auto& d : dir) {
+            int ni = i + d[0];
+            int nj = j + d[1];
+
+            if(ni >= 0 && ni < m && nj >= 0 && nj < n && grid[ni][nj] != 0) {
+                mx = max(mx, initial + dfs(ni, nj, grid, dir, m, n));
+            }
+        }
+        grid[i][j] = initial;
+        return mx;
+    }
+    int getMaximumGold(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+        int mx = 0;
+        for(int i = 0 ; i < m ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(grid[i][j] != 0) {
+                    mx = max(mx, dfs(i, j, grid, dir, m, n));
+                }
+            }
+        }
+        return mx;
+    }
+};
