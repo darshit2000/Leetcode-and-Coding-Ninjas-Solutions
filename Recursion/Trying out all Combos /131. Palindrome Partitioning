@@ -1,0 +1,35 @@
+https://leetcode.com/problems/palindrome-partitioning/
+
+
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        if(s.length() == 0) return false;
+        return s == string(s.rbegin(), s.rend());
+    }
+    vector<vector<string>> partition(string s) {
+        int n = s.length();
+        vector<vector<string>> ans;
+
+        auto f = [&] (auto& f, int i, vector<string>& ds) -> void {
+            if(i == n) {
+                ans.push_back(ds);
+                return;
+            }
+
+            for(int idx = i ; idx < n ; idx++) {
+                string str = s.substr(i, idx-i+1);
+                if(isPalindrome(str)) {
+                    ds.push_back(str);
+                    f(f, idx+1, ds);
+                    ds.pop_back();
+                }   
+            }
+        };
+        
+        vector<string> ds;
+        f(f, 0, ds);
+        return ans;
+    }
+};
