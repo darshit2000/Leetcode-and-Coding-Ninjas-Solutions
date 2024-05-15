@@ -1,0 +1,53 @@
+https://www.geeksforgeeks.org/problems/boolean-parenthesization5610/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+
+
+
+class Solution{
+public:
+    int countWays(int n, string s){
+        // code here
+        const int mod = 1003;
+        vector<vector<vector<int>>> dp(2, vector<vector<int>>(n, vector<int>(n, -1)));
+        auto f = [&] (auto& f, int i, int j, int isTrue) -> long long {
+            if(i > j) return 0;
+            
+            if(i == j) {
+                if(isTrue == 1) return s[i] == 'T';
+                else if(isTrue == 0) return s[i] == 'F';
+            }
+            
+            if(dp[isTrue][i][j] != -1) return dp[isTrue][i][j];
+            
+            long long ans = 0;
+            for(int k = i+1 ; k <= j-1 ; k += 2) {
+                long long lt = f(f, i, k-1, 1) % mod;
+                long long lf = f(f, i, k-1, 0) % mod;
+                long long rt = f(f, k+1, j, 1) % mod;
+                long long rf = f(f, k+1, j, 0) % mod;
+                
+                if(s[k] == '&') {
+                    if(isTrue == 1) {
+                        ans = (ans + (lt*rt) % mod) % mod;
+                    } else {
+                        ans = (ans + (lt*rf) % mod + (lf*rt) % mod + (lf*rf) % mod) % mod;
+                    }
+                } else if(s[k] == '|') {
+                    if(isTrue == 1) {
+                        ans = (ans + (lt*rt) % mod + (lf*rt) % mod + (lt*rf) % mod) % mod;
+                    } else {
+                        ans = (ans + (lf*rf) % mod) % mod;
+                    }
+                } else if(s[k] == '^') {
+                    if(isTrue == 1) {
+                        ans = (ans + (lt*rf) % mod + (lf*rt) % mod) % mod;
+                    } else {
+                        ans = (ans + (lt*rt) % mod + (lf*rf) % mod) % mod;
+                    }
+                }
+            }
+            return dp[isTrue][i][j] = ans % mod;
+        };
+        
+        return f(f, 0, n-1, 1);
+    }
+};
