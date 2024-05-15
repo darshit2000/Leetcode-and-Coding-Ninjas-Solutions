@@ -1,0 +1,75 @@
+https://leetcode.com/problems/find-the-safest-path-in-a-grid/description/?envType=daily-question&envId=2024-05-15
+
+
+
+class Solution {
+public:
+    int maximumSafenessFactor(vector<vector<int>>& grid) {
+        ios::sync_with_stdio(NULL);
+        cin.tie(NULL);
+        cout.tie(NULL);
+        
+        int n = grid.size();
+        vector<vector<int>> safeness(n, vector<int>(n, 0));
+        queue<pair<pair<int,int>,int>> sf;
+        vector<vector<int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        vector<vector<int>> vis(n, vector<int>(n, 0));
+
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(grid[i][j] == 1) {
+                    sf.push({{i,j}, 0});
+                    vis[i][j] = 1;
+                    safeness[i][j] = 0;
+                }
+            }
+        }
+
+        while(!sf.empty()) {
+            int row = sf.front().first.first;
+            int col = sf.front().first.second;
+            int steps = sf.front().second;
+            sf.pop();
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n && vis[nrow][ncol] == 0 && grid[nrow][ncol] == 0) {
+                    sf.push({{nrow, ncol}, steps + 1});
+                    vis[nrow][ncol] = 1;
+                    safeness[nrow][ncol] = steps + 1;
+                }
+            }
+        }
+
+        if(safeness[0][0] == 0 || safeness[n-1][n-1] == 0) return 0;
+
+        using pii = pair<int,pair<int,int>>;
+        priority_queue<pii> pq;
+        vector<vector<int>> dist(n, vector<int>(n, INT_MIN));
+        pq.push({safeness[0][0], {0,0}});
+        dist[0][0] = safeness[0][0];
+        
+        while(!pq.empty()) {
+            int row = pq.top().second.first;
+            int col = pq.top().second.second;
+            int s = pq.top().first;
+            pq.pop();
+
+            for(auto& d : dir) {
+                int nrow = row + d[0];
+                int ncol = col + d[1];
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < n) {
+                    int ns = min(s, safeness[nrow][ncol]);
+                    if(ns > dist[nrow][ncol]) {
+                        dist[nrow][ncol] = ns;
+                        pq.push({ns, {nrow, ncol}});
+                    }
+                }
+            }
+        }
+        return dist[n-1][n-1];
+    }
+};
