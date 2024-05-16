@@ -1,0 +1,35 @@
+https://www.geeksforgeeks.org/problems/minimum-number-of-steps-to-reach-a-given-number5234/1
+
+
+
+class Solution {
+  public:
+    int minSteps(int d) {
+        queue<int> q;
+        q.push(0);
+        int i = 1;
+        
+        while(!q.empty()) {
+            int sz = q.size();
+            unordered_set<int> st;
+            
+            while(sz--) {
+                int curr = q.front();
+                q.pop();
+                
+                if(curr+i == d || curr-i == d) return i;
+                
+                if(st.find(curr+i) == st.end()) {
+                    q.push(curr+i);
+                    st.insert(curr+i);
+                }
+                if(st.find(curr-i) == st.end()) {
+                    q.push(curr-i);
+                    st.insert(curr-i);
+                }
+            }
+            i++;
+        }
+        return -1;
+    }
+};
