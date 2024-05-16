@@ -1,0 +1,128 @@
+https://leetcode.com/problems/partition-array-for-maximum-sum/description/
+
+
+
+// bottom up (front partitioning)
+
+// class Solution {
+// public:
+//     int maxSumAfterPartitioning(vector<int>& arr, int k) {
+//         int n = arr.size();
+//         vector<int> dp(n+1, 0);
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             int maxCost = INT_MIN, cost = 0, currMax = arr[i];
+//             for(int idx = i ; idx <= min(i+k-1, n-1) ; idx++) {
+//                 currMax = max(currMax, arr[idx]);
+//                 cost = currMax*(idx - i + 1) + dp[idx + 1];
+//                 maxCost = max(cost, maxCost);
+//             }
+
+//             dp[i] = maxCost;
+//         }
+//         return dp[0];
+//     }
+// };
+
+
+
+// top down (front partitioning)
+
+class Solution {
+public:
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n = arr.size();
+        vector<int> dp(n, -1);
+        auto f = [&] (auto& f, int i) -> int {
+            if(i == n) {
+                return 0;
+            }
+
+            if(dp[i] != -1) return dp[i];
+
+            int maxCost = INT_MIN, cost = 0, currMax = arr[i];
+            for(int idx = i ; idx <= min(i+k-1, n-1) ; idx++) {
+                currMax = max(currMax, arr[idx]);
+                cost = currMax*(idx - i + 1) + f(f, idx + 1);
+                maxCost = max(cost, maxCost);
+            }
+
+            return dp[i] = maxCost;
+        };
+
+        return f(f, 0);
+    }
+};
+
+
+
+// trivial split/not-split 2d dp
+
+// class Solution {
+// public:
+//     int findMax(vector<int>& arr, int k, int i, int prevCount) {
+//         int mx = INT_MIN;
+//         while(prevCount > 0) {
+//             mx = max(mx, arr[i]);
+//             i--;
+//             prevCount--;
+//         }
+//         return mx;
+//     }
+//     int maxSumAfterPartitioning(vector<int>& arr, int k) {
+//         int n = arr.size();
+//         vector<vector<int>> dp(k+1, vector<int>(n, -1));
+
+//         auto f = [&] (auto& f, int i, int prevCount) -> int {
+//             if(i == n-1) {
+//                 return findMax(arr, k, i, prevCount)*prevCount;
+//             }
+
+//             if(dp[prevCount][i] != -1) return dp[prevCount][i];
+
+//             int v1 = INT_MIN, v2 = INT_MIN;
+
+//             // partition
+//             if(prevCount > 0) v1 = findMax(arr, k, i, prevCount)*prevCount + f(f, i+1, 1);
+
+//             // no partition
+//             if(prevCount < k) v2 = f(f, i+1, prevCount + 1);
+
+//             return dp[prevCount][i] = max(v1 ,v2);
+//         };
+
+//         return f(f, 0, 1);
+//     }
+// };
+
+
+
+// trivial split/not split 3d dp
+
+// class Solution {
+// public:
+//     int maxSumAfterPartitioning(vector<int>& arr, int k) {
+//         int n = arr.size();
+//         vector<vector<unordered_map<int,int>>> dp(k+1, vector<unordered_map<int,int>>(n));
+//         auto f = [&] (auto& f, int i, int prevCount, int mx) -> int {
+//             if(i == n-1) {
+//                 return prevCount*mx;
+//             }
+
+//             if(dp[prevCount][i].count(mx)) return dp[prevCount][i][mx];
+
+//             int v1 = INT_MIN, v2 = INT_MIN;
+
+//             // partition
+//             if(prevCount > 0) v1 = mx*prevCount + f(f, i+1, 1, arr[i+1]);
+
+//             // no partition
+//             int nmx = max(mx, arr[i+1]);
+//             if(prevCount < k) v2 = f(f, i+1, prevCount + 1, nmx);
+
+//             return dp[prevCount][i][mx] = max(v1 ,v2);
+//         };
+
+//         return f(f, 0, 1, arr[0]);
+//     }
+// };
