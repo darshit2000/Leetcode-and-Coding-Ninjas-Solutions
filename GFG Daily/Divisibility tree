@@ -1,0 +1,33 @@
+https://www.geeksforgeeks.org/problems/divisibility-tree1902/1
+
+
+
+class Solution {
+public:
+	int minimumEdgeRemove(int n, vector<vector<int>>edges){
+	    // Code here
+	    vector<vector<int>> adj(n+1);
+	    
+	    for(vector<int>& e : edges) {
+	        adj[e[0]].push_back(e[1]);
+	        adj[e[1]].push_back(e[0]);
+	    }
+	    
+	    int a = 0;
+	    
+	    auto dfs = [&] (auto& dfs, int node, int parent) -> int {
+	        int ans = 1;
+	        for(int neighbour : adj[node]) {
+	           if(neighbour != parent) {
+	               int res = dfs(dfs, neighbour, node);
+	               if(res % 2 == 0) a++;
+	               ans += res;
+	           }
+	        }
+	        return ans;
+	    };
+	    
+	    dfs(dfs, 1, -1);
+	    return a;
+	}
+};
