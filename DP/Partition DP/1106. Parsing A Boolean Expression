@@ -1,0 +1,170 @@
+https://leetcode.com/problems/parsing-a-boolean-expression/description/
+
+
+
+// stack
+
+// class Solution {
+// public:
+//     bool parseBoolExpr(string e) {
+//         int n = e.length();
+//         stack<char> stk;
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             if(e[i] == '(') {
+//                 int t = 0, f = 0;
+//                 while(stk.top() != ')') {
+//                     if(stk.top() == 't') t++;
+//                     else if(stk.top() == 'f') f++;
+//                     stk.pop();
+//                 }
+//                 stk.pop();
+//                 if(e[i-1] == '&') {
+//                     if(f > 0) stk.push('f');
+//                     else stk.push('t');
+//                 } else if(e[i-1] == '|') {
+//                     if(t > 0) stk.push('t');
+//                     else stk.push('f');
+//                 } else if(e[i-1] == '!') {
+//                     if(t > 0) stk.push('f');
+//                     else stk.push('t');
+//                 }
+//             } else if(e[i] == '|' || e[i] == '&' || e[i] == '!') {
+//                 continue;
+//             } else {
+//                 stk.push(e[i]);
+//             }
+//         }
+//         return stk.top() == 't' ? true : false;
+//     }
+// };
+
+
+
+// good recursive solution
+
+class Solution {
+public:
+    unordered_map<char, int> mpp;
+    
+    bool solve(string& e, int& i) {
+        char expr = e[i];
+        bool truePresent = false, falsePresent = false;
+
+        i += 2;
+        while(e[i] != ')') {
+            if(e[i] == 't') truePresent = true;
+            else if(e[i] == 'f') falsePresent = true;
+            else if(e[i] == '|' || e[i] == '&' || e[i] == '!') {
+                bool res = solve(e, i);
+                if(res) truePresent = true;
+                else falsePresent = true;
+            }
+
+            i++;
+        }
+
+        if(expr == '&') {
+            if(falsePresent) return false;
+            return true;
+        } else if(expr == '|') {
+            if(truePresent) return true;
+            return false;
+        } else if(expr == '!') {
+            if(truePresent) return false;
+            return true;
+        }
+        
+        return true;
+    }
+    bool parseBoolExpr(string e) {
+        int n = e.length();
+        int i = 0;
+        return solve(e, i);
+    }
+};
+
+
+
+
+// bekaar recursive solution, 73/75 test case passed
+
+// class Solution {
+// public:
+//     unordered_map<char, int> mpp;
+    
+//     bool solve(string& e, int i, int n, int op) {
+//         if(i >= n) return true;
+//         if(e[i] == ',') return solve(e, i+1, n, op);
+        
+//         if(e[i] == 't' || e[i] == 'f' || e[i] == ',') {
+//             // not
+//             if(op == 0) {
+//                 if(e[i] == 't') return false;
+//                 else if(e[i] == 'f') return true;
+//                 else return !solve(e, i+1, n, op);
+//             } 
+//             // and
+//             else if(op == 1) {
+//                 if(e[i] == 'f') {
+//                     return false;
+//                 }
+//                 else if(e[i] == 't' && e[i+1] == ')') {
+//                     return true;
+//                 } 
+//                 else if(e[i] == 't' && e[i+1] != ')') {
+//                     return solve(e, i+1, n, op);
+//                 } 
+//                 else return solve(e, i+1, n, op);
+//             } 
+//             // or
+//             else if(op == 2) {
+//                 if(e[i] == 't') {
+//                     return true;
+//                 } 
+//                 else if(e[i] == 'f' && e[i+1] == ')') {
+//                     return false;
+//                 } 
+//                 else if(e[i] == 'f' && e[i+1] != ')') {
+//                     return solve(e, i+1, n, op);
+//                 } 
+//                 else return solve(e, i+1, n, op);
+//             } 
+//         }
+
+//         bool ans;
+//         if(e[i] == '!') {
+//             if(e[i+2] == 't') return false;
+//             else if(e[i+2] == 'f') return true;
+//             else if(e[i] == '!' || e[i] == '&' || e[i] == '|') ans = !solve(e, i+2, n, mpp[e[i]]);
+//         } else if(e[i] == '|') {
+//             ans = false;
+//             for(int k = i+2 ; k <= n-2 ; k++) {
+//                 if(e[k] == 't') {
+//                     ans = true;
+//                     break;
+//                 }
+//                 else if(e[k] == '!' || e[k] == '&' || e[k] == '|') ans |= solve(e, k, n, mpp[e[k]]);               
+//             }
+//         } else if(e[i] == '&') {
+//             ans = true;
+//             for(int k = i+2 ; k <= n-2 ; k++) {
+//                 if(e[k] == 'f') {
+//                     ans = false;
+//                     break;
+//                 }
+//                 else if(e[k] == '!' || e[k] == '&' || e[k] == '|') ans &= solve(e, k, n, mpp[e[k]]);               
+//             }
+//         } 
+        
+//         return ans;
+//     }
+//     bool parseBoolExpr(string e) {
+//         int n = e.length();
+//         mpp['!'] = 0;
+//         mpp['&'] = 1;
+//         mpp['|'] = 2;
+
+//         return solve(e, 0, n, mpp[e[0]]);
+//     }
+// };
