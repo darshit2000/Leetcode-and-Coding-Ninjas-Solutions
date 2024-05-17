@@ -1,0 +1,102 @@
+https://leetcode.com/problems/maximal-rectangle/description/
+
+
+
+// using only 1 vector and not using 2 vectors (nsl and nsr)
+
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        int maxArea = 0;
+        vector<int> hist(m, 0);
+        
+        for(int i = 0 ; i < n ; i++) {
+            for(int j = 0 ; j < m ; j++) {
+                if(matrix[i][j] == '1') hist[j]++;
+                else hist[j] = 0;
+            }
+
+            stack<int> stk;
+            for(int j = 0 ; j < m+1 ; j++) {
+                // we require to also examine j = m because if hist = [1,1,2], and if 
+                // (j = m) is not examined, then we will not be enter to enter the 
+                // while loop ever
+                while(!stk.empty() && (j == m || hist[j] <= hist[stk.top()])) {
+                    int height = hist[stk.top()];
+                    stk.pop();
+
+                    int left = stk.empty() ? -1 : stk.top();
+                    int right = j;
+
+                    maxArea = max(maxArea, (right-left-1) * height);
+                }
+                stk.push(j);
+            }
+        }
+        return maxArea;
+    }
+};
+auto init = []() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 'c';
+}();
+
+
+
+// striver
+
+// class Solution {
+// public:
+//     int getArea(vector<int>& hist) {
+//         int n = hist.size();
+//         vector<int> nsl(n,-1), nsr(n, n);
+//         stack<int> stk;
+//         int maxArea = INT_MIN;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             while(!stk.empty() && hist[stk.top()] >= hist[i]) stk.pop();
+//             if(!stk.empty()) nsl[i] = stk.top();
+//             stk.push(i);
+//         }
+
+//         while(!stk.empty()) stk.pop();
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             while(!stk.empty() && hist[stk.top()] >= hist[i]) stk.pop();
+//             if(!stk.empty()) nsr[i] = stk.top();
+//             stk.push(i);
+//         }
+        
+//         for(int i = 0 ; i < n ; i++) {
+//             int area = (nsr[i] - nsl[i] - 1) * hist[i];
+//             maxArea = max(area, maxArea);
+//         }
+//         return maxArea;
+//     }
+//     int maximalRectangle(vector<vector<char>>& matrix) {
+//         int n = matrix.size();
+//         int m = matrix[0].size();
+//         int maxArea = INT_MIN;
+//         vector<int> hist(m, 0);
+
+//         for(int i = 0 ; i < n ; i++) {
+//             for(int j = 0 ; j < m ; j++) {
+//                 if(matrix[i][j] == '1') hist[j]++;
+//                 else hist[j] = 0;
+//             }
+//             int area = getArea(hist);
+//             maxArea = max(area, maxArea);
+//         }
+//         return maxArea;
+//     }
+// };
+// auto init = []() {
+//     ios::sync_with_stdio(false);
+//     cin.tie(nullptr);
+//     cout.tie(nullptr);
+//     return 'c';
+// }();
