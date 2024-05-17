@@ -1,0 +1,41 @@
+https://leetcode.com/problems/delete-leaves-with-a-given-value/description/?envType=daily-question&envId=2024-05-17
+
+
+
+
+// method 1
+
+class Solution {
+public:
+    int helper(TreeNode* root, int target) {
+        if(!root) return 0;
+        if(root && !root->left && !root->right) return root->val;
+
+        if(helper(root->left, target) == target && !root->left->left && !root->left->right) {
+            root->left = NULL;
+        }
+        if(helper(root->right, target) == target && !root->right->left && !root->right->right) {
+            root->right = NULL;
+        }
+        return root->val;
+    }
+    TreeNode* removeLeafNodes(TreeNode* root, int target) {
+        if(helper(root, target) == target && root && !root->left && !root->right) return NULL;
+        return root;
+    }
+};
+
+
+// method 2
+// class Solution {
+// public:
+//     TreeNode* removeLeafNodes(TreeNode* root, int target) {
+//         if(!root) return NULL;
+
+//         root->left = removeLeafNodes(root->left, target);
+//         root->right = removeLeafNodes(root->right, target);
+
+//         if(root && !root->left && !root->right && root->val == target) return NULL;
+//         else return root;
+//     }
+// };
