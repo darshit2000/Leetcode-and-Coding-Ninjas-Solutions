@@ -1,0 +1,40 @@
+https://leetcode.com/problems/distribute-coins-in-binary-tree/description/?envType=daily-question&envId=2024-05-18
+
+
+
+// dfs
+
+class Solution {
+public:
+    int distributeCoins(TreeNode* root) {
+        if(root && !root->left && !root->right) return 0;
+        TreeNode* temp = root;
+        int cnt = 0;
+
+        auto dfs = [&] (auto& dfs, TreeNode* node) -> int {
+            if(!node) return 0;
+
+            int left = dfs(dfs, node->left);
+            int right = dfs(dfs, node->right);
+
+            // value is -ve if child requires some money and +ve is child has excess money
+            // node->val - 1 because the node will take 1 coin for himself
+            /*
+                                Left child will return (4-1) + (0+0) = +3 
+                    5           and right child will return (0-1) + (0+0) = -1
+                   / \          Total movement from left child = abs(3) = 3 and from right child = abs(-1) = 1
+                  4   0         Net from node->val = 5 => (5-1) + (3-1) = +2. 
+                                Node with value 5 will return +2 to its parent.
+                                Total movement from node 5 to its parent = abs(2) = 2
+            */ 
+            int excess = (node->val - 1) + (left + right);
+
+            // cnt += abs(left) + abs(right);     OR
+            cnt += abs(excess);
+            return excess;           
+        };
+
+        dfs(dfs, root);
+        return cnt;
+    }
+};
