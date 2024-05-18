@@ -2,13 +2,12 @@ https://leetcode.com/problems/distribute-coins-in-binary-tree/description/?envTy
 
 
 
-// dfs
+// dfs  (method 1)
 
 class Solution {
 public:
     int distributeCoins(TreeNode* root) {
         if(root && !root->left && !root->right) return 0;
-        TreeNode* temp = root;
         int cnt = 0;
 
         auto dfs = [&] (auto& dfs, TreeNode* node) -> int {
@@ -20,7 +19,7 @@ public:
             // value is -ve if child requires some money and +ve is child has excess money
             // node->val - 1 because the node will take 1 coin for himself
             /*
-                                Left child will return (4-1) + (0+0) = +3 
+                                Left child will return (4-1) + (0+0) = +3
                     5           and right child will return (0-1) + (0+0) = -1
                    / \          Total movement from left child = abs(3) = 3 and from right child = abs(-1) = 1
                   4   0         Net from node->val = 5 => (5-1) + (3-1) = +2. 
@@ -29,7 +28,7 @@ public:
             */ 
             int excess = (node->val - 1) + (left + right);
 
-            // cnt += abs(left) + abs(right);     OR
+            // cnt += abs(left) + abs(right);    <- (More intuitive)    OR
             cnt += abs(excess);
             return excess;           
         };
@@ -38,3 +37,91 @@ public:
         return cnt;
     }
 };
+
+
+
+// dfs  (method 2)
+
+// class Solution {
+// public:
+//     int distributeCoins(TreeNode* root) {
+//         if(root && !root->left && !root->right) return 0;
+//         int cnt = 0;
+
+//         auto dfs = [&] (auto& dfs, TreeNode* node) -> pair<int,int> {
+//             if(!node) return {0,0};     // {size, total_coins}
+
+//             pair<int,int> left = dfs(dfs, node->left);
+//             pair<int,int> right = dfs(dfs, node->right);
+
+//             int totalSize = 1 + left.first + right.first;
+//             int totalCoins = node->val + left.second + right.second;
+
+//             // cnt += abs(left.second - left.first) + abs(right.second - right.first);
+//             // or   
+//             cnt += abs(totalCoins - totalSize);
+
+//             return {totalSize, totalCoins};
+//         };
+
+//         dfs(dfs, root);
+//         return cnt;
+//     }
+// };
+
+
+
+// dfs  (method 3)
+
+// class Coins {
+// public:
+//     int coins, size;
+//     Coins(int s, int c) {
+//         size = s;
+//         coins = c;
+//     }
+// };
+
+// class Solution {
+// public:
+//     int distributeCoins(TreeNode* root) {
+//         if(root && !root->left && !root->right) return 0;
+//         int cnt = 0;
+
+//         auto dfs = [&] (auto& dfs, TreeNode* node) -> Coins* {
+//             if(!node) return new Coins(0,0);     // {size, total_coins}
+
+//             Coins *left = dfs(dfs, node->left);
+//             Coins *right = dfs(dfs, node->right);
+
+//             int totalSize = 1 + left->size + right->size;
+//             int totalCoins = node->val + left->coins + right->coins;
+
+//             cnt += abs(left->coins - left->size) + abs(right->coins - right->size);
+//             // or   
+//             // cnt += abs(totalCoins - totalSize);
+
+//             // delete memory leak
+//             delete left;
+//             delete right;
+
+//             return new Coins(totalSize, totalCoins);
+//         };
+
+//         dfs(dfs, root);
+//         return cnt;
+//     }
+// };
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
