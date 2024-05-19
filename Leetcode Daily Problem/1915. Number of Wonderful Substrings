@@ -1,0 +1,74 @@
+https://leetcode.com/problems/number-of-wonderful-substrings/description/?envType=daily-question&envId=2024-04-30
+
+
+
+auto speedup = []() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    return 0;
+}();
+
+class Solution {
+public:
+    long long getHash(char ch) {
+        return (1 << (ch-'a'));
+    }
+    long long wonderfulSubstrings(string word) {
+        int n = word.length();
+
+        unordered_map<long long, long long> dp;
+        dp[0] = 1;
+        long long total = 0;
+        long long cumulativeXor = 0;
+
+        for(char& ch : word) {
+            cumulativeXor ^= getHash(ch);
+            total += dp[cumulativeXor];     // consider all substrings with even count char
+
+            for(char checkChar = 'a' ; checkChar <= 'j' ; checkChar++) {
+                long long newXor = (cumulativeXor ^ getHash(checkChar));
+                total += dp[newXor];        // consider all substrings with atmost 1 odd count char
+            }
+
+            dp[cumulativeXor]++;
+        }
+        return total;
+    }
+};
+
+
+
+// code to find substring having only even number occurence of all the characters
+
+// class Solution {
+// public:
+//     long long wonderfulSubstrings(string word) {
+//         int n = word.length();
+//         unordered_map<char, long long> mpp;
+//
+//         // map char to a value
+//         int bit = 0;
+//         for(int i = 0 ; i < n ; i++) {
+//             if(mpp.find(word[i]) == mpp.end()) {
+//                 mpp[word[i]] = (1 << bit);
+//                 bit++;
+//             }
+//         }
+
+//         unordered_map<long long, int> dp;
+//         dp[0] = 1;
+//         int total = 0;
+//         int x = 0;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             x ^= mpp[word[i]];
+//             // if we find some curr xor as 0, then we know that we have encountered 
+//             // a substring of even characters.   eg. aabb       
+//             // Similar to subarray sum (-ve) map logic
+//             total += dp[x]; 
+//             dp[x]++;
+//         }
+//         return total;
+//     }
+// };
