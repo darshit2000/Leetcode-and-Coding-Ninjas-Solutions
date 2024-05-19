@@ -1,0 +1,77 @@
+https://leetcode.com/problems/find-the-maximum-sum-of-node-values/?envType=daily-question&envId=2024-05-19
+
+
+
+# method 1 (NC)   O(nlogn)
+
+# class Solution:
+#     def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+#         n = len(nums)
+#         delta = [(i^k) - i for i in nums]
+#         delta.sort(reverse=True)
+#         ans = sum(nums)
+
+#         for i in range(0, n, 2):
+#             if i == n - 1:
+#                 break
+#             d = delta[i] + delta[i+1]
+#             if d <= 0:
+#                 break
+#             ans += d
+
+#         return ans
+
+
+# method 2  O(n)
+
+# class Solution:
+#     def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+#         n = len(nums)
+#         ans = sum(max(i, (i^k)) for i in nums)
+#         cnt = sum((i^k) > i for i in nums)
+#         return ans - (min(abs((i^k) - i) for i in nums) if cnt % 2 else 0)
+
+
+
+# method 3  (DP)
+class Solution:
+    def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+        n = len(nums)
+        
+        @cache
+        def dp(i, cnt):
+            if i == n:
+                return 0 if cnt % 2 == 0 else -inf
+
+            # xor
+            v1 = (nums[i] ^ k) + dp(i+1, cnt ^ 1)
+            # dont xor
+            v2 = nums[i] + dp(i+1, cnt)
+
+            return max(v1, v2)
+
+        return dp(0, 0)
+
+
+
+class Solution {
+public:
+    long long maximumValueSum(vector<int>& nums, int k, vector<vector<int>>& edges) {
+        int n = nums.size();
+        long long ans = 0;
+        long long mn = INT_MAX;
+        long long cnt = 0;
+
+        for(int i = 0 ; i < n ; i++) {
+            if((nums[i]^k) > nums[i]) {
+                ans += (nums[i]^k);
+                cnt++;
+            } else {
+                ans += nums[i];
+            }
+            mn = min(mn, abs((long long)nums[i] - (nums[i] ^ k))); 
+        }
+        if(cnt % 2 == 0) return ans;
+        return ans - mn;
+    }
+};
