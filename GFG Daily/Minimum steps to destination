@@ -5,31 +5,54 @@ https://www.geeksforgeeks.org/problems/minimum-number-of-steps-to-reach-a-given-
 class Solution {
   public:
     int minSteps(int d) {
-        queue<int> q;
-        q.push(0);
         int i = 1;
-        
-        while(!q.empty()) {
-            int sz = q.size();
-            unordered_set<int> st;
-            
-            while(sz--) {
-                int curr = q.front();
-                q.pop();
-                
-                if(curr+i == d || curr-i == d) return i;
-                
-                if(st.find(curr+i) == st.end()) {
-                    q.push(curr+i);
-                    st.insert(curr+i);
-                }
-                if(st.find(curr-i) == st.end()) {
-                    q.push(curr-i);
-                    st.insert(curr-i);
-                }
-            }
+        int curr = 0;
+        while(curr < d) {
+            curr += i;
             i++;
         }
-        return -1;
+        if(curr == d) return i-1;
+        
+        // jab tak diff even nai hota tab tak i ko badhate jaao
+        while((curr - d) % 2 != 0) {
+            curr += i;
+            i++;
+        }
+        return i-1;
     }
 };
+
+
+// queue
+
+// class Solution {
+//   public:
+//     int minSteps(int d) {
+//         queue<int> q;
+//         q.push(0);
+//         int i = 1;
+        
+//         while(!q.empty()) {
+//             int sz = q.size();
+//             unordered_set<int> st;
+            
+//             while(sz--) {
+//                 int curr = q.front();
+//                 q.pop();
+                
+//                 if(curr+i == d || curr-i == d) return i;
+                
+//                 if(st.find(curr+i) == st.end()) {
+//                     q.push(curr+i);
+//                     st.insert(curr+i);
+//                 }
+//                 if(st.find(curr-i) == st.end()) {
+//                     q.push(curr-i);
+//                     st.insert(curr-i);
+//                 }
+//             }
+//             i++;
+//         }
+//         return -1;
+//     }
+// };
