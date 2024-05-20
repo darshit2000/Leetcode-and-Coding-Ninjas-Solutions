@@ -1,0 +1,32 @@
+https://leetcode.com/problems/sum-of-all-subset-xor-totals/description/?envType=daily-question&envId=2024-05-20
+
+# recursion
+
+# class Solution:
+#     def subsetXORSum(self, nums: List[int]) -> int:
+#         self.sum = 0
+
+#         def dp(i, currXor):
+#             if i == len(nums):
+#                 self.sum += currXor
+#                 return
+
+#             dp(i+1, currXor ^ nums[i])
+#             dp(i+1, currXor)
+
+#         dp(0, 0)
+#         return self.sum
+
+
+
+# Method 2
+
+class Solution:
+    def subsetXORSum(self, nums: List[int]) -> int:
+        sum = 0 
+        n = len(nums)
+
+        for i in nums:
+            sum |= i
+
+        return (sum << (n - 1))
