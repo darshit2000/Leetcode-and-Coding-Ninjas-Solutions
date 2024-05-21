@@ -1,0 +1,45 @@
+https://leetcode.com/problems/subsets/description/?envType=daily-question&envId=2024-05-21
+
+
+
+# backtracking
+
+# class Solution:
+#     def subsets(self, nums: List[int]) -> List[List[int]]:
+#         ans = []
+#         n = len(nums)
+
+#         def getAll(i, ds):
+#             if i >= n:
+#                 ans.append(ds[:])
+#                 return
+
+#             ds.append(nums[i])
+#             getAll(i+1, ds)
+#             ds.pop()
+#             getAll(i+1, ds)
+
+#         getAll(0, [])
+#         return ans
+
+
+
+# bits manipulation
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        ans = []
+        n = len(nums)
+
+        for i in range(0, (1 << n)):
+            ds = []
+            bit = 0
+            binary = i
+            while binary:
+                if binary & 1:
+                    ds.append(nums[bit])
+                bit += 1
+                binary >>= 1
+            ans.append(ds)
+
+        return ans
