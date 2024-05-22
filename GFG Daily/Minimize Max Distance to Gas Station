@@ -1,0 +1,66 @@
+https://www.geeksforgeeks.org/problems/minimize-max-distance-to-gas-station/1
+
+
+
+class Solution {
+  public:
+    double findSmallestMaxDist(vector<int> &stations, int k) {
+        // TLE
+        // int n = stations.size();
+        // priority_queue<pair<double, int>> pq;
+        // vector<int> total(n-1, 0);
+        
+        // sort(stations.begin(), stations.end());
+        // for(int i = 0 ; i < n-1 ; i++) {
+        //     pq.push({stations[i+1] - stations[i], i});
+        // }
+        
+        // while(k > 0) {
+        //     double diff = pq.top().first;
+        //     int idx = pq.top().second;
+        //     pq.pop();
+            
+        //     total[idx]++;
+        //     double newDiff = (double)(stations[idx+1] - stations[idx])/((double)total[idx] + 1);
+        //     pq.push({newDiff, idx});
+            
+        //     k--;
+        // }
+        // return pq.top().first;
+        
+        int n = stations.size();
+        
+        auto getTotalStations = [&](double max_dist) -> int {
+            int total_stations = 0;
+            
+            for (int i = 0; i < n - 1; ++i) {
+                double diff = stations[i + 1] - stations[i];
+                total_stations += floor(diff / max_dist);
+                if(trunc(1.0*diff / max_dist) == (1.0*diff / max_dist)) {
+                    total_stations -= 1;
+                }
+                
+                if (total_stations > k) {
+                    return total_stations;
+                }
+            }
+            return total_stations;
+        };
+        
+        double low = 0;
+        double high = stations[n - 1] - stations[0];
+        
+        while (high - low > 1e-6) {
+            double mid = (low + high) / 2.0;
+            int total_stations = getTotalStations(mid);
+            
+            if (total_stations > k) {
+                low = mid;
+            } else {
+                high = mid;
+            }
+        }
+        
+        return high;
+    }
+};
