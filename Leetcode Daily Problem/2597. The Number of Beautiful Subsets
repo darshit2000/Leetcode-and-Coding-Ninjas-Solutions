@@ -1,0 +1,216 @@
+https://leetcode.com/problems/the-number-of-beautiful-subsets/description/?envType=daily-question&envId=2024-05-23
+
+
+
+// O(n) (using mod for grouping)
+
+class Solution {
+public:
+    int K;
+    int getTotalSubsets(int i, vector<pair<int,int>>& group, int n) {
+        if(i >= n) {
+            return 1;
+        }
+        int notTake = getTotalSubsets(i+1, group, n);
+        int take = 0;
+        /*
+            Here we need to consider 2 case for "take", because here we have considered mod for grouping
+            if k == 1, then all elements will be in the same group because the mod will be zero
+            So, when we are considering mod for grouping, the adjacent elements will not always cause 
+            the conflict (in below code, we have grouped based on the difference only, i.e.
+            group[i] + k = group[i+1], so adjacent elements will always have a conflict in a group), 
+            and because of that, we can apply the house robber algorithm. But in this case,  
+            adjacent elements in a group may not always result in a conflict 
+        */
+        if(i + 1 < n && group[i+1].first - group[i].first == K) {
+            // remove empty subset -> so -1
+            take = (pow(2, group[i].second) - 1) * getTotalSubsets(i+2, group, n);
+        } else {
+            take = (pow(2, group[i].second) - 1) * getTotalSubsets(i+1, group, n);
+        }
+
+        return take + notTake;
+    }
+
+    int beautifulSubsets(vector<int>& nums, int k) {
+        K = k;
+        int n = nums.size();
+        unordered_map<int, vector<pair<int,int>>> groups;
+        unordered_map<int,int> freq;
+
+        for(int i = 0 ; i < n ; i++) {
+            freq[nums[i]]++;
+        }
+
+        for(auto& [num, f] : freq) {
+            groups[num % k].push_back({num, f});
+        }
+
+        int res = 1;
+        for(auto& [m, group] : groups) {
+            vector<pair<int,int>> v(group.begin(), group.end());
+            sort(v.begin(), v.end());
+            res *= getTotalSubsets(0, v, v.size());
+        }
+        // remove empty subset -> so -1
+        return res - 1;
+    }
+};
+
+
+
+// O(n) (house robber recursion + longest non-consecutive sequence for grouping)
+
+// class Solution {
+// public:
+//     int getTotalSubsets(int i, vector<pair<int,int>>& group, int n) {
+//         if(i >= n) {
+//             return 1;
+//         }
+
+//         // remove empty subset -> so -1
+//         int take = (pow(2, group[i].second) - 1) * getTotalSubsets(i+2, group, n);
+//         int notTake = getTotalSubsets(i+1, group, n);
+
+//         return take + notTake;
+//     }
+
+//     int beautifulSubsets(vector<int>& nums, int k) {
+//         int n = nums.size();
+//         vector<vector<pair<int,int>>> groups;
+//         unordered_map<int,int> freq;
+//         unordered_set<int> vis;
+
+//         for(int i = 0 ; i < n ; i++) {
+//             freq[nums[i]]++;
+//         }
+
+//         for(auto item : freq) {
+//             int num = item.first;
+//             if(vis.find(num) != vis.end()) continue;
+
+//             while(freq.find(num - k) != freq.end()) {
+//                 num -= k;
+//             }
+
+//             vector<pair<int,int>> v;
+//             while(freq.find(num) != freq.end()) {
+//                 vis.insert(num);
+//                 v.push_back({num, freq[num]});
+//                 num += k;
+//             }
+//             groups.push_back(v);
+//         }
+
+//         int res = 1;
+//         for(vector<pair<int,int>>& group : groups) {
+//             res *= getTotalSubsets(0, group, group.size());
+//         }
+//         // remove empty subset -> so -1
+//         return res - 1;
+//     }
+// };
+
+
+
+// backtracking (more effective than binary search)
+
+// class Solution {
+// public:
+//     bool isSafe(vector<int> &ds, int num, int k) {
+//         if(ds.size() == 0) return true;
+//         for(int i = 0 ; i < ds.size() ; i++) {
+//             if(abs(ds[i] - num) == k) return false;
+//         }
+//         return true;
+//     }
+//     int beautifulSubsets(vector<int>& nums, int k) {
+//         int cnt = 0;
+//         int n = nums.size();
+
+//         auto f = [&] (auto& f, int i, vector<int> &ds) -> void {
+//             if(i == n) {
+//                 if(ds.size() > 0) cnt++;
+//                 return;
+//             }
+
+//             if(isSafe(ds, nums[i], k)) {
+//                 ds.push_back(nums[i]);
+//                 f(f, i+1, ds);
+//                 ds.pop_back();
+//             }
+//             f(f, i+1, ds);
+//         };
+
+//         vector<int> ds;
+//         f(f, 0, ds);
+//         return cnt;
+//     }
+// };
+
+
+
+// backtracking + binary search  - 2
+
+// class Solution {
+// public:
+//     int beautifulSubsets(vector<int>& nums, int k) {
+//         int cnt = 0;
+//         int n = nums.size();
+//         sort(nums.begin(), nums.end());
+
+//         auto f = [&] (auto& f, int i, vector<int> &ds) -> void {
+//             if(i == n) {
+//                 if(ds.size() > 0) cnt++;
+//                 return;
+//             }
+
+//             int pos = lower_bound(ds.begin(), ds.end(), nums[i]-k) - ds.begin();
+
+//             if(pos == ds.size() || ds[pos] != nums[i]-k) {
+//                 ds.push_back(nums[i]);
+//                 f(f, i+1, ds);
+//                 ds.pop_back();
+//             }
+//             f(f, i+1, ds);
+//         };
+
+//         vector<int> ds;
+//         f(f, 0, ds);
+//         return cnt;
+//     }
+// };
+
+
+
+// backtracking + binary search  - 1
+
+// class Solution {
+// public:
+//     int beautifulSubsets(vector<int>& nums, int k) {
+//         int cnt = 0;
+//         int n = nums.size();
+//         sort(nums.begin(), nums.end());
+
+//         auto f = [&] (auto& f, int i, vector<int> &ds) -> void {
+//             if(i == n) {
+//                 if(ds.size() > 0) cnt++;
+//                 return;
+//             }
+
+//             if(binary_search(ds.begin(), ds.end(), nums[i] - k) == 0) {
+//                 ds.push_back(nums[i]);
+//                 f(f, i+1, ds);
+//                 ds.pop_back();
+//             }
+//             f(f, i+1, ds);
+//         };
+
+//         vector<int> ds;
+//         f(f, 0, ds);
+//         return cnt;
+//     }
+// };
+
+
+
