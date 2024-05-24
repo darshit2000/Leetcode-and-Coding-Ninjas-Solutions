@@ -48,9 +48,8 @@ public:
 
         int res = 1;
         for(auto& [m, group] : groups) {
-            vector<pair<int,int>> v(group.begin(), group.end());
-            sort(v.begin(), v.end());
-            res *= getTotalSubsets(0, v, v.size());
+            sort(group.begin(), group.end());
+            res *= getTotalSubsets(0, group, group.size());
         }
         // remove empty subset -> so -1
         return res - 1;
@@ -211,6 +210,8 @@ public:
 //         return cnt;
 //     }
 // };
+
+
 
 
 
