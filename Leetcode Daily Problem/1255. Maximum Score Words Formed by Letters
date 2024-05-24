@@ -1,0 +1,108 @@
+https://leetcode.com/problems/maximum-score-words-formed-by-letters/description/?envType=daily-question&envId=2024-05-24
+
+
+
+// using charFreq vector for freq (bit method in python)
+
+class Solution {
+public:
+    int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score) {
+        int m = words.size();
+        int n = letters.size();
+        vector<int> charFreq(26);
+        unordered_map<int, unordered_map<string, int>> dp;
+        
+        for(char ch : letters) charFreq[ch-'a']++;
+
+        auto getScore = [&] (auto& getScore, int widx, vector<int>& charFreq) -> int {
+            if(widx >= m) {
+                return 0;       // all words are exhausted
+            }
+            // create a key for DP
+            string key = "";
+            for(int i = 0 ; i < 26 ; i++) {
+                key += string(1, charFreq[i]);
+            }
+            if(dp.count(widx) && dp[widx].count(key)) return dp[widx][key];
+
+            // skip the current word and go to next word
+            int skip = getScore(getScore, widx + 1, charFreq);
+
+            // check if current word can be formed by the current available chars from letters[]
+            bool canForm = true;
+            int include = 0;
+            for(char ch : words[widx]) {
+                if(charFreq[ch-'a'] == 0) {
+                    canForm = false;
+                }
+
+                charFreq[ch-'a']--;
+                include += score[ch-'a'];
+            }
+
+            // can include the current word, so recurse to next word
+            if(canForm) {
+                include += getScore(getScore, widx+1, charFreq);
+            } 
+            // cannot take current word, so set include = 0
+            else {
+                include = 0;
+            }
+
+            // backtrack
+            for(char ch : words[widx]) {
+                charFreq[ch-'a']++;
+            }
+            
+            return dp[widx][key] = max(skip, include);
+        };
+
+        return getScore(getScore, 0, charFreq);
+    }
+};
+
+
+
+
+# using bit method
+
+class Solution:
+    def maxScoreWords(self, words: List[str], letters: List[str], score: List[int]) -> int:
+        n = len(words)
+        res = 0
+        letterCounter = [0 for i in range(26)]
+        for ch in letters:
+            idx = ord(ch) - ord('a')
+            letterCounter[idx] += 1
+
+        def getScore(str, temp_cnt):
+            sc = 0
+            for ch in str:
+                if temp_cnt[ord(ch) - ord('a')] == 0:
+                    # if curr word cannot be formed by available chars, then return -inf
+                    return -inf     
+                temp_cnt[ord(ch) - ord('a')] -= 1
+                sc += score[ord(ch) - ord('a')]
+            # if curr word can be formed by available chars, then return the score
+            return sc
+
+        # use bits to create subsets (01001 means only 1st and 4th word are included in the subset)
+        for i in range(1 << n):
+            temp_cnt = letterCounter.copy()
+            curr_score = 0
+            for j in range(0, n):
+                # check if word[i] is included in current subset or not
+                if (i >> j) & 1:
+                    sc = getScore(words[j], temp_cnt)
+                    if sc == -inf:
+                        # if sc = -inf, word[j] cannot be included, so we are breaking and going to next subset
+                        break
+                    else:
+                        curr_score += sc
+                        res = max(res, curr_score)
+
+        return res
+
+
+
+        
