@@ -1,0 +1,89 @@
+https://leetcode.com/problems/word-break-ii/description/?envType=daily-question&envId=2024-05-25
+
+
+
+# DP
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        n = len(s)
+        wordSet = set(wordDict)
+        dp = {}
+
+        def helper(i) -> List[str]:
+            if i >= n:
+                return [""]
+
+            if i in dp:
+                return dp[i]
+
+            curr = []
+            sentence = ""
+            for idx in range(i, len(s)):
+                word = s[i:idx+1]
+                if word in wordSet:
+                    strings_list = helper(idx+1)
+                    for w in strings_list:
+                        sentence = word
+                        if w:
+                            sentence += " "
+                        sentence += w
+                        curr.append(sentence)
+
+            dp[i] = curr
+            return curr
+
+        return helper(0)
+
+
+
+# backtracking (no DP) 2
+
+# class Solution:
+#     def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+#         n = len(s)
+#         wordSet = set(wordDict)
+#         ans = []
+#         cur = []
+
+#         def helper(i):
+#             if i >= n:
+#                 ans.append(" ".join(cur))
+#                 return
+
+#             for idx in range(i, len(s)):
+#                 word = s[i:idx+1]
+#                 if word in wordSet:
+#                     cur.append(word)
+#                     helper(idx+1)
+#                     cur.pop()
+
+#         helper(0)
+#         return ans
+
+
+
+# backtracking (no DP) 1
+
+# class Solution:
+#     def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+#         n = len(s)
+#         wordSet = set(wordDict)
+#         self.ans = []
+
+#         def helper(i, pidx, ds):
+#             if i >= n:
+#                 if pidx == n:
+#                     self.ans.append(ds[:-1])
+#                 return
+
+#             helper(i+1, pidx, ds)
+
+#             word = s[pidx:i+1]
+#             if word in wordSet:
+#                 ds += word
+#                 ds += " "
+#                 helper(i+1, i+1, ds)
+
+#         helper(0, 0, "")
+#         return self.ans
