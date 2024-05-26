@@ -1,0 +1,70 @@
+https://leetcode.com/problems/student-attendance-record-ii/description/?envType=daily-question&envId=2024-05-26
+
+
+
+// bottom up
+
+// class Solution {
+// public:
+//     int checkRecord(int n) {
+//         int mod = 1e9 + 7;
+//         // vector<vector<vector<int>>> dp(2, vector<vector<int>>(3, vector<int>(n+1,0)));
+//         int dp[2][3][n+1];
+//         memset(dp, 0, sizeof(dp));
+
+//         for(int a = 0 ; a < 2 ; a++) {
+//             for(int l = 0 ; l < 3 ; l++) {
+//                 dp[a][l][n] = 1;
+//             }
+//         }
+
+//         for(int i = n-1 ; i >= 0 ; i--) {
+//             for(int absent = 1 ; absent >= 0 ; absent--) {
+//                 for(int late = 2 ; late >= 0 ; late--) {
+//                     int v1 = 0, v2 = 0, v3 = 0;
+//                     v1 = dp[absent][0][i+1];  // P
+//                     if(late < 2) v2 = dp[absent][late+1][i+1];    // L
+//                     if(absent == 0) v3 = dp[absent + 1][0][i+1];  // A
+
+//                     dp[absent][late][i] = (1LL*v1 + v2 + v3) % mod;
+//                 }
+//             }
+//         }
+//         return dp[0][0][0];
+//     }
+// };
+
+
+
+
+// top down
+
+class Solution {
+public:
+    int checkRecord(int n) {
+        int mod = 1e9 + 7;
+        vector<vector<vector<int>>> dp(2, vector<vector<int>>(4, vector<int>(n,-1)));
+
+        auto f = [&] (auto& f, int i, int absent, int late) -> int {
+            if(i == n) {
+                return 1; 
+            }
+            if(dp[absent][late][i] != -1) return dp[absent][late][i];
+
+            int v1 = 0, v2 = 0, v3 = 0;
+            
+            // P
+            v1 = f(f, i+1, absent, 0);
+
+            // L
+            if(late < 2) v2 = f(f, i+1, absent, late+1);
+
+            // A
+            if(absent == 0) v3 = f(f, i+1, absent + 1, 0);
+
+            return dp[absent][late][i] = (1LL*v1 + v2 + v3) % mod;
+        };
+
+        return f(f, 0, 0, 0);
+    }
+};
