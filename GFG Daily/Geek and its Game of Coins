@@ -1,0 +1,29 @@
+https://www.geeksforgeeks.org/problems/geek-and-its-game-of-coins4043/1
+
+
+
+class Solution {
+  public:
+    int findWinner(int n, int x, int y) {
+        // code here
+        vector<int> dp(n+1, -1);
+        
+        auto f = [&] (auto& f, int rem) -> bool {
+            if(rem < 0) return false;
+            if(rem == x || rem == y || rem == 1) {
+                return true;
+            }
+            
+            if(dp[rem] != -1) return dp[rem];
+            
+            // geek will have to win the game but the other player has to lose it, so negation applied
+            bool v1 = false, v2 = false, v3 = false;
+            if(rem >= 1) v1 = !f(f, rem-1);
+            if(rem >= x) v2 = !f(f, rem-x);
+            if(rem >= y) v3 = !f(f, rem-y);
+            
+            return dp[rem] = (v1 || v2 || v3);
+        };
+        return f(f, n);
+    }
+};
