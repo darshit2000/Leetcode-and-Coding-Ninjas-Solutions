@@ -1,0 +1,31 @@
+https://www.geeksforgeeks.org/problems/find-number-of-times-a-string-occurs-as-a-subsequence3020/1
+
+
+
+class Solution {
+  public:
+    int countWays(string s1, string s2) {
+        // code here
+        int n = s1.length();
+        int m = s2.length();
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+        const int mod = 1e9 + 7;
+        
+        auto f = [&] (auto& f, int i, int j) -> int {
+            if(j == m) return 1;
+        
+            if(i == n) return 0;
+            
+            if(dp[i][j] != -1) return dp[i][j];
+            
+            int v1 = 0, v2 = 0;
+            if(s1[i] == s2[j]) {
+                v1 = f(f, i+1, j+1);
+            }
+            v2 = f(f, i+1, j);
+            
+            return dp[i][j] = (1LL*v1 + v2) % mod;
+        };
+        return f(f, 0, 0);
+    }
+};
