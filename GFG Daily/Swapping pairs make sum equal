@@ -1,0 +1,52 @@
+https://www.geeksforgeeks.org/problems/swapping-pairs-make-sum-equal4142/1
+
+
+
+// using maths and binary search
+/*
+    SumA - ai + bi = SumB - bi + ai
+    bi = (Sumb - SumA + 2*ai) / 2     => for every ai, check for this bi in B array
+*/
+class Solution {
+  public:
+    int findSwapValues(int a[], int n, int b[], int m) {
+        // Your code goes here
+        int sa = accumulate(a, a+n, 0);
+        int sb = accumulate(b, b+m, 0);
+        sort(b, b+m);
+        
+        for(int i = 0 ; i < n ; i++) {
+            int req = sb - sa + 2*a[i];
+            if(req & 1) continue;
+            
+            int idx = lower_bound(b, b+m, req/2) - b;
+            if(idx >= 0 && idx < m && b[idx] == req/2) return 1;
+        }
+        return -1;
+    }
+};
+
+
+
+// using set
+
+// class Solution {
+// public:
+//     int findSwapValues(int a[], int n, int b[], int m) {
+//         // Your code goes here
+//         int sa = accumulate(a, a+n, 0);
+//         int sb = accumulate(b, b+m, 0);
+//         unordered_set<int> st;
+        
+//         for(int i = 0 ; i < m ; i++) {
+//             st.insert(b[i]);
+//         }
+//         for(int i = 0 ; i < n ; i++) {
+//             int req = sb - sa + 2*a[i];
+//             if(req & 1) continue;
+            
+//             if(st.find(req/2) != st.end()) return 1;
+//         }
+//         return -1;
+//     }
+// };
