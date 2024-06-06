@@ -1,0 +1,72 @@
+https://www.geeksforgeeks.org/problems/max-sum-in-the-configuration/1
+
+
+class Solution {
+  public:
+    long long max_sum(int a[], int n) {
+        long long previousSum = 0;
+        long long sum = 0;
+        
+        for(int i = 0 ; i < n ; i++) {
+            sum += a[i]*1LL;
+            previousSum += a[i]*1LL*i;      // taking a[n-1] as last element
+        }
+        
+        long long res = previousSum;
+        
+        for(int i = n-1 ; i >= 0 ; i--) {
+            // lastEl -> last element in previous permutation (not in current permutation)
+            long long lastEl = a[i];        
+            
+            previousSum = previousSum + (sum-lastEl) - 1LL*(lastEl*(n-1));
+            res = max(res, previousSum);
+        }
+        return res;
+    }
+};
+
+
+/*
+https://discuss.geeksforgeeks.org/comment/2857afb8-6e6f-4097-9486-c61e97b150a6/practice
+
+Intuition, Example dry run and Solution
+
+for examle input array is: {8, 3, 1, 2}
+
+Sum of this array is aSum = 8 + 3 + 1 + 2 = 14
+
+
+Initial pattern Sum would be:
+pattern1Sum = 8 * 0 + 3 * 1 + 1 * 2 + 2 *3 = 11
+
+Second pattern Sum would be:
+pattern2Sum = 2 * 0 + 8 * 1 + 3 * 2 + 1 * 3 = 17
+
+Now the question to ask is can we use pattern1Sum and aSum in order to obtain pattern2Sum?
+
+if you notice pattern1Sum can be written as
+0 + (3) + (1 + 1) + (2 + 2 + 2)
+and pattern2Sum can be written as
+0 + (8) + (3 + 3) + (1 + 1 + 1)
+
+We can see that we are removing 2 * 3  from pattern1Sum  and then adding all elements of the array except 2 (which is last number and getting multiplied with n - 1) to pattern1Sum. 
+
+Also sum of all elements excluding 2 is aSum - 2. 2 is being excluded since it would get multiplied to 0 and hence will not take part in forming pattern2Sum.
+
+
+Thus
+pattern2Sum = pattern1Sum  - (2 * 3) + (aSum - 2)
+
+Similarly when we want to obtain pattern3Sum
+pattern2Sum can be written as
+0 + (8) + (3 + 3) + (1 + 1 + 1)
+pattern3Sum can be written as
+0 + (2) + (8 + 8) + (3 + 3 + 3)
+
+Here we have removed 1 from sum of array elements and 1 * 3 from pattern2Sum.
+
+Thus we can form a general forumla:
+patternSum = PreviousPatternSum  - (lastNumberInCurrentPattern * (n-1)) + (aSum - lastNumberInCurrentPattern )
+
+
+*/
