@@ -1,0 +1,82 @@
+https://leetcode.com/problems/replace-words/description/?envType=daily-question&envId=2024-06-07
+
+
+
+class Node {
+public:
+    vector<Node*> links;
+    bool isEnd;
+
+    Node() {
+        links.resize(26);
+        for(int i = 0 ; i < 26 ; i++) {
+            links[i] = NULL;
+        }
+        isEnd = false;
+    }
+};
+
+class TrieNode {
+public:
+    Node* root;
+    TrieNode() {
+        root = new Node();
+    }
+
+    void add(string word) {
+        int n = word.length();
+        Node* curr = root;
+        
+        for(int i = 0 ; i < n ; i++) {
+            char ch = word[i];
+
+            if(curr->links[ch - 'a'] == NULL) {
+                curr->links[ch-'a'] = new Node();
+            }
+            curr = curr->links[ch-'a'];
+        }
+        curr->isEnd = true;
+    }
+
+    string getString(string word) {
+        int n = word.length();
+        string s = "";
+        Node* curr = root;
+
+        for(int i = 0 ; i < n ; i++) {
+            char ch = word[i];
+            
+            if(curr->links[ch - 'a'] == NULL) {
+                return word;
+            }
+            s += string(1, ch);
+            curr = curr->links[ch-'a'];
+            if(curr->isEnd) return s;
+        }
+        return word;
+    }
+};
+
+class Solution {
+public:
+    string replaceWords(vector<string>& dictionary, string sentence) {
+        int n = dictionary.size();
+        int m = sentence.length();
+        TrieNode* trie = new TrieNode();
+
+        for(string& s : dictionary) {
+            trie->add(s);
+        }
+
+        string ans = "";
+        stringstream ss(sentence);
+        string temp;
+        while(getline(ss, temp, ' ')) {
+            if(ans.length() > 0) {
+                ans += " ";
+            }
+            ans += trie->getString(temp);
+        }
+        return ans;
+    }
+};
