@@ -1,0 +1,52 @@
+https://cses.fi/problemset/result/9584744/
+
+
+
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+void solve(vector<vector<ll>>& nums, vector<vector<ll>> queries, int n, int q) {
+	vector<vector<ll>> pSum(n+1, vector<ll>(n+1, 0));
+
+	for(int i = 1 ; i <= n ; i++) {
+		for(int j = 1 ; j <= n ; j++) {
+			pSum[i][j] = nums[i][j] + pSum[i-1][j] + pSum[i][j-1] - pSum[i-1][j-1];
+		}
+	}
+
+	for(int i = 0 ; i < q ; i++) {
+		int total = 0;
+		for(int j = 0 ; j < 4 ; j++) {
+			int sr = queries[i][0], sc = queries[i][1], er = queries[i][2], ec = queries[i][3];
+			total = pSum[er][ec] - pSum[sr-1][ec] - pSum[er][sc-1] + pSum[sr-1][sc-1];
+		}
+		cout << total << endl;
+	}
+}
+
+
+int main() {
+	int t = 1;
+	// cin >> t;
+	while(t--) {
+		int n, q;
+		cin >> n >> q;
+		vector<vector<ll>> nums(n+1, vector<ll>(n+1));
+		for(int i = 1 ; i <= n ; i++) {
+			for(int j = 1 ; j <= n ; j++) {
+				char ch;
+				cin >> ch;
+				if(ch == '*') nums[i][j] = 1;
+			}
+		}
+		vector<vector<ll>> queries(q, vector<ll>(4));
+		for (int i = 0; i < q; ++i) {
+			for (int j = 0; j < 4; ++j)	{
+				cin >> queries[i][j];
+			}
+		}
+		solve(nums, queries, n, q);
+	}
+}
+
