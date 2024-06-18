@@ -1,0 +1,31 @@
+https://leetcode.com/problems/number-of-digit-one/description/
+
+
+class Solution {
+public:
+    int countDigitOne(int n) {
+        string s = to_string(n);
+        int x = s.length();
+        int dp[11][2][11];
+        memset(dp, -1, sizeof(dp));
+
+        auto f = [&] (auto& f, int i, bool bound, int count) -> int {
+            if(i >= x) return count;
+            if(dp[i][bound][count] != -1) return dp[i][bound][count];
+
+            int maxNumber = 9;
+            if(bound) {
+                maxNumber = s[i]-'0';
+            }
+
+            int res = 0;
+            for(int num = 0 ; num <= maxNumber ; num++) {
+                bool newBound = (bound & (num == s[i]-'0'));
+                res += f(f, i+1, newBound, count + (num == 1));
+            }
+            return dp[i][bound][count] = res;
+        };
+
+        return f(f, 0, true, 0);
+    }
+};
