@@ -1,0 +1,44 @@
+https://leetcode.com/problems/partition-array-into-disjoint-intervals/
+
+
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        int n = nums.size();
+        int maxTillNow = nums[0], globalMax = nums[0], partition = 0;
+
+        for(int i = 1 ; i < n ; i++) {
+            globalMax = max(globalMax, nums[i]);
+
+            if(nums[i] < maxTillNow) {
+                partition = i;
+                maxTillNow = globalMax;
+            }
+        }
+        return partition + 1;
+    }
+};
+
+
+
+// two pass (prefix min and max)
+
+// class Solution {
+// public:
+//     int partitionDisjoint(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> Lmax(n, INT_MIN), Rmin(n, INT_MAX);
+//         Lmax[0] = nums[0];
+//         Rmin[n-1] = nums[n-1];
+
+//         for(int i = 1 ; i < n ; i++) {
+//             Lmax[i] = max(Lmax[i-1], nums[i]);
+//             Rmin[n-1-i] = min(Rmin[n-i], nums[n-1-i]);
+//         }
+
+//         for(int i = 0 ; i < n-1 ; i++) {
+//             if(Lmax[i] <= Rmin[i+1]) return i+1;
+//         }
+//         return -1;
+//     }
+// };
