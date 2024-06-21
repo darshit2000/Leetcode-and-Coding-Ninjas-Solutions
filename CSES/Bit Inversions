@@ -1,0 +1,79 @@
+https://cses.fi/problemset/task/1188/
+
+
+
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+multiset<int> ms;
+set<int> st;
+int n;
+
+void flip(int x) {
+	if (x == 0 || x == n) return;
+
+	if(st.find(x) != st.end()) {
+		auto it = st.find(x);
+		auto nxt = next(it);
+		auto prv = prev(it);
+		st.erase(it);
+		ms.erase(ms.find(x - *prv));
+		ms.erase(ms.find(*nxt - x));
+		ms.insert(*nxt - *prv);
+	} else {
+		st.insert(x); 	 
+		auto it = st.find(x);
+		auto nxt = next(it);
+		auto prv = prev(it);
+		st.insert(x);
+		ms.erase(ms.find(*nxt - *prv));
+		ms.insert(x - *prv);
+		ms.insert(*nxt - x);
+	}
+}
+
+vector<int> solve(string& s, int m, vector<int>& v) {
+	vector<int> ans;
+	n = s.length();
+	
+	st.insert(0);
+	st.insert(n);
+
+	for(int i = 1 ; i < n ; i++) {
+		if(s[i] != s[i-1]) {
+			st.insert(i);
+		}
+	}
+	for(auto it = ++st.begin() ; it != st.end() ; it++) {
+		ms.insert(*it - *prev(it)); 	
+	}
+
+	for(int i = 0 ; i < m ; i++) {
+		int x = v[i];
+		flip(x-1);
+		flip(x);
+		ans.push_back(*(ms.rbegin()));
+	}
+	return ans;
+ }
+
+
+int main() {
+	int t = 1;
+	// cin >> t;
+	while(t--) {
+		string s;
+		int m;
+		cin >> s;
+		cin >> m;
+		vector<int> v(m);
+		for(int i = 0 ; i < m ; i++) {
+			cin >> v[i];
+		}
+		vector<int> res = solve(s, m, v);
+		for(int i : res) {
+			cout << i << " ";
+		}
+	}
+}
+
