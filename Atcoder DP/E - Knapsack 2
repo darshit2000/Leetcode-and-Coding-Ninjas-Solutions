@@ -1,0 +1,109 @@
+https://atcoder.jp/contests/dp/tasks/dp_e
+
+
+
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+// top down
+int main() {
+    const ll inf = 1e11 + 9;
+    ll n, w, ans = 0;
+    cin >> n >> w;
+    vector<ll> weights(n), profits(n);
+    for(int i = 0 ; i < n ; i++) {
+        cin >> weights[i] >> profits[i];
+    }
+
+    // because max N is 100 and max value of each item is 1000
+    // so max profit achievable is 100000.
+    ll maxVal = 100000; 
+
+    // dp[i][j] = MIN weight when we select some items amongst the 'i' items 
+    // to achive the value/profit of 'j'.
+    // In normal DP, 'j' was the remaining weight and
+    // we were calculating max profit, so we had profit[i] + f(i-1, j-wt[i]).
+    // Here we are calculating: among the 'i' items, what items can we pick 
+    // such that the profit of the selected items is 'j' and
+    // the weight of the selected items is minimum
+    vector<vector<ll>> dp(n+1, vector<ll>(maxVal+1, -1));
+
+    auto f = [&] (auto& f, int i, int j) -> ll {
+        // Zero profit -> min wt = 0 -> don't pick any items
+        if(j == 0) return 0; 
+
+        // If some 'j' profit is still required but our items are exhausted    
+        if(i == -1) return inf;  
+        
+        if(dp[i][j] != -1) return dp[i][j];
+
+        ll take = inf, skip = inf;
+        skip = f(f, i-1, j);
+
+        // only able to take if the profit of ith item 
+        // is less than 'j' (max profit till ith item).
+        if(profits[i] <= j) {
+            take = weights[i] + f(f, i-1, j - profits[i]);
+        }
+        return dp[i][j] = min(take, skip);
+    };
+
+    // check if the min weight of 'i' items to achieve the 
+    // max value/profit of 'j' is within the max knapsack weight ('w').
+    for(int j = maxVal ; j >= 0 ; j--) {
+        if(f(f, n-1, j) <= w) {
+            ans = j;
+            break;
+        }
+    }
+    cout << ans << endl;
+}
+
+
+
+// bottom up
+// int main() {
+//     const ll inf = 1e11 + 9;
+//     ll n, w, ans = 0;
+//     cin >> n >> w;
+//     vector<ll> weights(n+1), profits(n+1);
+//     for(int i = 1 ; i <= n ; i++) {
+//         cin >> weights[i] >> profits[i];
+//     }
+
+//     ll maxVal = 100000; 
+//     vector<vector<ll>> dp(n+1, vector<ll>(maxVal+1, 0));
+
+//     // If some 'j' profit is still required but our items are exhausted
+//     for(int j = 0 ; j <= maxVal ; j++) {
+//         dp[0][j] = inf;
+//     }
+
+//     // for zero profit, min wt is always 0 -> dont pick any items.
+//     for(int i = 0 ; i < n ; i++) {
+//         dp[i][0] = 0;
+//     }
+
+//     for(int i = 1 ; i <= n ; i++) {
+//         for(int j = 1 ; j <= maxVal ; j++) {
+//             ll take = inf, skip = inf;
+//             skip = dp[i-1][j];
+
+//             if(profits[i] <= j) {
+//                 take = weights[i] + dp[i-1][j - profits[i]];
+//             }
+//             dp[i][j] = min(take, skip);
+//         }
+//     }
+
+//     for(int j = maxVal ; j >= 0 ; j--) {
+//         if(dp[n][j] <= w) {
+//             ans = j;
+//             break;
+//         }
+//     }
+//     cout << ans << endl;
+// }
+
+    
