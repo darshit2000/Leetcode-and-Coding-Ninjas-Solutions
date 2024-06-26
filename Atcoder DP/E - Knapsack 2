@@ -16,16 +16,12 @@ int main() {
         cin >> weights[i] >> profits[i];
     }
 
-    // because max N is 100 and max value of each item is 1000
-    // so max profit achievable is 100000.
+    // because max N is 100 and max value of each item is 1000 so max profit achievable is 100000.
     ll maxVal = 100000; 
 
-    // dp[i][j] = MIN weight when we select some items amongst the 'i' items 
-    // to achive the value/profit of 'j'.
-    // In normal DP, 'j' was the remaining weight and
-    // we were calculating max profit, so we had profit[i] + f(i-1, j-wt[i]).
-    // Here we are calculating: among the 'i' items, what items can we pick 
-    // such that the profit of the selected items is 'j' and
+    // dp[i][j] = MIN weight when we select some items amongst the 'i' items to achive the value/profit of 'j'.
+    // In normal DP, 'j' was the remaining weight and we were calculating max profit, so we had profit[i] + f(i-1, j-wt[i]).
+    // Here we are calculating: among the 'i' items, what items can we pick such that the profit of the selected items is 'j' and
     // the weight of the selected items is minimum
     vector<vector<ll>> dp(n+1, vector<ll>(maxVal+1, -1));
 
@@ -41,16 +37,14 @@ int main() {
         ll take = inf, skip = inf;
         skip = f(f, i-1, j);
 
-        // only able to take if the profit of ith item 
-        // is less than 'j' (max profit till ith item).
+        // only able to take if the profit of ith item is less than 'j' (max profit till ith item).
         if(profits[i] <= j) {
             take = weights[i] + f(f, i-1, j - profits[i]);
         }
         return dp[i][j] = min(take, skip);
     };
 
-    // check if the min weight of 'i' items to achieve the 
-    // max value/profit of 'j' is within the max knapsack weight ('w').
+    // check if the min weight of 'i' items to achieve the max value/profit of 'j' is within the max knapsack weight ('w').
     for(int j = maxVal ; j >= 0 ; j--) {
         if(f(f, n-1, j) <= w) {
             ans = j;
@@ -105,5 +99,8 @@ int main() {
 //     }
 //     cout << ans << endl;
 // }
+
+    
+
 
     
